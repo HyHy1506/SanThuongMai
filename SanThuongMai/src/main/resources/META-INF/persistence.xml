@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="my_persistence_unit">
+    <class>com.txd.pojo.Paymentdetail</class>
+    <class>com.txd.pojo.Seller</class>
+    <class>com.txd.pojo.Product</class>
+    <class>com.txd.pojo.Payment</class>
+    <class>com.txd.pojo.Customer</class>
+    <class>com.txd.pojo.Staff</class>
+    <class>com.txd.pojo.Tagdetail</class>
+    <class>com.txd.pojo.Category</class>
+    <class>com.txd.pojo.Orderdetail</class>
+    <class>com.txd.pojo.Sellerreview</class>
+    <class>com.txd.pojo.Tag</class>
+    <class>com.txd.pojo.Admin</class>
+    <class>com.txd.pojo.Shop</class>
+    <class>com.txd.pojo.Sellerrating</class>
+    <class>com.txd.pojo.Comment</class>
+    <class>com.txd.pojo.Productrating</class>
+    <class>com.txd.pojo.User</class>
+    <class>com.txd.pojo.Productattribute</class>
+    <class>com.txd.pojo.Attribute</class>
+  </persistence-unit>
+</persistence>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Trang chủ</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container">
+
+        <h1 th:text="${hello}"> helo</h1>
+        <li class="nav-item" th:each="c: ${categories}"> 
+            <a class="nav-link" href="#" th:text="${c.name}"></a> 
+        </li>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+
+
+</body>
+</html>
