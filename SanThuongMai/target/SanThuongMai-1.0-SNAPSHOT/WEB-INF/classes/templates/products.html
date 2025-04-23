@@ -13,7 +13,7 @@
         <li class="nav-item" th:each="c: ${categories}"> 
             <a class="nav-link" href="#" th:text="${c.name}"></a> 
         </li>
-
+        <a th:href="@{/edit-product}" class="btn btn-success m-2">Thêm sản phẩm</a>
         <table class="table">
             <thead>
                 <tr>
@@ -21,26 +21,23 @@
                     <th scope="col">Ảnh</th>
                     <th scope="col">Tên</th>
                     <th scope="col">Giá</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                <tr th:each="p:${products}">
+                    <th th:text="${p.id}"></th>
+                    <td th:src="${p.image}">
+                        <img th:src="${p.image}" width="100"/>
+                    </td>
+                    <td th:text="${p.name}"></td>
+                    <td th:text="${p.price}"></td>
+                    <td>
+                        <button class="btn btn-info">&times;</button>
+                        <a href="#" class="btn btn-info">&#128393;</a>
+                    </td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+
             </tbody>
         </table>
     </main>

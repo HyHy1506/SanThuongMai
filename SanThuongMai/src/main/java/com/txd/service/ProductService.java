@@ -4,10 +4,16 @@
  */
 package com.txd.service;
 
+import com.txd.pojo.Product;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author tran1
  */
 public interface ProductService {
-    
+    List<Product> getProducts(Map<String, String> params);
+     Product saveOrUpdate(Product p);
+     Product getProductById(int id);
 }

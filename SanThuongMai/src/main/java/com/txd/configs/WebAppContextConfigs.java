@@ -33,10 +33,10 @@ package com.txd.configs;
          configurer.enable();
      }
  
-//     @Override
-//     public void addFormatters(FormatterRegistry registry) {
-//         registry.addFormatter(new CategoryFormatter());
-//     }
+     @Override
+     public void addFormatters(FormatterRegistry registry) {
+         registry.addFormatter(new CategoryFormatter());
+     }
      
      
  }
