@@ -24,7 +24,8 @@ package com.txd.configs;
  @ComponentScan(basePackages = {
      "com.txd.controllers",
      "com.txd.repository",
-     "com.txd.service"
+     "com.txd.service",
+     "com.txd.utils"
  })
  public class WebAppContextConfigs implements WebMvcConfigurer {
  

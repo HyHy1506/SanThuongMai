@@ -36,5 +36,8 @@ public class ProductServiceImpl implements ProductService{
     public Product getProductById(int id) {
         return proRepo.getProductById(id);
     }
-    
+     @Override
+    public Long countProducts(Map<String, String> params) {
+       return proRepo.countProducts(params);
+    }
 }

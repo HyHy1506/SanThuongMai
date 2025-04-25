@@ -27,10 +27,15 @@ D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repository\CategoryRepository.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repository\impl\CategoryRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repository\impl\ProductRepositoryImpl.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repository\impl\UserRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repository\ProductRepository.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repository\UserRepository.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\santhuongmai\JakartaRestConfiguration.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\santhuongmai\resources\JakartaEE11Resource.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\service\CategoryService.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\service\impl\CategoryServiceImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\service\impl\ProductServiceImpl.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\service\impl\UserServiceImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\service\ProductService.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\service\UserService.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\utils\GlobalVariables.java

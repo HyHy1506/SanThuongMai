@@ -4,9 +4,10 @@
  */
 package com.txd.repository;
 
-import com.txd.pojo.Product;
 import java.util.List;
 import java.util.Map;
+
+import com.txd.pojo.Product;
 
 /**
  *
@@ -19,4 +20,5 @@ public interface ProductRepository {
     Product saveOrUpdate(Product p);
 
     Product getProductById(int id);
+    Long countProducts(Map<String, String> params);
 }

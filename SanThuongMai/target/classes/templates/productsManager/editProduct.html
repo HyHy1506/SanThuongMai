@@ -15,7 +15,7 @@
         <div>
             <img th:src="${product.image}" width="300" alt="Ảnh lỗi"/>
         </div>
-        <form method="post" th:action="@{/updated-product}" th:object="${product}">
+        <form method="post" th:action="@{/api/leaf/updated-product}" th:object="${product}">
             <div class="form-floating mb-3 mt-3">
                 <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Tên sản phẩm">
                 <label for="name">Tên sản phẩm</label>
