@@ -6,30 +6,42 @@ package com.txd.configs;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.ServletRegistration;
+
 /**
  *
  * @author tran1
  */
-public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherServletInitializer{
+public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] {
-             ThymeleafConfig.class,
-             HibernateConfigs.class
-         };
+        return new Class[]{
+            ThymeleafConfig.class,
+            HibernateConfigs.class,
+            SpringSecurityConfigs.class,};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
- return new Class[] {
-             WebAppContextConfigs.class
-         };
+        return new Class[]{
+            WebAppContextConfigs.class
+        };
     }
 
     @Override
     protected String[] getServletMappings() {
-        return new String[] {"/"};
+        return new String[]{"/"};
     }
-    
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        String location = "/";
+        long maxFileSize = 5242880; // 5MB
+        long maxRequestSize = 20971520; // 20MB
+        int fileSizeThreshold = 0;
+
+        registration.setMultipartConfig(new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold));
+    }
 }

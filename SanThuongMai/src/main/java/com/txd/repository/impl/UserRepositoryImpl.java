@@ -4,13 +4,16 @@
  */
 package com.txd.repository.impl;
 
-import com.txd.pojo.Staff;
-import com.txd.repository.UserRepository;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.txd.pojo.User;
+import com.txd.repository.UserRepository;
+
+import jakarta.persistence.Query;
 
 /**
  *
@@ -18,14 +21,26 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
+
     @Override
-    public void createStaff(Staff s) {
-        Session se = factory.getObject().getCurrentSession();
-        se.persist(s);
+    public User getUserByUsername(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createNamedQuery("User.findByUsername", User.class);
+        q.setParameter("username", username);
+
+        return (User) q.getSingleResult();
     }
-    
+
+    @Override
+    public User register(User u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.persist(u);
+
+        s.refresh(u);
+        return u;
+    }
 }

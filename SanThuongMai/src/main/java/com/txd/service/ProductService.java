@@ -14,8 +14,14 @@ import com.txd.pojo.Product;
  * @author tran1
  */
 public interface ProductService {
+
     List<Product> getProducts(Map<String, String> params);
-     Product saveOrUpdate(Product p);
-     Product getProductById(int id);
-     Long countProducts(Map<String, String> params);
+
+    Product saveOrUpdate(Product p);
+
+    Product getProductById(int id);
+
+    Long countProducts(Map<String, String> params);
+
+    void deleteProduct(int id);
 }

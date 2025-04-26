@@ -4,24 +4,33 @@
  */
 package com.txd.service.impl;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.txd.pojo.Product;
 import com.txd.repository.ProductRepository;
 import com.txd.service.ProductService;
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  *
  * @author tran1
  */
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository proRepo;
-    
+    @Autowired
+    private Cloudinary cloudinary;
+
     @Override
     public List<Product> getProducts(Map<String, String> params) {
         return proRepo.getProducts(params);
@@ -29,6 +38,15 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Product saveOrUpdate(Product p) {
+         if (!p.getFile().isEmpty()) {
+             try {
+                 Map res = cloudinary.uploader().upload(p.getFile().getBytes(),
+                         ObjectUtils.asMap("resource_type", "auto"));
+                 p.setImage(res.get("secure_url").toString());
+             } catch (IOException ex) {
+                 Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+             }
+         }
         return proRepo.saveOrUpdate(p);
     }
 
@@ -36,8 +54,14 @@ public class ProductServiceImpl implements ProductService{
     public Product getProductById(int id) {
         return proRepo.getProductById(id);
     }
-     @Override
+
+    @Override
     public Long countProducts(Map<String, String> params) {
-       return proRepo.countProducts(params);
+        return proRepo.countProducts(params);
+    }
+
+    @Override
+    public void deleteProduct(int id) {
+        proRepo.deleteProduct(id);
     }
 }

@@ -4,12 +4,15 @@
  */
 package com.txd.repository;
 
-import com.txd.pojo.Staff;
+import com.txd.pojo.User;
 
 /**
  *
  * @author tran1
  */
 public interface UserRepository {
-    void createStaff (Staff s);
+
+    User getUserByUsername(String username);
+
+    User register(User u);
 }

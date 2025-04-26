@@ -4,12 +4,20 @@
  */
 package com.txd.service;
 
-import com.txd.pojo.Staff;
+import java.util.Map;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.txd.pojo.User;
 
 /**
  *
  * @author tran1
  */
-public interface UserService {
-    void createStaff (Staff s);
+public interface UserService extends UserDetailsService {
+
+    User getUserByUsername(String username);
+
+    User register(Map<String, String> params, MultipartFile avatar);
 }

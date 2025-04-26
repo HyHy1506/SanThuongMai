@@ -4,10 +4,12 @@
  */
 package com.txd.configs;
 
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+
 /**
  *
  * @author tran1
  */
-public class SecurityWebApplicationInitializer {
+public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer{
     
 }

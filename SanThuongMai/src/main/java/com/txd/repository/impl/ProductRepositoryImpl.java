@@ -24,84 +24,85 @@ import jakarta.persistence.criteria.Root;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 /**
  *
  * @author tran1
  */
 @Repository
 @Transactional
-public class ProductRepositoryImpl implements ProductRepository{
-    
+public class ProductRepositoryImpl implements ProductRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
     @Autowired
     private GlobalVariables globalVariables;
+
     @Override
     public List<Product> getProducts(Map<String, String> params) {
-        int PAGE_SIZE=globalVariables.PAGE_SIZE;
-        Session s= factory.getObject().getCurrentSession();
+        int PAGE_SIZE = globalVariables.PAGE_SIZE;
+        Session s = factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
-        CriteriaQuery<Product> cQ= b.createQuery(Product.class);
-        Root root= cQ.from(Product.class);
+        CriteriaQuery<Product> cQ = b.createQuery(Product.class);
+        Root root = cQ.from(Product.class);
         cQ.select(root);
-        
-        if(params!=null){
-             List<Predicate> predicates = new ArrayList<>();
-                 
-                 String kw = params.get("kw");
-                 if (kw != null && !kw.isEmpty()) {
-                     kw=kw.trim();
-                     predicates.add(b.like(root.get("name"), String.format("%%%s%%", kw)));
-                 }
-                 
-                 String fromPrice = params.get("fromPrice");
-                 if (fromPrice != null && !fromPrice.isEmpty()) {
-                     predicates.add(b.greaterThanOrEqualTo(root.get("price"), 
-                             fromPrice));
-                 }
-                 
-                 String toPrice = params.get("toPrice");
-                 if (toPrice != null && !toPrice.isEmpty()) {
-                     predicates.add(b.lessThanOrEqualTo(root.get("price"), 
-                             toPrice));
-                 }
-                 
-                 String cateId = params.get("categoryId");
-                 if (cateId != null && !cateId.isEmpty()) {
-                     predicates.add(b.equal(root.get("categoryId").as(Integer.class), 
-                             cateId));
-                 }
-                 
-                 cQ.where(predicates.toArray(Predicate[]::new));
+
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
+
+            String kw = params.get("kw");
+            if (kw != null && !kw.isEmpty()) {
+                kw = kw.trim();
+                predicates.add(b.like(root.get("name"), String.format("%%%s%%", kw)));
+            }
+
+            String fromPrice = params.get("fromPrice");
+            if (fromPrice != null && !fromPrice.isEmpty()) {
+                predicates.add(b.greaterThanOrEqualTo(root.get("price"),
+                        fromPrice));
+            }
+
+            String toPrice = params.get("toPrice");
+            if (toPrice != null && !toPrice.isEmpty()) {
+                predicates.add(b.lessThanOrEqualTo(root.get("price"),
+                        toPrice));
+            }
+
+            String cateId = params.get("categoryId");
+            if (cateId != null && !cateId.isEmpty()) {
+                predicates.add(b.equal(root.get("categoryId").as(Integer.class),
+                        cateId));
+            }
+
+            cQ.where(predicates.toArray(Predicate[]::new));
         }
-        Query query= s.createQuery(cQ);
-        if(params!=null){
+        Query query = s.createQuery(cQ);
+        if (params != null ) {
             int page = Integer.parseInt(params.getOrDefault("page", "1"));
-            int start = (page-1)* PAGE_SIZE;
+            int start = (page - 1) * PAGE_SIZE;
             query.setFirstResult(start);
             query.setMaxResults(PAGE_SIZE);
         }
-        
+
         return query.getResultList();
     }
 
     @Override
     public Product saveOrUpdate(Product p) {
-         Session s = this.factory.getObject().getCurrentSession();
-              if (p.getId() == null)
-                  s.persist(p);
-              else
-                  s.merge(p);
-          
-          return p;
+        Session s = this.factory.getObject().getCurrentSession();
+        if (p.getId() == null) {
+            s.persist(p);
+        } else {
+            s.merge(p);
+        }
+
+        return p;
     }
 
     @Override
     public Product getProductById(int id) {
-     Session s = this.factory.getObject().getCurrentSession();
-     return s.get(Product.class, id);
-    
+        Session s = this.factory.getObject().getCurrentSession();
+        return s.get(Product.class, id);
+
     }
 
     // @Override
@@ -111,7 +112,6 @@ public class ProductRepositoryImpl implements ProductRepository{
     //     CriteriaQuery<Long> cQ = b.createQuery(Long.class);
     //     Root<Product> root = cQ.from(Product.class);
     //     cQ.select(b.count(root));
-        
     //     Query query = s.createQuery(cQ);
     //     return (Long) query.getSingleResult();
     // }
@@ -122,37 +122,44 @@ public class ProductRepositoryImpl implements ProductRepository{
         CriteriaQuery<Long> cQ = b.createQuery(Long.class);
         Root<Product> root = cQ.from(Product.class);
         cQ.select(b.count(root));
-        
-        if (params != null) {
+
+        if (params != null ) {
             List<Predicate> predicates = new ArrayList<>();
-                 
+
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
                 predicates.add(b.like(root.get("name"), String.format("%%%s%%", kw)));
             }
-                 
+
             String fromPrice = params.get("fromPrice");
             if (fromPrice != null && !fromPrice.isEmpty()) {
-                predicates.add(b.greaterThanOrEqualTo(root.get("price"), 
+                predicates.add(b.greaterThanOrEqualTo(root.get("price"),
                         Double.parseDouble(fromPrice)));
             }
-                 
+
             String toPrice = params.get("toPrice");
             if (toPrice != null && !toPrice.isEmpty()) {
-                predicates.add(b.lessThanOrEqualTo(root.get("price"), 
+                predicates.add(b.lessThanOrEqualTo(root.get("price"),
                         Double.parseDouble(toPrice)));
             }
-                 
+
             String cateId = params.get("categoryId");
             if (cateId != null && !cateId.isEmpty()) {
-                predicates.add(b.equal(root.get("categoryId").as(Integer.class), 
+                predicates.add(b.equal(root.get("categoryId").as(Integer.class),
                         Integer.parseInt(cateId)));
             }
-                 
+
             cQ.where(predicates.toArray(Predicate[]::new));
         }
-        
+
         Query query = s.createQuery(cQ);
         return (Long) query.getSingleResult();
+    }
+
+    @Override
+    public void deleteProduct(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Product p = this.getProductById(id);
+        s.remove(p);
     }
 }

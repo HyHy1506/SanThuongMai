@@ -11,11 +11,15 @@
     <main class="container">
 
         <h1 class="text-center text-info mt-1">Chỉnh sửa sản phẩm</h1>
-        
-        <div>
-            <img th:src="${product.image}" width="300" alt="Ảnh lỗi"/>
-        </div>
-        <form method="post" th:action="@{/api/leaf/updated-product}" th:object="${product}">
+   
+        <form method="post" th:action="@{/api/leaf/updated-product}" th:object="${product}" enctype="multipart/form-data">
+            <div class=" mb-3 mt-3">
+                <h3 >Ảnh sản phẩm</h3>
+                <input type="file" class="form-control" th:field="*{file}" id="file" >
+                
+                
+                <img th:src="${product.image}" th:if="${product.id != null && product.image != null}" width="200" alt="Ảnh lỗi"/>
+            </div>
             <div class="form-floating mb-3 mt-3">
                 <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Tên sản phẩm">
                 <label for="name">Tên sản phẩm</label>

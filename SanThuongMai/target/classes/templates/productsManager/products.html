@@ -1,80 +1,83 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Trang chủ</title>
-        <th:block th:replace="base :: bootstrap"></th:block>
-    </head>
-    <body>
-        <div th:replace="base :: header"></div>
 
-        <main class="container">
-            <form th:action="@{/products}" method="get" class="mb-4">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label for="kw" class="form-label">Từ khóa</label>
-                        <input type="text" class="form-control" id="kw" name="kw" th:value="${param.kw}" placeholder="Tìm theo tên sản phẩm">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="fromPrice" class="form-label">Giá từ</label>
-                        <input type="number" class="form-control" id="fromPrice" name="fromPrice" th:value="${param.fromPrice}" placeholder="Giá tối thiểu" min="0">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="toPrice" class="form-label">Giá đến</label>
-                        <input type="number" class="form-control" id="toPrice" name="toPrice" th:value="${param.toPrice}" placeholder="Giá tối đa" min="0">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="categoryId" class="form-label">Danh mục</label>
-                        <select class="form-select" id="categoryId" name="categoryId">
-                            <option value="">Tất cả danh mục</option>
-                            <option th:each="c : ${categories}" 
-                            th:value="${c.id}" 
-                            th:text="${c.name}" 
-                            th:selected="${selectedCategoryId != null and selectedCategoryId == c.id}"></option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">Lọc</button>
-                    </div>
+<head>
+    <title>Trang chủ</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container">
+        <form th:action="@{/products}" method="get" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="kw" class="form-label">Từ khóa</label>
+                    <input type="text" class="form-control" id="kw" name="kw" th:value="${param.kw}"
+                        placeholder="Tìm theo tên sản phẩm">
                 </div>
-            </form>
-
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Ảnh</th>
-                        <th scope="col">Tên</th>
-                        <th scope="col">Giá</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="p:${products}">
-                        <th th:text="${p.id}"></th>
-                        <td>
-                            <img th:src="${p.image}" width="100"/>
-                        </td>
-                        <td th:text="${p.name}"></td>
-                        <td th:text="${p.price}"></td>
-                        <td>
-                            <button class="btn btn-danger">&times;</button>
-                            <a th:href="@{/edit-product/{id}(id=${p.id})}" class="btn btn-info">&#128393;</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="d-flex justify-content-between mt-3">
-                <a th:href="@{/products(page=${currentPage - 1}, kw=${param.kw}, fromPrice=${param.fromPrice}, toPrice=${param.toPrice}, categoryId=${param.categoryId})}"
-                   th:class="${currentPage <= 1} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
-                   th:disabled="${currentPage <= 1}">Xem trước</a>
-                <span>Trang <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span></span>
-                <a th:href="@{/products(page=${currentPage + 1}, kw=${param.kw}, fromPrice=${param.fromPrice}, toPrice=${param.toPrice}, categoryId=${param.categoryId})}"
-                   th:class="${currentPage >= totalPages} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
-                   th:disabled="${currentPage >= totalPages}">Xem sau</a>
+                <div class="col-md-2">
+                    <label for="fromPrice" class="form-label">Giá từ</label>
+                    <input type="number" class="form-control" id="fromPrice" name="fromPrice"
+                        th:value="${param.fromPrice}" placeholder="Giá tối thiểu" min="0">
+                </div>
+                <div class="col-md-2">
+                    <label for="toPrice" class="form-label">Giá đến</label>
+                    <input type="number" class="form-control" id="toPrice" name="toPrice" th:value="${param.toPrice}"
+                        placeholder="Giá tối đa" min="0">
+                </div>
+                <div class="col-md-3">
+                    <label for="categoryId" class="form-label">Danh mục</label>
+                    <select class="form-select" id="categoryId" name="categoryId">
+                        <option value="">Tất cả danh mục</option>
+                        <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"
+                            th:selected="${selectedCategoryId != null and selectedCategoryId == c.id}"></option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                </div>
             </div>
-        </main>
+        </form>
 
-        <div th:replace="base :: footer"></div>
-   
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Ảnh</th>
+                    <th scope="col">Tên</th>
+                    <th scope="col">Giá</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p:${products}">
+                    <th th:text="${p.id}"></th>
+                    <td>
+                        <img th:src="${p.image}" width="100" />
+                    </td>
+                    <td th:text="${p.name}"></td>
+                    <td th:text="${p.price}"></td>
+                    <td>
+                        <button class="btn btn-danger" th:onclick="'deleteProduct(\''+@{/api/products}+'\',' + ${p.id} + ')'">&times;</button>
+                        <a th:href="@{/edit-product/{id}(id=${p.id})}" class="btn btn-info">&#128393;</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-between mt-3">
+            <a th:href="@{/products(page=${currentPage - 1}, kw=${param.kw}, fromPrice=${param.fromPrice}, toPrice=${param.toPrice}, categoryId=${param.categoryId})}"
+                th:class="${currentPage <= 1} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
+                th:disabled="${currentPage <= 1}">Xem trước</a>
+            <span>Trang <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span></span>
+            <a th:href="@{/products(page=${currentPage + 1}, kw=${param.kw}, fromPrice=${param.fromPrice}, toPrice=${param.toPrice}, categoryId=${param.categoryId})}"
+                th:class="${currentPage >= totalPages} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
+                th:disabled="${currentPage >= totalPages}">Xem sau</a>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+    <script th:src="@{/js/main.js}"></script>
 </html>
