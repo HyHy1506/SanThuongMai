@@ -4,6 +4,8 @@
  */
 package com.txd.configs;
 
+import com.txd.filters.JwtFilter;
+import jakarta.servlet.Filter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import jakarta.servlet.MultipartConfigElement;
@@ -44,4 +46,9 @@ public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherSer
 
         registration.setMultipartConfig(new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold));
     }
+    
+    @Override
+     protected Filter[] getServletFilters() {
+         return new Filter[] { new JwtFilter() }; // Filter sẽ áp dụng cho mọi request
+     }
 }

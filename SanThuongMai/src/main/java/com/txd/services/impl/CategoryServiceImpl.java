@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.txd.service.impl;
+package com.txd.services.impl;
 
 import com.txd.pojo.Category;
-import com.txd.repository.CategoryRepository;
-import com.txd.service.CategoryService;
+import com.txd.repositories.CategoryRepository;
+import com.txd.services.CategoryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.txd.formatters.CategoryFormatter;
+import com.txd.formatters.SellerFormatter;
 
 /**
  *
@@ -26,8 +27,8 @@ import com.txd.formatters.CategoryFormatter;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
     "com.txd.controllers",
-    "com.txd.repository",
-    "com.txd.service",
+    "com.txd.repositories",
+    "com.txd.services",
     "com.txd.utils"
 })
 public class WebAppContextConfigs implements WebMvcConfigurer {
@@ -40,6 +41,8 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new CategoryFormatter());
+        registry.addFormatter(new SellerFormatter());
+
     }
 
     @Override

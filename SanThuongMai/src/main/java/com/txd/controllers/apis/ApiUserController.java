@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.txd.controllers;
+package com.txd.controllers.apis;
 
 import java.util.Map;
 
@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.txd.pojo.User;
-import com.txd.service.UserService;
+import com.txd.services.UserService;
 
 import jakarta.ws.rs.core.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  *
@@ -27,6 +28,7 @@ import jakarta.ws.rs.core.MediaType;
 
  @RestController
  @RequestMapping("/api")
+ @CrossOrigin
  public class ApiUserController {
      @Autowired
      private UserService userDetailsService;

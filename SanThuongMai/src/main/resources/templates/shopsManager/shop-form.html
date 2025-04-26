@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thêm/Sửa cửa hàng</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container">
+        <form th:action="@{/update-shop}" th:object="${shop}" method="post" class="bg-light p-4 rounded shadow-sm">
+            <!-- Hidden Fields -->
+            <input type="hidden" th:field="*{id}" />
+
+
+            <!-- Shop ID (Shown only when editing) -->
+            <div class="mb-3" th:if="${shop.id != null}">
+                <label for="id" class="form-label">ID cửa hàng</label>
+                <input type="text" class="form-control" id="id" th:value="*{id}" readonly>
+            </div>
+
+            <!-- Shop Name -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Tên cửa hàng <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" required
+                       placeholder="Nhập tên cửa hàng">
+                <div class="invalid-feedback" th:errors="*{name}"></div>
+            </div>
+
+            <!-- Shop Status -->
+            <div class="mb-3">
+                <label for="isActive" class="form-label">Trạng thái</label>
+                <select class="form-select" id="isActive" th:field="*{isActive}">
+                    <option value="true">Hoạt động</option>
+                    <option value="false">Không hoạt động</option>
+                </select>
+            </div>
+
+            <!-- Seller  -->
+            <div class="mb-3" th:if="${shop.id != null}">
+                <label for="sellerName" class="form-label">Người bán</label>
+                <input type="text" class="form-control" id="sellerName" th:value="${shop.sellerId.user.nickname} ?: 'N/A'" readonly>
+                <input type="hidden" th:field="*{sellerId}" />
+            </div>
+            <div class="mb-3" th:unless="${shop.id != null}">
+                <label for="sellerId" class="form-label">Người bán <span class="text-danger">*</span></label>
+                <select class="form-select" id="sellerId" th:field="*{sellerId}" required>
+                  
+                    <option th:each="seller : ${sellers}" th:value="${seller.id}" th:text="${seller.nickname}"></option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{sellerId}"></div>
+            </div>
+
+            <!-- Form Buttons -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <a th:href="@{/shops}" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

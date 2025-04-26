@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.txd.pojo.Product;
-import com.txd.service.ProductService;
-import com.txd.service.UserService;
+import com.txd.services.ProductService;
+import com.txd.services.UserService;
 import com.txd.utils.GlobalVariables;
 
 /**
@@ -60,11 +60,10 @@ public class ProductController {
         return "productsManager/editProduct";
     }
 
-    @PostMapping("/api/leaf/updated-product")
+    @PostMapping("/updated-product")
     public String updatedProduct(@ModelAttribute("product") Product product) {
 
-        //tesst usserr//////////////
-        //////////////////////////////
+       
         proSer.saveOrUpdate(product);
         return "redirect:/products";
     }

@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.txd.repository.impl;
+package com.txd.repositories.impl;
 
 import com.txd.pojo.Category;
-import com.txd.repository.CategoryRepository;
+import com.txd.repositories.CategoryRepository;
 import jakarta.persistence.Query;
 import java.util.List;
 import org.hibernate.Session;

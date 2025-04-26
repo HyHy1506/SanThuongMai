@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.txd.service.impl;
+package com.txd.services.impl;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -23,8 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.txd.pojo.User;
-import com.txd.repository.UserRepository;
-import com.txd.service.UserService;
+import com.txd.repositories.UserRepository;
+import com.txd.services.UserService;
 
 /**
  *

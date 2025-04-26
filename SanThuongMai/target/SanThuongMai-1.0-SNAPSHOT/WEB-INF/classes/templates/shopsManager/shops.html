@@ -1,0 +1,82 @@
+
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Trang chủ</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container">
+        <!-- Search and Filter Form -->
+        <form th:action="@{/shops}" method="get" class="mb-4 bg-light p-4 rounded shadow-sm">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="kw" class="form-label">Tên cửa hàng</label>
+                    <input type="text" class="form-control" id="kw" name="kw" th:value="${param.kw}" placeholder="Tìm theo tên">
+                </div>
+                <div class="col-md-3">
+                    <label for="isActive" class="form-label">Trạng thái</label>
+                    <select class="form-select" id="isActive" name="isActive">
+                        <option value="">Tất cả</option>
+                        <option value="true" th:selected="${param.isActive == 'true'}">Hoạt động</option>
+                        <option value="false" th:selected="${param.isActive == 'false'}">Không hoạt động</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <a th:href="@{/add-shop}" class="btn btn-success w-100">Thêm cửa hàng</a>
+                </div>
+            </div>
+        </form>
+
+        <!-- Shop List -->
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Ngày tạo</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="shop : ${shops}">
+                        <td th:text="${shop.id}"></td>
+                        <td th:text="${shop.name}"></td>
+                        <td th:text="${#dates.format(shop.createAt, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <span th:class="${shop.isActive} ? 'badge bg-success' : 'badge bg-danger'" th:text="${shop.isActive} ? 'Hoạt động' : 'Không hoạt động'"></span>
+                        </td>
+                        <td>
+                            <a th:href="@{'shops/'+${shop.id}}" class="btn btn-sm btn-info me-1">Sửa</a>
+                            <button class="btn btn-sm btn-danger" th:onclick="'deleteShop(\''+@{/api/shops}+'\',' + ${shop.id} + ')'">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr th:if="${shops.isEmpty}">
+                        <td colspan="7" class="text-center">Không tìm thấy cửa hàng nào</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <a th:href="@{/shops(page=${currentPage - 1}, kw=${param.kw}, isActive=${param.isActive})}"
+               th:class="${currentPage <= 1} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
+               th:disabled="${currentPage <= 1}">Trang trước</a>
+            <span>Trang <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span></span>
+            <a th:href="@{/shops(page=${currentPage + 1}, kw=${param.kw}, isActive=${param.isActive})}"
+               th:class="${currentPage >= totalPages} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
+               th:disabled="${currentPage >= totalPages}">Trang sau</a>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+    <script th:src="@{/js/main.js}"></script>
+</html>

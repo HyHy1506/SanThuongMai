@@ -1,4 +1,4 @@
-
+<!--
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -60,5 +60,60 @@
     <div th:replace="base :: footer"></div>
 
 
+</body>
+</html>-->
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Chỉnh sửa sản phẩm</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container py-5">
+        <h1 class="text-center mb-4">Chỉnh sửa sản phẩm</h1>
+        <div class="card p-4 mx-auto" style="max-width: 600px;">
+            <form method="post" th:action="@{/updated-product}" th:object="${product}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="file" class="form-label">Ảnh sản phẩm</label>
+                    <input type="file" class="form-control" th:field="*{file}" id="file">
+                    <img th:src="${product.image}" th:if="${product.id != null && product.image != null}" class="img-fluid mt-2 rounded" style="max-width: 200px;" alt="Ảnh lỗi"/>
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Tên sản phẩm</label>
+                    <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Tên sản phẩm">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Giá sản phẩm</label>
+                    <input type="number" class="form-control" th:field="*{price}" id="price" placeholder="Giá sản phẩm">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Miêu tả</label>
+                    <input type="text" class="form-control" th:field="*{description}" id="description" placeholder="Miêu tả">
+                </div>
+                <div class="mb-3">
+                    <label for="shopId" class="form-label">Mã cửa hàng (Shop ID)</label>
+                    <input type="text" class="form-control" th:value="*{shopId.name}" id="shopId" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Danh mục</label>
+                    <select class="form-select" id="category" th:field="*{categoryId}">
+                        <option th:each="c: ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-success px-5">Lưu sản phẩm</button>
+                </div>
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{shopId.id}" />
+                <input type="hidden" th:field="*{image}" />
+                <input type="hidden" th:field="*{isActive}" />
+            </form>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+    <script>(function(){function c(){var b = a.contentDocument || a.contentWindow.document; if (b){var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'93631e54ac41673d',t:'MTc0NTYzOTQ1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d)}}if (document.body){var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState)c();  else if (window.addEventListener)document.addEventListener('DOMContentLoaded', c);  else{var e = document.onreadystatechange || function(){}; document.onreadystatechange = function(b){e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c())}}}})();</script>
 </body>
 </html>

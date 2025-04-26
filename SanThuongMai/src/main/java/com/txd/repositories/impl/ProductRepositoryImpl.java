@@ -1,4 +1,4 @@
-package com.txd.repository.impl;
+package com.txd.repositories.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.txd.pojo.Product;
-import com.txd.repository.ProductRepository;
+import com.txd.repositories.ProductRepository;
 import com.txd.utils.GlobalVariables;
 
 import jakarta.persistence.Query;

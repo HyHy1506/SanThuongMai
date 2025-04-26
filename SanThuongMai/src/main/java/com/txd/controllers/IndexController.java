@@ -4,7 +4,7 @@
  */
 package com.txd.controllers;
 
-import com.txd.service.CategoryService;
+import com.txd.services.CategoryService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
