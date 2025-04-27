@@ -4,6 +4,9 @@
  */
 package com.txd.pojo;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,8 +22,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
@@ -77,7 +78,7 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -243,5 +244,5 @@ public class User implements Serializable {
     public String toString() {
         return "com.txd.pojo.User[ id=" + id + " ]";
     }
-    
+
 }

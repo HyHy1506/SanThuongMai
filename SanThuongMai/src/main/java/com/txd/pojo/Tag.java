@@ -4,6 +4,10 @@
  */
 package com.txd.pojo;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,9 +23,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
 
 /**
  *
@@ -50,7 +51,7 @@ public class Tag implements Serializable {
     @Column(name = "name")
     private String name;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;

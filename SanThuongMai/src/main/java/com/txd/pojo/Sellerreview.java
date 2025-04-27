@@ -4,6 +4,9 @@
  */
 package com.txd.pojo;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,8 +23,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
@@ -53,7 +54,7 @@ public class Sellerreview implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;

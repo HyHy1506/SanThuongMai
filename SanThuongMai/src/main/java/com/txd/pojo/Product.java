@@ -4,6 +4,13 @@
  */
 package com.txd.pojo;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Set;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,11 +30,6 @@ import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Set;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -76,7 +78,7 @@ public class Product implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Category categoryId;

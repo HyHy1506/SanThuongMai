@@ -8,6 +8,8 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedQueries;
@@ -32,15 +34,18 @@ import java.util.Set;
     @NamedQuery(name = "Seller.findByStatus", query = "SELECT s FROM Seller s WHERE s.status = :status")})
 public class Seller implements Serializable {
 
+    public enum SellerStatusEnum {
+        PENDING, APPROVED, REJECT
+    }
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "user_id")
     private Integer userId;
-    @Size(max = 8)
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private SellerStatusEnum status = SellerStatusEnum.PENDING;
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
@@ -66,11 +71,11 @@ public class Seller implements Serializable {
         this.userId = userId;
     }
 
-    public String getStatus() {
+    public SellerStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(SellerStatusEnum status) {
         this.status = status;
     }
 
@@ -130,5 +135,5 @@ public class Seller implements Serializable {
     public String toString() {
         return "com.txd.pojo.Seller[ userId=" + userId + " ]";
     }
-    
+
 }

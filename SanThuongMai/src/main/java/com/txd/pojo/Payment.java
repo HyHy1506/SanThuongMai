@@ -4,10 +4,17 @@
  */
 package com.txd.pojo;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Set;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,12 +26,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Set;
 
 /**
  *
@@ -43,6 +47,10 @@ import java.util.Set;
     @NamedQuery(name = "Payment.findByCreateAt", query = "SELECT p FROM Payment p WHERE p.createAt = :createAt")})
 public class Payment implements Serializable {
 
+    public enum PaymentMethodEnum {
+        COD, Paypal, Stripe, ZaloPay, Momo
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,16 +64,16 @@ public class Payment implements Serializable {
     private BigDecimal price;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 7)
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
-    private String paymentMethod;
+    private PaymentMethodEnum paymentMethod;
     @Column(name = "is_pay")
     private Boolean isPay;
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
@@ -82,7 +90,7 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public Payment(Integer id, BigDecimal price, String paymentMethod) {
+    public Payment(Integer id, BigDecimal price, PaymentMethodEnum paymentMethod) {
         this.id = id;
         this.price = price;
         this.paymentMethod = paymentMethod;
@@ -104,12 +112,12 @@ public class Payment implements Serializable {
         this.price = price;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethodEnum getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setPaymentMethod(PaymentMethodEnum paymentMethod) {
+        this.paymentMethod = paymentMethod; 
     }
 
     public Boolean getIsPay() {
@@ -184,5 +192,5 @@ public class Payment implements Serializable {
     public String toString() {
         return "com.txd.pojo.Payment[ id=" + id + " ]";
     }
-    
+
 }

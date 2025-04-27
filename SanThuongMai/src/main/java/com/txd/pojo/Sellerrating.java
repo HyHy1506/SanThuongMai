@@ -4,9 +4,14 @@
  */
 package com.txd.pojo;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,8 +23,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
@@ -44,13 +47,14 @@ public class Sellerrating implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "rate")
-    private Character rate;
+    private RatingEnum rate;
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
@@ -68,7 +72,7 @@ public class Sellerrating implements Serializable {
         this.id = id;
     }
 
-    public Sellerrating(Integer id, Character rate) {
+    public Sellerrating(Integer id, RatingEnum rate) {
         this.id = id;
         this.rate = rate;
     }
@@ -81,11 +85,11 @@ public class Sellerrating implements Serializable {
         this.id = id;
     }
 
-    public Character getRate() {
+    public RatingEnum getRate() {
         return rate;
     }
 
-    public void setRate(Character rate) {
+    public void setRate(RatingEnum rate) {
         this.rate = rate;
     }
 

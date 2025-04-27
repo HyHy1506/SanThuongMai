@@ -61,7 +61,7 @@ public class Category implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
     private Set<Product> productSet;
 

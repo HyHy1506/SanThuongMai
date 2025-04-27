@@ -56,7 +56,7 @@ public class Attribute implements Serializable {
     @Column(name = "value")
     private String value;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;

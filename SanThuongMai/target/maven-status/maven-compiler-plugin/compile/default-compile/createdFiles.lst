@@ -1,5 +1,6 @@
 com\txd\pojo\Sellerreview.class
 com\txd\services\impl\UserServiceImpl.class
+com\txd\pojo\Seller$SellerStatusEnum.class
 com\txd\pojo\Payment.class
 com\txd\pojo\Orderdetail.class
 com\txd\controllers\IndexController.class
@@ -28,6 +29,7 @@ com\txd\controllers\apis\ApiProductController.class
 com\txd\configs\DispatcherServletInit.class
 com\txd\services\UserService.class
 com\txd\services\impl\SellerServiceImpl.class
+com\txd\pojo\Payment$PaymentMethodEnum.class
 com\txd\repositories\impl\UserRepositoryImpl.class
 com\txd\configs\HibernateConfigs.class
 com\txd\controllers\UserController.class
@@ -53,6 +55,7 @@ com\txd\pojo\Productrating.class
 com\txd\repositories\CategoryRepository.class
 com\txd\configs\SecurityWebApplicationInitializer.class
 com\txd\services\impl\CategoryServiceImpl.class
+com\txd\pojo\RatingEnum.class
 com\txd\santhuongmai\JakartaRestConfiguration.class
 com\txd\pojo\Comment.class
 com\txd\repositories\impl\ShopRepositoryImpl.class

@@ -4,6 +4,9 @@
  */
 package com.txd.pojo;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,8 +20,6 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
@@ -41,7 +42,7 @@ public class Tagdetail implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;

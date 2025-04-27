@@ -4,10 +4,15 @@
  */
 package com.txd.pojo;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,9 +26,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
 
 /**
  *
@@ -58,11 +60,11 @@ public class Shop implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "shopId")
     private Set<Product> productSet;
     @JoinColumn(name = "seller_id", referencedColumnName = "user_id")
-    @OneToOne(optional = false)
+    @OneToOne(optional = false,fetch = FetchType.EAGER)
     private Seller sellerId;
 
     public Shop() {
