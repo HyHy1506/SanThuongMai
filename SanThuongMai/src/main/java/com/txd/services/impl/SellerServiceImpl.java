@@ -4,13 +4,15 @@
  */
 package com.txd.services.impl;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.txd.pojo.Seller;
 import com.txd.repositories.SellerRepository;
 import com.txd.services.SellerService;
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  *
@@ -23,13 +25,32 @@ public class SellerServiceImpl implements SellerService{
     private SellerRepository sellerRepo;
     
     @Override
-    public List<Seller> getSeller(Map<String, String> params) {
-        return sellerRepo.getSeller(params);
+    public List<Seller> getSellers(Map<String, String> params) {
+        return sellerRepo.getSellers(params);
     }
 
     @Override
     public List<Seller> getSellersWithoutShop(Map<String, String> params) {
         return sellerRepo.getSellersWithoutShop(params);
     }
-    
+      @Override
+    public Seller getSellerById(int id) {
+        return sellerRepo.getSellerById(id);
+    }
+
+    @Override
+    public void saveOrUpdate(Seller seller) {
+        sellerRepo.saveOrUpdate(seller);
+    }
+
+    @Override
+    public void deleteSeller(int id) {
+        sellerRepo.deleteSeller(id);
+    }
+
+  
+    @Override
+    public void updateSellerStatus(Seller seller) {
+        sellerRepo.updateSellerStatus(seller);
+    }
 }

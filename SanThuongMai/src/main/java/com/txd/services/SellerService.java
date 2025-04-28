@@ -4,16 +4,26 @@
  */
 package com.txd.services;
 
-import com.txd.pojo.Seller;
 import java.util.List;
 import java.util.Map;
+
+import com.txd.pojo.Seller;
 
 /**
  *
  * @author tran1
  */
 public interface SellerService {
-    
-     List<Seller> getSeller(Map<String,String> params);
+
+    List<Seller> getSellers(Map<String, String> params);
+
     List<Seller> getSellersWithoutShop(Map<String, String> params);
+
+    Seller getSellerById(int id);
+
+    void saveOrUpdate(Seller seller);
+
+    void deleteSeller(int id);
+
+    void updateSellerStatus(Seller seller);
 }

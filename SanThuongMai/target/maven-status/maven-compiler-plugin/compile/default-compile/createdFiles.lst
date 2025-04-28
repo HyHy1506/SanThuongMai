@@ -39,6 +39,7 @@ com\txd\services\CategoryService.class
 com\txd\repositories\SellerRepository.class
 com\txd\pojo\Category.class
 com\txd\pojo\Staff.class
+com\txd\controllers\CheckController.class
 com\txd\formatters\CategoryFormatter.class
 com\txd\pojo\Paymentdetail.class
 com\txd\pojo\Product.class

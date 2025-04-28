@@ -1,0 +1,126 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kiểm duyệt người bán</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container py-5">
+        <h1 class="text-center mb-4">Kiểm duyệt người bán</h1>
+        
+        <!-- Tabs for Seller Status -->
+        <ul class="nav nav-tabs mb-4" id="sellerTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="pending" aria-selected="true">Chờ duyệt</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="approved-tab" data-bs-toggle="tab" data-bs-target="#approved" type="button" role="tab" aria-controls="approved" aria-selected="false">Đã duyệt</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected" type="button" role="tab" aria-controls="rejected" aria-selected="false">Từ chối</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="sellerTabContent">
+            <!-- Pending Tab -->
+            <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="seller : ${pendingSellers}">
+                                <td th:text="${seller.user.id}"></td>
+                                <td th:text="${seller.user.nickname}"></td>
+                                <td th:text="${seller.user.email}"></td>
+                                <td th:text="${#dates.format(seller.user.createAt, 'dd/MM/yyyy HH:mm')}"></td>
+                                <td>
+                                    <a th:href="@{'/staff/check/'+${seller.user.id}}" class="btn btn-sm btn-info me-1">Xem</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${pendingSellers.isEmpty}">
+                                <td colspan="5" class="text-center">Không có người bán đang chờ duyệt</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Approved Tab -->
+            <div class="tab-pane fade" id="approved" role="tabpanel" aria-labelledby="approved-tab">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="seller : ${approvedSellers}">
+                                <td th:text="${seller.user.id}"></td>
+                                <td th:text="${seller.user.nickname}"></td>
+                                <td th:text="${seller.user.email}"></td>
+                                <td th:text="${#dates.format(seller.user.createAt, 'dd/MM/yyyy HH:mm')}"></td>
+                                <td>
+                                    <a th:href="@{'/staff/check/'+${seller.user.id}}" class="btn btn-sm btn-info me-1">Xem</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${approvedSellers.isEmpty}">
+                                <td colspan="5" class="text-center">Không có người bán được duyệt</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Rejected Tab -->
+            <div class="tab-pane fade" id="rejected" role="tabpanel" aria-labelledby="rejected-tab">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="seller : ${rejectedSellers}">
+                                <td th:text="${seller.user.id}"></td>
+                                <td th:text="${seller.user.nickname}"></td>
+                                <td th:text="${seller.user.email}"></td>
+                                <td th:text="${#dates.format(seller.user.createAt, 'dd/MM/yyyy HH:mm')}"></td>
+                                <td>
+                                    <a th:href="@{'/staff/check/'+${seller.user.id}}" class="btn btn-sm btn-info me-1">Xem</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${rejectedSellers.isEmpty}">
+                                <td colspan="5" class="text-center">Không có người bán bị từ chối</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th  th:replace="base :: footer"></div>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
