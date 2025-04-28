@@ -1,12 +1,13 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Thêm/Sửa người dùng</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:block th:replace="base :: bootstrap"></th:block>
 </head>
+
 <body>
     <div th:replace="base :: header"></div>
 
@@ -26,11 +27,11 @@
                     <input type="text" class="form-control" id="id" th:value="*{id}" readonly>
                 </div>
 
-                 <!-- Username -->
-                 <div class="mb-3">
+                <!-- Username -->
+                <div class="mb-3">
                     <label for="username" class="form-label">Tên tài khoản <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="username" th:field="*{username}" required
-                           placeholder="Nhập tên tài khoản">
+                        placeholder="Nhập tên tài khoản">
                     <div class="invalid-feedback" th:errors="*{username}"></div>
                 </div>
 
@@ -38,7 +39,7 @@
                 <div class="mb-3">
                     <label for="nickname" class="form-label">Tên người dùng <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="nickname" th:field="*{nickname}" required
-                           placeholder="Nhập tên người dùng">
+                        placeholder="Nhập tên người dùng">
                     <div class="invalid-feedback" th:errors="*{nickname}"></div>
                 </div>
 
@@ -46,20 +47,20 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                     <input type="email" class="form-control" id="email" th:field="*{email}" required
-                           placeholder="Nhập email">
+                        placeholder="Nhập email">
                     <div class="invalid-feedback" th:errors="*{email}"></div>
                 </div>
 
                 <!-- Password (only for adding new user) -->
                 <div class="mb-3" th:unless="${user.id != null}">
                     <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-                    <input type="password" class="form-control" id="password" name="password" required th:field="*{password}"
-                           placeholder="Nhập mật khẩu">
+                    <input type="password" class="form-control" id="password" name="password" required
+                        th:field="*{password}" placeholder="Nhập mật khẩu">
                     <div class="invalid-feedback">Mật khẩu là bắt buộc</div>
                 </div>
 
-                <!-- Role -->
-                <div class="mb-3">
+                <!-- Role nre user-->
+                <div class="mb-3" th:if="${user.id == null}">
                     <label for="role" class="form-label">Vai trò <span class="text-danger">*</span></label>
                     <select class="form-select" id="role" th:field="*{userRole}" required>
                         <option value="Customer">Khách hàng</option>
@@ -69,7 +70,14 @@
                     </select>
                     <div class="invalid-feedback" th:errors="*{userRole}"></div>
                 </div>
-
+                <!-- Role user exist-->
+                <div class="mb-3" th:if="${user.id != null}">
+                    <label for="roleExist" class="form-label">Vai trò <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="roleExist" th:field="*{userRole}" 
+                        placeholder="Vai trò bị trống" readonly>
+                   
+                    <div class="invalid-feedback" th:errors="*{userRole}"></div>
+                </div>
                 <!-- Status -->
                 <div class="mb-3">
                     <label for="isActive" class="form-label">Trạng thái</label>
@@ -83,7 +91,8 @@
                 <div class="mb-3">
                     <label for="avatar" class="form-label">Ảnh đại diện</label>
                     <input type="file" class="form-control" id="avatar" name="avatar" th:field="*{file}">
-                    <img th:src="${user.avatar}" th:if="${user.id != null && user.avatar != null}" class="img-fluid mt-2 rounded" style="max-width: 200px;" alt="Ảnh lỗi"/>
+                    <img th:src="${user.avatar}" th:if="${user.id != null && user.avatar != null}"
+                        class="img-fluid mt-2 rounded" style="max-width: 200px;" alt="Ảnh lỗi" />
                 </div>
 
                 <!-- Form Buttons -->
@@ -97,4 +106,5 @@
 
     <div th:replace="base :: footer"></div>
 </body>
+
 </html>

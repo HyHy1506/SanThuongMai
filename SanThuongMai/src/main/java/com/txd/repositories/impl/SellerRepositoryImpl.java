@@ -70,14 +70,13 @@ public class SellerRepositoryImpl implements SellerRepository {
         }
 
         String orderBy = params.get("orderBy");
-        orderBy=orderBy.trim();
         if (orderBy == null || orderBy.isEmpty() || orderBy.equalsIgnoreCase("desc")) {
             cQ.orderBy(b.desc(root.get("id"))); // Sắp xếp giảm dần theo id
         } else if (orderBy.equalsIgnoreCase("asc")) {
             cQ.orderBy(b.asc(root.get("id"))); // Sắp xếp tăng dần theo id
         }
-        Query query = s.createQuery(cQ);
 
+        Query query = s.createQuery(cQ);
         return query.getResultList();
     }
 
@@ -145,10 +144,38 @@ public class SellerRepositoryImpl implements SellerRepository {
     @Override
     public void updateSellerStatus(Seller seller) {
         Session session = factory.getObject().getCurrentSession();
-        Seller existingSeller = getSellerById(seller.getUserId());
-        if (existingSeller != null) {
-            existingSeller.setStatus(seller.getStatus());
-            session.update(existingSeller);
+        if (seller != null) {
+            Seller existingSeller = getSellerById(seller.getUserId());
+            if (existingSeller != null) {
+                existingSeller.setStatus(seller.getStatus());
+                session.update(existingSeller);
+            }
         }
+
+    }
+
+    @Override
+    public boolean removeRelationshipWithShop(Seller seller) {
+        Session session = factory.getObject().getCurrentSession();
+        if (seller != null && seller.getUserId() != null) {
+            seller.setShop(null);
+            session.merge(seller);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean hasRelatedProductsOrShops(int id) {
+        Session session = factory.getObject().getCurrentSession();
+        Seller seller = session.get(Seller.class, id);
+        if (seller != null) {
+            if (seller.getShop() != null && seller.getShop().getId() != null) {
+                return true;
+            }
+        }
+        return false;
+
     }
 }

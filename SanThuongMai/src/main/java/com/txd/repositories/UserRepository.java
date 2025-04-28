@@ -27,5 +27,5 @@ public interface UserRepository {
 
     User saveOrUpdate(User user);
 
-    void deleteUser(int id);
+    void deleteUser(int id) throws IllegalArgumentException;;
 }

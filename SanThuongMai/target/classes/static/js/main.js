@@ -15,7 +15,7 @@ function deleteShop(endpoint, id) {
     if (confirm("Bạn chắc chắn muốn xóa cửa hàng này?") === true) {
         fetch(`${endpoint}/${id}`, {
             method: "DELETE",
-           
+
         }).then(res => {
             if (res.status === 204) {
                 alert("Xóa cửa hàng thành công!");
@@ -32,16 +32,25 @@ function deleteShop(endpoint, id) {
     }
 }
 function deleteUser(url, id) {
-    if (confirm("Bạn có chắc muốn xóa người dùng này?")) {
-        fetch(`${url}/${id}`, {
-            method: "DELETE"
-        }).then(res => {
-            if (res.status === 204) {
-                alert("Xóa người dùng thành công!");
-                location.reload();
-            } else {
-                alert("Đã có lỗi xảy ra!");
-            }
-        });
+    try {
+        if (confirm("Bạn có chắc muốn xóa người dùng này?")) {
+            fetch(`${url}/${id}`, {
+                method: "DELETE"
+            }).then(res => {
+                if (res.ok) {
+                    alert("Xóa người dùng thành công!");
+                    location.reload();
+                } else {
+                    return res.json().then(errorData => {
+                        console.error(res);
+                        console.error(errorData);
+                        alert(errorData.error);
+                    });
+                }
+            });
+        }
+    } catch (err) {
+        alert(err);
     }
+   
 }

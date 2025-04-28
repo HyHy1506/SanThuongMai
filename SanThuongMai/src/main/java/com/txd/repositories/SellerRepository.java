@@ -26,4 +26,6 @@ public interface SellerRepository {
     void deleteSeller(int id);
 
     void updateSellerStatus(Seller seller);
+    boolean removeRelationshipWithShop(Seller seller);
+    boolean hasRelatedProductsOrShops(int id);
 }

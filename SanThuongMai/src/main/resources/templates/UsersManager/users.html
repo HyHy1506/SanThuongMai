@@ -8,7 +8,15 @@
 
 <body>
     <div th:replace="base :: header"></div>
+    <!-- Hiển thị thông báo thành công -->
+    <div th:if="${message}" class="alert alert-success" role="alert">
+        <span th:text="${message}"></span>
+    </div>
 
+    <!-- Hiển thị thông báo lỗi -->
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
     <main class="container py-5">
         <h1 class="text-center mb-4">Danh sách người dùng</h1>
         <div class="card p-4 mb-5">
@@ -23,8 +31,12 @@
                         <label for="isActive" class="form-label">Trạng thái</label>
                         <select class="form-select" id="isActive" name="isActive">
                             <option value="">Tất cả</option>
-                            <option value="true" th:selected="${selectedIsActive !=null and selectedIsActive == 'true'}">Hoạt động</option>
-                            <option value="false" th:selected="${selectedIsActive !=null and selectedIsActive == 'false'}">Không hoạt động</option>
+                            <option value="true"
+                                th:selected="${selectedIsActive !=null and selectedIsActive == 'true'}">Hoạt động
+                            </option>
+                            <option value="false"
+                                th:selected="${selectedIsActive !=null and selectedIsActive == 'false'}">Không hoạt động
+                            </option>
                         </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">

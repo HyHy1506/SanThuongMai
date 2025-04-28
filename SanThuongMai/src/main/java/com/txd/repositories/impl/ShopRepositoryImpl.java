@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.txd.pojo.Seller;
 import com.txd.pojo.Shop;
+import com.txd.repositories.SellerRepository;
 import com.txd.repositories.ShopRepository;
 import com.txd.utils.GlobalVariables;
 
@@ -31,7 +32,8 @@ public class ShopRepositoryImpl implements ShopRepository {
     @Autowired
     private LocalSessionFactoryBean factory;
 
-   
+    @Autowired
+    private SellerRepository SellerRepo;
 
     @Override
     public List<Shop> getShops(Map<String, String> params) {
@@ -122,11 +124,10 @@ public class ShopRepositoryImpl implements ShopRepository {
 
             //xoa quan he sheller voi shop
             Seller seller = shop.getSellerId();
-            if (seller != null) {
-                seller.setShop(null); 
-                s.merge(seller); 
+            boolean result = SellerRepo.removeRelationshipWithShop(seller);
+            if (result) {
+                s.remove(shop);
             }
-            s.remove(shop);
         }
     }
 }

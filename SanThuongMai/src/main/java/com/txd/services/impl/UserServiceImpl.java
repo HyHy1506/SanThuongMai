@@ -96,6 +96,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveOrUpdate(User user) {
+        if (user != null) {
+            user.setNickname(user.getNickname().trim());
+            user.setUsername(user.getUsername().trim());
+            user.setEmail(user.getEmail().trim());
+            user.setPassword(this.passswordEncoder.encode(user.getPassword().trim()));
+       
+        }
         if (!user.getFile().isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(user.getFile().getBytes(),
@@ -114,12 +121,12 @@ public class UserServiceImpl implements UserService {
             Date d = userRepo.getUserById(user.getId()).getCreateAt();
             user.setCreateAt(d);
         }
-         userRepo.saveOrUpdate(user);
+        userRepo.saveOrUpdate(user);
     }
 
     @Override
-    public void deleteUser(int id) {
-        this.userRepo.deleteUser(id);
+    public void deleteUser(int id) throws IllegalArgumentException {
+       this.userRepo.deleteUser(id);
     }
 
     @Override

@@ -30,5 +30,5 @@ public interface UserService extends UserDetailsService {
 
     void saveOrUpdate(User user);
 
-    void deleteUser(int id);
+    void deleteUser(int id) throws IllegalArgumentException;
 }

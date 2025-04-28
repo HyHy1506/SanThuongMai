@@ -14,7 +14,16 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.txd.pojo.Admin;
+import com.txd.pojo.Customer;
+import com.txd.pojo.Seller;
+import com.txd.pojo.Staff;
 import com.txd.pojo.User;
+import com.txd.pojo.UserRoleEnum;
+import com.txd.repositories.AdminRepository;
+import com.txd.repositories.CustomerRepository;
+import com.txd.repositories.SellerRepository;
+import com.txd.repositories.StaffRepository;
 import com.txd.repositories.UserRepository;
 import com.txd.utils.GlobalVariables;
 
@@ -34,6 +43,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
+    @Autowired
+    private StaffRepository staffRepo;
+    @Autowired
+    private SellerRepository sellerRepo;
+    @Autowired
+    private AdminRepository adminRepo;
+    @Autowired
+    private CustomerRepository customerRepo;
 
     @Override
     public User getUserByUsername(String username) {
@@ -48,7 +65,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User register(User u) {
         Session s = this.factory.getObject().getCurrentSession();
         s.persist(u);
-
+        createEntityByRoleOfUser(u);
         s.refresh(u);
         return u;
     }
@@ -79,6 +96,13 @@ public class UserRepositoryImpl implements UserRepository {
             query.where(predicates.toArray(Predicate[]::new));
         }
 
+        String orderBy = params.get("orderBy");
+
+        if (orderBy == null || orderBy.isEmpty() || orderBy.equalsIgnoreCase("desc")) {
+            query.orderBy(builder.desc(root.get("id")));
+        } else if (orderBy.equalsIgnoreCase("asc")) {
+            query.orderBy(builder.asc(root.get("id")));
+        }
         query.orderBy(builder.asc(root.get("id")));
 
         Query q = session.createQuery(query);
@@ -131,18 +155,95 @@ public class UserRepositoryImpl implements UserRepository {
         Session session = this.factory.getObject().getCurrentSession();
         if (user.getId() == null) {
             session.persist(user);
+            createEntityByRoleOfUser(user);
         } else {
             session.merge(user);
         }
+
         return user;
     }
 
     @Override
-    public void deleteUser(int id) {
+    public void deleteUser(int id) throws IllegalArgumentException {
         Session session = this.factory.getObject().getCurrentSession();
         User user = session.get(User.class, id);
-        if (user != null) {
+        if (user == null) {
+            throw new IllegalArgumentException("Không tìm thấy id: " + id);
+        }
+
+        try {
+            deleteEntityByRoleOfUser(user);
             session.remove(user);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Lỗi : " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("An unexpected error occurred while deleting user: " + e.getMessage(), e);
+        }
+
+    }
+
+    private void deleteEntityByRoleOfUser(User user) {
+        if (user != null) {
+            try {
+                UserRoleEnum userRole = UserRoleEnum.valueOf(user.getUserRole());
+                switch (userRole) {
+                    case Admin:
+                        adminRepo.deleteAdmin(user.getId());
+                        break;
+                    case Customer:
+                        customerRepo.deleteCustomer(user.getId());
+                        break;
+                    case Seller:
+                        Seller seller = sellerRepo.getSellerById(user.getId());
+                        if (seller != null) {
+                            // Kiểm tra xem Seller có cửa hàng không
+
+                            if (sellerRepo.hasRelatedProductsOrShops(user.getId())) {
+                                throw new IllegalArgumentException("Không thể xóa seller, hãy xóa theo thứ tự sau , product->shop->seller");
+
+                            }
+                            sellerRepo.deleteSeller(user.getId());
+                        }
+                        break;
+                    case Staff:
+                        staffRepo.deleteStaff(user.getId());
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Không biết role: " + userRole);
+                }
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Xóa thực thể kế thừa user thất bại : "+ e);
+            }
+
+        }
+    }
+
+    private void createEntityByRoleOfUser(User user) {
+        if (user != null) {
+            try {
+                UserRoleEnum userRole = UserRoleEnum.valueOf(user.getUserRole());
+                switch (userRole) {
+                    case Admin:
+                        adminRepo.saveOrUpdate(new Admin(user.getId()));
+                        break;
+                    case Customer:
+                        customerRepo.saveOrUpdate(new Customer(user.getId()));
+                        break;
+                    case Seller:
+                        Seller newSeller = new Seller(user.getId());
+                        newSeller.setStatus(Seller.SellerStatusEnum.PENDING);
+                        sellerRepo.saveOrUpdate(newSeller);
+                        break;
+                    case Staff:
+                        staffRepo.saveOrUpdate(new Staff(user.getId()));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Không biết role: " + userRole);
+                }
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Chỉnh sửa thực thể kế thừa user thất bại ", e);
+            }
+
         }
     }
 }
