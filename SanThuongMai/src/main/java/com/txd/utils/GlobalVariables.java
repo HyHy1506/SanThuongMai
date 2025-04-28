@@ -13,5 +13,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GlobalVariables {
-    public static int PAGE_SIZE = 6;
+    public static final  int PAGE_SIZE = 6;
 }

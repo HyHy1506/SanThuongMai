@@ -10,7 +10,7 @@
     <div th:replace="base :: header"></div>
 
     <main class="container">
-        <form th:action="@{/update-shop}" th:object="${shop}" method="post" class="bg-light p-4 rounded shadow-sm">
+        <form th:action="@{/admin/update-shop}" th:object="${shop}" method="post" class="bg-light p-4 rounded shadow-sm">
             <!-- Hidden Fields -->
             <input type="hidden" th:field="*{id}" />
 
@@ -48,7 +48,7 @@
                 <label for="sellerId" class="form-label">Người bán <span class="text-danger">*</span></label>
                 <select class="form-select" id="sellerId" th:field="*{sellerId}" required>
                   
-                    <option th:each="seller : ${sellers}" th:value="${seller.userId}" th:text="${ 'id: '+seller.userId + ' - '+  seller.user.nickname}"></option>
+                    <option th:each="seller : ${sellers}" th:value="${seller.id}" th:text="${seller.nickname}"></option>
                 </select>
                 <div class="invalid-feedback" th:errors="*{sellerId}"></div>
             </div>
@@ -56,7 +56,7 @@
             <!-- Form Buttons -->
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Lưu</button>
-                <a th:href="@{/shops}" class="btn btn-secondary">Hủy</a>
+                <a th:href="@{/admin/shops}" class="btn btn-secondary">Hủy</a>
             </div>
         </form>
     </main>

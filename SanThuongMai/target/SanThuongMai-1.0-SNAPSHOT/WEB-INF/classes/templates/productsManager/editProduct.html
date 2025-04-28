@@ -1,67 +1,4 @@
-<!--
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Trang chủ</title>
-    <th:block th:replace="base :: bootstrap"></th:block>
-</head>
-<body>
-    <div th:replace="base :: header"></div>
 
-    <main class="container">
-
-        <h1 class="text-center text-info mt-1">Chỉnh sửa sản phẩm</h1>
-   
-        <form method="post" th:action="@{/api/leaf/updated-product}" th:object="${product}" enctype="multipart/form-data">
-            <div class=" mb-3 mt-3">
-                <h3 >Ảnh sản phẩm</h3>
-                <input type="file" class="form-control" th:field="*{file}" id="file" >
-                
-                
-                <img th:src="${product.image}" th:if="${product.id != null && product.image != null}" width="200" alt="Ảnh lỗi"/>
-            </div>
-            <div class="form-floating mb-3 mt-3">
-                <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Tên sản phẩm">
-                <label for="name">Tên sản phẩm</label>
-            </div>
-            <div class="form-floating mb-3 mt-3">
-                <input type="number" class="form-control" th:field="*{price}" id="price" placeholder="Gía sản phẩm">
-                <label for="price">Gía sản phẩm</label>
-            </div>
-            <div class="form-floating mb-3 mt-3">
-                <input type="text" class="form-control" th:field="*{description}" id="description" placeholder="Miêu tả">
-                <label for="description">Miêu tả</label>
-            </div>
-            <div class="form-floating mb-3 mt-3">
-                <input type="text" class="form-control" th:value="*{shopId.name}" id="shopId" readonly>
-                <label for="shopId">Mã cửa hàng (Shop ID)</label>
-            </div>
-           
-            
-            <div class="form-floating">
-                <select class="form-select" id="category" th:field="*{categoryId}">
-                    <option th:each="c: ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
-                </select>
-                <label for="category" class="form-label">Danh mục:</label>
-            </div>
-            <div class="form-floating mt-1">
-                <button class="btn btn-success">Lưu sản phẩm</button>
-            </div>
-            <input type="hidden" th:field="*{id}" />
-            <input type="hidden" th:field="*{shopId.id}" />
-             <input type="hidden" th:field="*{image}" />
-             
-               <input type="hidden" th:field="*{create_at}" />
-                <input type="hidden" th:field="*{update_at}" />
-                <input type="hidden" th:field="*{is_active}" />
-        </form>
-    </main>
-
-    <div th:replace="base :: footer"></div>
-
-
-</body>
-</html>-->
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -74,7 +11,7 @@
     <main class="container py-5">
         <h1 class="text-center mb-4">Chỉnh sửa sản phẩm</h1>
         <div class="card p-4 mx-auto" style="max-width: 600px;">
-            <form method="post" th:action="@{/updated-product}" th:object="${product}" enctype="multipart/form-data">
+            <form method="post" th:action="@{/admin/updated-product}" th:object="${product}" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="file" class="form-label">Ảnh sản phẩm</label>
                     <input type="file" class="form-control" th:field="*{file}" id="file">

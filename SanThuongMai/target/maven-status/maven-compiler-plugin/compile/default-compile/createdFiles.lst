@@ -13,6 +13,7 @@ com\txd\services\impl\ProductServiceImpl.class
 com\txd\repositories\impl\ProductRepositoryImpl.class
 com\txd\repositories\impl\SellerRepositoryImpl.class
 com\txd\pojo\Seller.class
+com\txd\controllers\AuthenticationController.class
 com\txd\pojo\User.class
 com\txd\controllers\apis\ApiShopCotroller.class
 com\txd\utils\JwtUtils.class
@@ -48,6 +49,7 @@ com\txd\pojo\Productattribute.class
 com\txd\pojo\Tag.class
 com\txd\pojo\Sellerrating.class
 com\txd\repositories\UserRepository.class
+com\txd\pojo\UserRoleEnum.class
 com\txd\services\ProductService.class
 com\txd\configs\ThymeleafConfig.class
 com\txd\services\impl\ShopServiceImpl.class

@@ -34,12 +34,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
-    @Autowired
-    private GlobalVariables globalVariables;
 
     @Override
     public List<Product> getProducts(Map<String, String> params) {
-        int PAGE_SIZE = globalVariables.PAGE_SIZE;
+        int PAGE_SIZE = GlobalVariables.PAGE_SIZE;
         Session s = factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Product> cQ = b.createQuery(Product.class);

@@ -31,3 +31,17 @@ function deleteShop(endpoint, id) {
         });
     }
 }
+function deleteUser(url, id) {
+    if (confirm("Bạn có chắc muốn xóa người dùng này?")) {
+        fetch(`${url}/${id}`, {
+            method: "DELETE"
+        }).then(res => {
+            if (res.status === 204) {
+                alert("Xóa người dùng thành công!");
+                location.reload();
+            } else {
+                alert("Đã có lỗi xảy ra!");
+            }
+        });
+    }
+}

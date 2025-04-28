@@ -10,7 +10,7 @@
 
     <main class="container">
         <!-- Search and Filter Form -->
-        <form th:action="@{/shops}" method="get" class="mb-4 bg-light p-4 rounded shadow-sm">
+        <form th:action="@{/admin/shops}" method="get" class="mb-4 bg-light p-4 rounded shadow-sm">
             <div class="row g-3">
                 <div class="col-md-4">
                     <label for="kw" class="form-label">Tên cửa hàng</label>
@@ -28,7 +28,7 @@
                     <button type="submit" class="btn btn-primary w-100">Lọc</button>
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
-                    <a th:href="@{/add-shop}" class="btn btn-success w-100">Thêm cửa hàng</a>
+                    <a th:href="@{/admin/add-shop}" class="btn btn-success w-100">Thêm cửa hàng</a>
                 </div>
             </div>
         </form>
@@ -54,7 +54,7 @@
                             <span th:class="${shop.isActive} ? 'badge bg-success' : 'badge bg-danger'" th:text="${shop.isActive} ? 'Hoạt động' : 'Không hoạt động'"></span>
                         </td>
                         <td>
-                            <a th:href="@{'shops/'+${shop.id}}" class="btn btn-sm btn-info me-1">Sửa</a>
+                            <a th:href="@{'/admin/shops/'+${shop.id}}" class="btn btn-sm btn-info me-1">Sửa</a>
                             <button class="btn btn-sm btn-danger" th:onclick="'deleteShop(\''+@{/api/shops}+'\',' + ${shop.id} + ')'">Xóa</button>
                         </td>
                     </tr>
@@ -67,11 +67,11 @@
 
         <!-- Pagination -->
         <div class="d-flex justify-content-between align-items-center mt-3">
-            <a th:href="@{/shops(page=${currentPage - 1}, kw=${param.kw}, isActive=${param.isActive})}"
+            <a th:href="@{/admin/shops(page=${currentPage - 1}, kw=${param.kw}, isActive=${param.isActive})}"
                th:class="${currentPage <= 1} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
                th:disabled="${currentPage <= 1}">Trang trước</a>
             <span>Trang <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span></span>
-            <a th:href="@{/shops(page=${currentPage + 1}, kw=${param.kw}, isActive=${param.isActive})}"
+            <a th:href="@{/admin/shops(page=${currentPage + 1}, kw=${param.kw}, isActive=${param.isActive})}"
                th:class="${currentPage >= totalPages} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
                th:disabled="${currentPage >= totalPages}">Trang sau</a>
         </div>

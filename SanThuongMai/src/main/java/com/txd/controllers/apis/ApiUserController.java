@@ -20,23 +20,32 @@ import com.txd.services.UserService;
 
 import jakarta.ws.rs.core.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
  * @author tran1
  */
+@RestController
+@RequestMapping("/api")
+@CrossOrigin
+public class ApiUserController {
 
- @RestController
- @RequestMapping("/api")
- @CrossOrigin
- public class ApiUserController {
-     @Autowired
-     private UserService userDetailsService;
-     
-     @PostMapping(path = "/users", consumes = MediaType.MULTIPART_FORM_DATA)
-     public ResponseEntity<User> register(@RequestParam Map<String, String> params, 
-             @RequestParam(value = "avatar") MultipartFile avatar) {
-         
-         return new ResponseEntity<>(this.userDetailsService.register(params, avatar), HttpStatus.CREATED);
-     }
- }
+    @Autowired
+    private UserService userDetailsService;
+
+    @PostMapping(path = "/users", consumes = MediaType.MULTIPART_FORM_DATA)
+    public ResponseEntity<User> register(@RequestParam Map<String, String> params,
+            @RequestParam(value = "avatar") MultipartFile avatar) {
+
+        return new ResponseEntity<>(this.userDetailsService.register(params, avatar), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void destroy(@PathVariable("userId") int id) {
+        this.userDetailsService.deleteUser(id);
+    }
+}

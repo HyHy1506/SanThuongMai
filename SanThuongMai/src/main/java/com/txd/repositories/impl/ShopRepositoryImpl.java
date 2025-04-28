@@ -1,23 +1,25 @@
 package com.txd.repositories.impl;
 
-import com.txd.pojo.Seller;
-import com.txd.pojo.Shop;
-import com.txd.repositories.ShopRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.txd.pojo.Seller;
+import com.txd.pojo.Shop;
+import com.txd.repositories.ShopRepository;
+import com.txd.utils.GlobalVariables;
+
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import com.txd.utils.GlobalVariables;
 
 /**
  * Implementation of ShopRepository for managing Shop entities.
@@ -29,12 +31,11 @@ public class ShopRepositoryImpl implements ShopRepository {
     @Autowired
     private LocalSessionFactoryBean factory;
 
-    @Autowired
-    private GlobalVariables globalVariables;
+   
 
     @Override
     public List<Shop> getShops(Map<String, String> params) {
-        int PAGE_SIZE = globalVariables.PAGE_SIZE;
+        int PAGE_SIZE = GlobalVariables.PAGE_SIZE;
         Session s = factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Shop> cQ = b.createQuery(Shop.class);

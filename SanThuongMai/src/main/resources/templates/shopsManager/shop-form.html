@@ -10,7 +10,7 @@
     <div th:replace="base :: header"></div>
 
     <main class="container">
-        <form th:action="@{/update-shop}" th:object="${shop}" method="post" class="bg-light p-4 rounded shadow-sm">
+        <form th:action="@{/admin/update-shop}" th:object="${shop}" method="post" class="bg-light p-4 rounded shadow-sm">
             <!-- Hidden Fields -->
             <input type="hidden" th:field="*{id}" />
 
@@ -56,7 +56,7 @@
             <!-- Form Buttons -->
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Lưu</button>
-                <a th:href="@{/shops}" class="btn btn-secondary">Hủy</a>
+                <a th:href="@{/admin/shops}" class="btn btn-secondary">Hủy</a>
             </div>
         </form>
     </main>

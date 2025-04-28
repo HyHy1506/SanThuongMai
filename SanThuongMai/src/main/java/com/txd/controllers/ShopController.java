@@ -4,9 +4,7 @@
  */
 package com.txd.controllers;
 
-import com.txd.pojo.Seller;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +14,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.txd.pojo.Shop;
-import com.txd.pojo.User;
 import com.txd.services.SellerService;
 import com.txd.services.ShopService;
 import com.txd.utils.GlobalVariables;
-import java.util.HashMap;
 
 /**
  *
  * @author tran1
  */
 @Controller
+@RequestMapping("/admin")
 public class ShopController {
 
     @Autowired
@@ -51,21 +49,21 @@ public class ShopController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages > 0 ? totalPages : 1);
 
-        return "shopsManager/shops";
+        return "ShopsManager/shops";
     }
 
     @PostMapping("/update-shop")
     public String add(@ModelAttribute(value = "shop") Shop s) {
         this.shopSer.saveOrUpdate(s);
 
-        return "redirect:/shops";
+        return "redirect:/admin/shops";
     }
 
     @GetMapping("/shops/{shopId}")
     public String updateView(Model model, @PathVariable(value = "shopId") int id) {
         Shop s = shopSer.getShopById(id);
         model.addAttribute("shop", s);
-        return "shopsManager/shop-form";
+        return "ShopsManager/shop-form";
     }
 
     @GetMapping("/add-shop")
@@ -75,6 +73,6 @@ public class ShopController {
         Map<String, String> params = new HashMap<>();
         params.put("isActive", "true");
         model.addAttribute("sellers", sellerSer.getSellersWithoutShop(params));
-        return "shopsManager/shop-form";
+        return "ShopsManager/shop-form";
     }
 }

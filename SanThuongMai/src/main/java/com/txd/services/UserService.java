@@ -4,6 +4,7 @@
  */
 package com.txd.services;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,4 +21,14 @@ public interface UserService extends UserDetailsService {
     User getUserByUsername(String username);
 
     User register(Map<String, String> params, MultipartFile avatar);
+
+    List<User> getUsers(Map<String, String> params);
+
+    long countUsers(Map<String, String> params);
+
+    User getUserById(int id);
+
+    void saveOrUpdate(User user);
+
+    void deleteUser(int id);
 }

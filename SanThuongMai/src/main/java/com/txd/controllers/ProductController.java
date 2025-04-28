@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.txd.pojo.Product;
@@ -25,6 +26,7 @@ import com.txd.utils.GlobalVariables;
  * @author tran1
  */
 @Controller
+@RequestMapping("/admin")
 public class ProductController {
 
     @Autowired
@@ -50,14 +52,14 @@ public class ProductController {
         //lay danh muc da chon
         model.addAttribute("selectedCategoryId", 
         categoryId != null && !categoryId.isEmpty() ? Integer.parseInt(categoryId) : null);
-        return "productsManager/products";
+        return "ProductsManager/products";
     }
 
     @GetMapping("/edit-product/{pId}")
     public String editProduct(Model model, @PathVariable("pId") int pId) {
 
         model.addAttribute("product", proSer.getProductById(pId));
-        return "productsManager/editProduct";
+        return "ProductsManager/editProduct";
     }
 
     @PostMapping("/updated-product")
@@ -65,6 +67,6 @@ public class ProductController {
 
        
         proSer.saveOrUpdate(product);
-        return "redirect:/products";
+        return "redirect:/admin/products";
     }
 }
