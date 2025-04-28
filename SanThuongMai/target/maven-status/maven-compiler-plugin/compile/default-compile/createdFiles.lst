@@ -32,6 +32,7 @@ com\txd\services\ShopService.class
 com\txd\controllers\apis\ApiUserController.class
 com\txd\controllers\apis\ApiProductController.class
 com\txd\configs\DispatcherServletInit.class
+com\txd\controllers\apis\ApiTransactionController.class
 com\txd\services\UserService.class
 com\txd\services\impl\SellerServiceImpl.class
 com\txd\pojo\Payment$PaymentMethodEnum.class
@@ -41,6 +42,7 @@ com\txd\controllers\UserController.class
 com\txd\repositories\ShopRepository.class
 com\txd\services\CategoryService.class
 com\txd\repositories\SellerRepository.class
+com\txd\services\PaymentService.class
 com\txd\pojo\Category.class
 com\txd\pojo\Staff.class
 com\txd\repositories\impl\CustomerRepositoryImpl.class
@@ -48,12 +50,15 @@ com\txd\controllers\CheckController.class
 com\txd\formatters\CategoryFormatter.class
 com\txd\pojo\Paymentdetail.class
 com\txd\pojo\Product.class
+com\txd\services\impl\PaymentServiceImpl.class
 com\txd\pojo\Customer.class
 com\txd\pojo\Tagdetail.class
 com\txd\formatters\SellerFormatter.class
 com\txd\repositories\StaffRepository.class
+com\txd\repositories\impl\PaymentRepositoryImpl.class
 com\txd\pojo\Productattribute.class
 com\txd\pojo\Tag.class
+com\txd\controllers\TransactionController.class
 com\txd\pojo\Sellerrating.class
 com\txd\repositories\UserRepository.class
 com\txd\pojo\UserRoleEnum.class
@@ -63,6 +68,7 @@ com\txd\repositories\impl\StaffRepositoryImpl.class
 com\txd\services\impl\ShopServiceImpl.class
 com\txd\pojo\Productrating.class
 com\txd\repositories\CategoryRepository.class
+com\txd\repositories\PaymentRepository.class
 com\txd\configs\SecurityWebApplicationInitializer.class
 com\txd\services\impl\CategoryServiceImpl.class
 com\txd\pojo\RatingEnum.class

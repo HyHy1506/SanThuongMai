@@ -97,7 +97,6 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         String orderBy = params.get("orderBy");
-
         if (orderBy == null || orderBy.isEmpty() || orderBy.equalsIgnoreCase("desc")) {
             query.orderBy(builder.desc(root.get("id")));
         } else if (orderBy.equalsIgnoreCase("asc")) {

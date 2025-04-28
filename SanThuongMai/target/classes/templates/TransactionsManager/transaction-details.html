@@ -1,0 +1,62 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chi tiết giao dịch</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container py-5">
+        <h1 class="text-center mb-4">Chi tiết giao dịch</h1>
+        <div class="card p-4 mx-auto" style="max-width: 800px;">
+            <h4>Thông tin giao dịch</h4>
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>ID:</strong> <span th:text="${payment.id}"></span></div>
+                <div class="col-md-6"><strong>Khách hàng:</strong> <span th:text="${payment.customerId.user.nickname}"></span></div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>Tổng giá:</strong> <span th:text="${payment.price} + ' VNĐ'"></span></div>
+                <div class="col-md-6"><strong>Phương thức:</strong> <span th:text="${payment.paymentMethod}"></span></div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Trạng thái:</strong>
+                    <span th:class="${payment.isPay} ? 'badge bg-success' : 'badge bg-warning'"
+                          th:text="${payment.isPay} ? 'Đã thanh toán' : 'Chưa thanh toán'"></span>
+                </div>
+                <div class="col-md-6"><strong>Ngày tạo:</strong> <span th:text="${#dates.format(payment.createAt, 'dd/MM/yyyy HH:mm')}"></span></div>
+            </div>
+
+            <h4 class="mt-4">Chi tiết đơn hàng</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="detail : ${payment.paymentdetailSet}">
+                            <td th:text="${detail.orderDetailId.productId.name}"></td>
+                            <td th:text="${detail.orderDetailId.quantity}"></td>
+                            <td th:text="${detail.orderDetailId.price} + ' VNĐ'"></td>
+                        </tr>
+                        <tr th:if="${payment.paymentdetailSet.isEmpty}">
+                            <td colspan="3" class="text-center">Không có chi tiết đơn hàng</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center mt-4">
+                <a th:href="@{/admin/transactions}" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>

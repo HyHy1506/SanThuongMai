@@ -73,8 +73,18 @@ public class ProductRepositoryImpl implements ProductRepository {
 
             cQ.where(predicates.toArray(Predicate[]::new));
         }
+
+//sap sxep
+        String orderBy = params.get("orderBy");
+        if (orderBy == null || orderBy.isEmpty() || orderBy.equalsIgnoreCase("desc")) {
+            cQ.orderBy(b.desc(root.get("id")));
+        } else if (orderBy.equalsIgnoreCase("asc")) {
+            cQ.orderBy(b.asc(root.get("id")));
+        }
+        cQ.orderBy(b.asc(root.get("id")));
+
         Query query = s.createQuery(cQ);
-        if (params != null ) {
+        if (params != null) {
             int page = Integer.parseInt(params.getOrDefault("page", "1"));
             int start = (page - 1) * PAGE_SIZE;
             query.setFirstResult(start);
@@ -121,7 +131,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         Root<Product> root = cQ.from(Product.class);
         cQ.select(b.count(root));
 
-        if (params != null ) {
+        if (params != null) {
             List<Predicate> predicates = new ArrayList<>();
 
             String kw = params.get("kw");

@@ -1,0 +1,97 @@
+
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản lý giao dịch</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container py-5">
+        <h1 class="text-center mb-4">Danh sách giao dịch</h1>
+        <div class="card p-4 mb-5">
+            <form th:action="@{/admin/transactions}" method="get">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="kw" class="form-label">Tìm tên khách hàng</label>
+                        <input type="text" class="form-control" id="kw" name="kw" th:value="${param.kw}" placeholder="Tìm theo ID hoặc tên khách hàng">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="paymentMethod" class="form-label">Phương thức thanh toán</label>
+                        <select class="form-select" id="paymentMethod" name="paymentMethod">
+                            <option value="">Tất cả</option>
+                            <option value="COD" th:selected="${selectedPaymentMethod == 'COD'}">COD</option>
+                            <option value="Paypal" th:selected="${selectedPaymentMethod == 'Paypal'}">Paypal</option>
+                            <option value="Stripe" th:selected="${selectedPaymentMethod == 'Stripe'}">Stripe</option>
+                            <option value="ZaloPay" th:selected="${selectedPaymentMethod == 'ZaloPay'}">ZaloPay</option>
+                            <option value="Momo" th:selected="${selectedPaymentMethod == 'Momo'}">Momo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="isPay" class="form-label">Trạng thái thanh toán</label>
+                        <select class="form-select" id="isPay" name="isPay">
+                            <option value="">Tất cả</option>
+                            <option value="true" th:selected="${selectedIsPay == 'true'}">Đã thanh toán</option>
+                            <option value="false" th:selected="${selectedIsPay == 'false'}">Chưa thanh toán</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Khách hàng</th>
+                        <th scope="col">Tổng giá</th>
+                        <th scope="col">Phương thức</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Ngày tạo</th>
+                        <th scope="col">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="payment : ${payments}">
+                        <td th:text="${payment.id}"></td>
+                        <td th:text="${payment.customerId.user.nickname}"></td>
+                        <td th:text="${payment.price} + ' VNĐ'"></td>
+                        <td th:text="${payment.paymentMethod}"></td>
+                        <td>
+                            <span th:class="${payment.isPay} ? 'badge bg-success' : 'badge bg-warning'"
+                                  th:text="${payment.isPay} ? 'Đã thanh toán' : 'Chưa thanh toán'"></span>
+                        </td>
+                        <td th:text="${#dates.format(payment.createAt, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <a th:href="@{'/admin/transactions/'+${payment.id}}" class="btn btn-sm btn-info me-1">Chi tiết</a>
+                            <!-- <button class="btn btn-sm btn-danger"
+                                    th:onclick="'deleteTransaction(\''+@{/api/transactions}+'\',' + ${payment.id} + ')'">Xóa</button> -->
+                        </td>
+                    </tr>
+                    <tr th:if="${payments.isEmpty}">
+                        <td colspan="7" class="text-center">Không tìm thấy giao dịch nào</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-5">
+            <a th:href="@{/admin/transactions(page=${currentPage - 1}, kw=${param.kw}, paymentMethod=${param.paymentMethod}, isPay=${param.isPay})}"
+               th:class="${currentPage <= 1} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
+               th:disabled="${currentPage <= 1}">Trang trước</a>
+            <span>Trang <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span></span>
+            <a th:href="@{/admin/transactions(page=${currentPage + 1}, kw=${param.kw}, paymentMethod=${param.paymentMethod}, isPay=${param.isPay})}"
+               th:class="${currentPage >= totalPages} ? 'btn btn-secondary disabled' : 'btn btn-primary'"
+               th:disabled="${currentPage >= totalPages}">Trang sau</a>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
