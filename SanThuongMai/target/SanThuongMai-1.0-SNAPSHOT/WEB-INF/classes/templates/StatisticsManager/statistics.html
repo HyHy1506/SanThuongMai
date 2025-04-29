@@ -1,0 +1,128 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thống kê doanh thu</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container py-5">
+        <h1 class="text-center mb-4">Thống kê doanh thu</h1>
+
+        Form lọc
+        <div class="card p-4 mb-5">
+            <form id="filterForm" method="get" th:action="@{/admin/statistics}">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="period" class="form-label">Thời gian</label>
+                        <select class="form-select" id="period" name="period" onchange="this.form.submit()">
+                            <option value="month" th:selected="${period == 'month'}">Theo tháng</option>
+                            <option value="quarter" th:selected="${period == 'quarter'}">Theo quý</option>
+                            <option value="year" th:selected="${period == 'year'}">Theo năm</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="year" class="form-label">Năm</label>
+                        <input type="number" class="form-control" id="year" name="year" th:value="${selectedYear}" min="2000" max="2099" onchange="this.form.submit()">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="categoryId" class="form-label">Danh mục</label>
+                        <select class="form-select" id="categoryId" name="categoryId" onchange="this.form.submit()">
+                            <option value="">Tất cả danh mục</option>
+                            <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}" th:selected="${selectedCategoryId != null and selectedCategoryId == c.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="chartType" class="form-label">Loại biểu đồ</label>
+                        <select class="form-select" id="chartType" name="chartType" onchange="updateChartType()" >
+                            <option value="bar" th:selected="${chartType == 'bar'}">Bar</option>
+                            <option value="line" th:selected="${chartType == 'line'}">Line</option>
+                            <option value="pie" th:selected="${chartType == 'pie'}">Pie</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Biểu đồ -->
+        <div class="card p-4">
+            <canvas id="revenueChart" style="max-height: 400px;"></canvas>
+        </div>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+
+    <script th:inline="javascript">
+        let chartInstance = null;
+
+        function fetchRevenueData() {
+            const period = document.getElementById('period').value;
+            const year = document.getElementById('year').value;
+            const categoryId = document.getElementById('categoryId').value;
+            const chartType = document.getElementById('chartType').value;
+
+            fetch(`/SanThuongMai/api/statistics/revenue?period=${period}&year=${year}&categoryId=${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const ctx = document.getElementById('revenueChart').getContext('2d');
+
+                    // Hủy biểu đồ cũ nếu tồn tại
+                    if (chartInstance) {
+                        chartInstance.destroy();
+                    }
+
+                    chartInstance = new Chart(ctx, {
+                        type: chartType,
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Doanh thu (VNĐ)',
+                                data: data.data,
+                                backgroundColor: chartType === 'pie' ? [
+                                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                                    '#9966FF', '#FF9F40', '#E7E9ED', '#76D7C4'
+                                ] : 'rgba(75, 192, 192, 0.2)',
+                                borderColor: chartType === 'pie' ? '#fff' : 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: chartType !== 'pie' ? {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Doanh thu (VNĐ)'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: period === 'month' ? 'Tháng' : period === 'quarter' ? 'Quý' : 'Danh mục'
+                                    }
+                                }
+                            } : {},
+                            plugins: {
+                                legend: {
+                                    display: chartType === 'pie'
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching revenue data:', error));
+        }
+
+        function updateChartType() {
+            fetchRevenueData();
+        }
+
+        // Gọi hàm để vẽ biểu đồ khi trang được tải
+        document.addEventListener('DOMContentLoaded', fetchRevenueData);
+    </script>
+</body>
+</html>

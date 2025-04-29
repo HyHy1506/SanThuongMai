@@ -6,6 +6,7 @@ D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\configs\WebAppContextConfigs.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiProductController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiShopCotroller.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiStatisticsController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiTransactionController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiUserController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\AuthenticationController.java
@@ -13,6 +14,7 @@ D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\IndexController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\ProductController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\ShopController.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\StatisticsController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\TransactionController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\UserController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\filters\JwtFilter.java
