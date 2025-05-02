@@ -32,6 +32,7 @@ com\txd\repositories\impl\CustomerRepositoryImpl.class
 com\txd\formatters\CategoryFormatter.class
 com\txd\pojo\Product.class
 com\txd\services\impl\PaymentServiceImpl.class
+com\txd\dto\UserDTO.class
 com\txd\repositories\StaffRepository.class
 com\txd\controllers\StatisticsController.class
 com\txd\pojo\Productattribute.class

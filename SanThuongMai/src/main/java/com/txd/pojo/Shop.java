@@ -21,6 +21,8 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -64,7 +66,7 @@ public class Shop implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "shopId")
     private Set<Product> productSet;
     @JoinColumn(name = "seller_id", referencedColumnName = "user_id")
-    @OneToOne(optional = false,fetch = FetchType.EAGER)
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
     private Seller sellerId;
 
     public Shop() {
@@ -77,6 +79,17 @@ public class Shop implements Serializable {
     public Shop(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = new Date();
+        this.updateAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateAt = new Date();
     }
 
     public Integer getId() {
@@ -159,5 +172,5 @@ public class Shop implements Serializable {
     public String toString() {
         return "com.txd.pojo.Shop[ id=" + id + " ]";
     }
-    
+
 }

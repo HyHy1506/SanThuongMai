@@ -26,12 +26,14 @@ import com.txd.repositories.SellerRepository;
 import com.txd.repositories.StaffRepository;
 import com.txd.repositories.UserRepository;
 import com.txd.utils.GlobalVariables;
+import jakarta.persistence.NoResultException;
 
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  *
@@ -51,6 +53,8 @@ public class UserRepositoryImpl implements UserRepository {
     private AdminRepository adminRepo;
     @Autowired
     private CustomerRepository customerRepo;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public User getUserByUsername(String username) {
@@ -58,16 +62,12 @@ public class UserRepositoryImpl implements UserRepository {
         Query q = s.createNamedQuery("User.findByUsername", User.class);
         q.setParameter("username", username);
 
-        return (User) q.getSingleResult();
-    }
-
-    @Override
-    public User register(User u) {
-        Session s = this.factory.getObject().getCurrentSession();
-        s.persist(u);
-        createEntityByRoleOfUser(u);
-        s.refresh(u);
-        return u;
+        try {
+            List<User> results = q.getResultList();
+            return results.isEmpty() ? null : results.get(0);
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -211,7 +211,7 @@ public class UserRepositoryImpl implements UserRepository {
                         throw new IllegalArgumentException("Không biết role: " + userRole);
                 }
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Xóa thực thể kế thừa user thất bại : "+ e);
+                throw new IllegalArgumentException("Xóa thực thể kế thừa user thất bại : " + e);
             }
 
         }
@@ -243,6 +243,37 @@ public class UserRepositoryImpl implements UserRepository {
                 throw new IllegalArgumentException("Chỉnh sửa thực thể kế thừa user thất bại ", e);
             }
 
+        }
+    }
+
+    @Override
+    public User addUser(User u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.persist(u);
+
+        return u;
+    }
+
+    @Override
+    public boolean authenticate(String username, String password) {
+        User u = this.getUserByUsername(username);
+        if(u==null){
+            return false;
+        }
+        return this.passwordEncoder.matches(password, u.getPassword());
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createNamedQuery("User.findByEmail", User.class);
+        q.setParameter("email", email);
+
+        try {
+            List<User> results = q.getResultList();
+            return results.isEmpty() ? null : results.get(0);
+        } catch (NoResultException e) {
+            return null;
         }
     }
 }

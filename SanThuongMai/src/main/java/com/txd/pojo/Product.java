@@ -24,6 +24,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -109,6 +111,17 @@ public class Product implements Serializable {
         this.id = id;
         this.name = name;
         this.price = price;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = new Date();
+        this.updateAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateAt = new Date();
     }
 
     public Integer getId() {

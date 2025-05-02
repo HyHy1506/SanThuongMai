@@ -20,7 +20,7 @@ public interface UserService extends UserDetailsService {
 
     User getUserByUsername(String username);
 
-    User register(Map<String, String> params, MultipartFile avatar);
+    User getUserByEmail(String email);
 
     List<User> getUsers(Map<String, String> params);
 
@@ -31,4 +31,8 @@ public interface UserService extends UserDetailsService {
     void saveOrUpdate(User user);
 
     void deleteUser(int id) throws IllegalArgumentException;
+
+    User addUser(Map<String, String> params, MultipartFile avatar);
+
+    boolean authenticate(String username, String password);
 }

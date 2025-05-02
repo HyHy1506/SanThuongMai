@@ -17,6 +17,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -63,7 +65,7 @@ public class Comment implements Serializable {
     @OneToMany(mappedBy = "replyCommentId")
     private Set<Comment> commentSet;
     @JoinColumn(name = "reply_comment_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY,optional = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private Comment replyCommentId;
     @JoinColumn(name = "customer_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
@@ -82,6 +84,17 @@ public class Comment implements Serializable {
     public Comment(Integer id, String content) {
         this.id = id;
         this.content = content;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = new Date();
+        this.updateAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateAt = new Date();
     }
 
     public Integer getId() {
@@ -180,5 +193,5 @@ public class Comment implements Serializable {
     public String toString() {
         return "com.txd.pojo.Comment[ id=" + id + " ]";
     }
-    
+
 }

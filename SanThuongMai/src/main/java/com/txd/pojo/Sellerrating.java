@@ -19,6 +19,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -75,6 +77,17 @@ public class Sellerrating implements Serializable {
     public Sellerrating(Integer id, RatingEnum rate) {
         this.id = id;
         this.rate = rate;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = new Date();
+        this.updateAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateAt = new Date();
     }
 
     public Integer getId() {
@@ -157,5 +170,5 @@ public class Sellerrating implements Serializable {
     public String toString() {
         return "com.txd.pojo.Sellerrating[ id=" + id + " ]";
     }
-    
+
 }

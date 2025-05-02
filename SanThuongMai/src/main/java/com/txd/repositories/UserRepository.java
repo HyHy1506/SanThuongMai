@@ -17,7 +17,7 @@ public interface UserRepository {
 
     User getUserByUsername(String username);
 
-    User register(User u);
+    User getUserByEmail(String email);
 
     List<User> getUsers(Map<String, String> params);
 
@@ -27,5 +27,9 @@ public interface UserRepository {
 
     User saveOrUpdate(User user);
 
-    void deleteUser(int id) throws IllegalArgumentException;;
+    void deleteUser(int id) throws IllegalArgumentException;
+
+    User addUser(User u);
+
+    boolean authenticate(String username, String password);
 }

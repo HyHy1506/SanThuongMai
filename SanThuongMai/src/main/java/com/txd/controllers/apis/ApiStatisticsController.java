@@ -27,7 +27,8 @@ import com.txd.services.PaymentService;
 @RestController
 @RequestMapping("/api")
 public class ApiStatisticsController {
-     @Autowired
+
+    @Autowired
     private PaymentService paymentService;
 
     @GetMapping("/statistics/revenue")
@@ -35,9 +36,9 @@ public class ApiStatisticsController {
             @RequestParam(name = "period") String period,
             @RequestParam(name = "year") int year,
             @RequestParam(name = "categoryId", required = false, defaultValue = "") String sCategoryId) {
-        Integer categoryId=null;
-        if(sCategoryId!=null && !sCategoryId.isBlank()){
-            categoryId=Integer.valueOf(sCategoryId);
+        Integer categoryId = null;
+        if (sCategoryId != null && !sCategoryId.isBlank()) {
+            categoryId = Integer.valueOf(sCategoryId);
         }
 
         Map<String, Object> response = new HashMap<>();
@@ -65,6 +66,8 @@ public class ApiStatisticsController {
             response.put("labels", new ArrayList<>(revenueByMonth.keySet()));
             response.put("data", new ArrayList<>(revenueByMonth.values()));
 
+
+
         } else if ("quarter".equals(period)) {
             // Thống kê theo quý
             Map<String, Double> revenueByQuarter = new TreeMap<>();
@@ -83,8 +86,10 @@ public class ApiStatisticsController {
             response.put("labels", new ArrayList<>(revenueByQuarter.keySet()));
             response.put("data", new ArrayList<>(revenueByQuarter.values()));
 
+
+
         } else {
-            // Thống kê theo năm (doanh thu các danh mục hoặc sản phẩm)
+            // Thống kê theo năm (phân theo các mục hoặc lấy hết)
             Map<String, Double> revenueByCategory = new TreeMap<>();
             for (Payment payment : payments) {
                 for (Paymentdetail detail : payment.getPaymentdetailSet()) {
@@ -94,7 +99,7 @@ public class ApiStatisticsController {
                             String categoryName = category.getName();
                             double revenue;
                             revenue = detail.getOrderDetailId().getPrice()
-                                    .multiply(BigDecimal.valueOf( detail.getOrderDetailId().getQuantity())).doubleValue() ;
+                                    .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue();
                             revenueByCategory.compute(categoryName, (k, v) -> v == null ? revenue : v + revenue);
                         }
                     }
@@ -103,6 +108,8 @@ public class ApiStatisticsController {
 
             response.put("labels", new ArrayList<>(revenueByCategory.keySet()));
             response.put("data", new ArrayList<>(revenueByCategory.values()));
+
+
         }
 
         return ResponseEntity.ok(response);
@@ -115,7 +122,7 @@ public class ApiStatisticsController {
                 Category category = detail.getOrderDetailId().getProductId().getCategoryId();
                 if (categoryId == null || category.getId() == categoryId) {
                     revenue += detail.getOrderDetailId().getPrice()
-                            .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue() ;
+                            .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue();
                 }
             }
         }

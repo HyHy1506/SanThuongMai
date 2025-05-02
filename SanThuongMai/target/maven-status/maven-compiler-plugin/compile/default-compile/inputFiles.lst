@@ -17,6 +17,7 @@ D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\StatisticsController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\TransactionController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\UserController.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\UserDTO.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\filters\JwtFilter.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\formatters\CategoryFormatter.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\formatters\SellerFormatter.java

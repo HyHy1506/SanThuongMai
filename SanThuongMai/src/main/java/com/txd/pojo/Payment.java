@@ -24,6 +24,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -76,7 +78,7 @@ public class Payment implements Serializable {
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId",fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId", fetch = FetchType.EAGER)
     private Set<Paymentdetail> paymentdetailSet;
     @JoinColumn(name = "customer_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
@@ -93,6 +95,17 @@ public class Payment implements Serializable {
         this.id = id;
         this.price = price;
         this.paymentMethod = paymentMethod;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = new Date();
+        this.updateAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateAt = new Date();
     }
 
     public Integer getId() {
@@ -116,7 +129,7 @@ public class Payment implements Serializable {
     }
 
     public void setPaymentMethod(PaymentMethodEnum paymentMethod) {
-        this.paymentMethod = paymentMethod; 
+        this.paymentMethod = paymentMethod;
     }
 
     public Boolean getIsPay() {

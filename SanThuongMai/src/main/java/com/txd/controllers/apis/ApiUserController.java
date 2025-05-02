@@ -4,6 +4,7 @@
  */
 package com.txd.controllers.apis;
 
+import com.txd.dto.UserDTO;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,8 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.txd.pojo.User;
 import com.txd.services.UserService;
+import com.txd.utils.JwtUtils;
+import java.security.Principal;
 
-import jakarta.ws.rs.core.MediaType;
+import java.util.Collections;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -36,11 +43,67 @@ public class ApiUserController {
     @Autowired
     private UserService userDetailsService;
 
-    @PostMapping(path = "/users", consumes = MediaType.MULTIPART_FORM_DATA)
-    public ResponseEntity<User> register(@RequestParam Map<String, String> params,
-            @RequestParam(value = "avatar") MultipartFile avatar) {
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody User u) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        if (this.userDetailsService.authenticate(u.getUsername(), u.getPassword())) {
+            try {
+                String token = JwtUtils.generateToken(u.getUsername());
+                response.compute("status", (k, v) -> "success");
+                response.compute("token", (k, v) -> token);
 
-        return new ResponseEntity<>(this.userDetailsService.register(params, avatar), HttpStatus.CREATED);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } catch (Exception e) {
+                response.compute("status", (k, v) -> "fail");
+                response.compute("error", (k, v) -> "Loi tao toke JWT");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        response.compute("status", (k, v) -> "fail");
+        response.compute("error", (k, v) -> "Sai thông tin đăng nhập");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping(path = "/users",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> create(@RequestParam Map<String, String> params, @RequestParam(value = "avatar") MultipartFile avatar) {
+        Map<String, Object> response = new HashMap<>();
+        //kiem tra user name
+        User user1 = userDetailsService.getUserByUsername(params.get("username"));
+        if (user1 != null) {
+            response.put("status", "fail");
+            response.put("error", "Username đã tồn tại");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+        //kiem tra email
+        User user2 = userDetailsService.getUserByEmail(params.get("email"));
+        if (user2 != null) {
+            response.put("status", "fail");
+            response.put("error", "Email đã tồn tại");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT); // 409 Conflict
+        }
+
+        //neu user khong bi xung dot du lieu thi tao user moi
+        try {
+            User newUser = userDetailsService.addUser(params, avatar);
+            response.put("status", "success");
+            response.put("user", newUser);
+            return new ResponseEntity<>(response, HttpStatus.CREATED); // 201 Created
+        } catch (Exception e) {
+            response.put("status", "fail");
+            response.put("error", "Lỗi khi tạo user: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
+    }
+
+    @GetMapping("/secure/profile")
+    @ResponseBody
+    @CrossOrigin
+    public ResponseEntity<UserDTO> getProfile(Principal principal) {
+        User user = this.userDetailsService.getUserByUsername(principal.getName());
+        UserDTO userDTO = new UserDTO(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{userId}")

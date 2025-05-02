@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepo;
 
     @Autowired
-    private BCryptPasswordEncoder passswordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -64,27 +64,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(Map<String, String> params, MultipartFile avatar) {
-        User u = new User();
-        u.setNickname(params.get("nickname").trim());
-        u.setUsername(params.get("username").trim());
-        u.setEmail(params.get("email").trim());
-        u.setPassword(this.passswordEncoder.encode(params.get("password").trim()));
-        u.setUserRole("Customer");
-        if (!avatar.isEmpty()) {
-            try {
-                Map res = cloudinary.uploader().upload(avatar.getBytes(),
-                        ObjectUtils.asMap("resource_type", "auto"));
-                u.setAvatar(res.get("secure_url").toString());
-            } catch (IOException ex) {
-                Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return this.userRepo.register(u);
-    }
-
-    @Override
     public long countUsers(Map<String, String> params) {
         return this.userRepo.countUsers(params);
     }
@@ -100,8 +79,8 @@ public class UserServiceImpl implements UserService {
             user.setNickname(user.getNickname().trim());
             user.setUsername(user.getUsername().trim());
             user.setEmail(user.getEmail().trim());
-            user.setPassword(this.passswordEncoder.encode(user.getPassword().trim()));
-       
+            user.setPassword(this.passwordEncoder.encode(user.getPassword().trim()));
+
         }
         if (!user.getFile().isEmpty()) {
             try {
@@ -126,12 +105,43 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(int id) throws IllegalArgumentException {
-       this.userRepo.deleteUser(id);
+        this.userRepo.deleteUser(id);
     }
 
     @Override
     public List<User> getUsers(Map<String, String> params) {
         return userRepo.getUsers(params);
+    }
+
+    @Override
+    public User addUser(Map<String, String> params, MultipartFile avatar) {
+        User u = new User();
+        u.setNickname(params.get("nickname"));
+        u.setEmail(params.get("email"));
+        u.setUsername(params.get("username"));
+        u.setPassword(this.passwordEncoder.encode(params.get("password")));
+        u.setUserRole(params.get("userRole"));
+
+        if (!avatar.isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return this.userRepo.addUser(u);
+    }
+
+    @Override
+    public boolean authenticate(String username, String password) {
+        return this.userRepo.authenticate(username, password);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepo.getUserByEmail(email);
     }
 
 }
