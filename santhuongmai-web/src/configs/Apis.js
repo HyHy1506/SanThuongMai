@@ -7,7 +7,11 @@ export const endpoints = {
 
     'register': '/users',
     'login': '/login',
-    'current-user': '/secure/profile'
+    'current-user': '/secure/profile',
+    'products':'/products',
+    'categories':'/categories',
+    'productDetail':(productId)=>`/products/${productId}`,
+    'shops':'/shops'
 }
 
 export const authApis = () => {

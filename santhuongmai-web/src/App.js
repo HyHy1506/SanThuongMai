@@ -10,6 +10,8 @@ import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
 import Footer from './components/layouts/Footer';
+import ProductDetail from './components/Product/ProductDetail';
+import SearchHome from './components/Search/SearchHome';
 
 function App() {
   const [counter, setCouter] = useState(null)
@@ -23,11 +25,13 @@ function App() {
     <BrowserRouter>
       <Header />
 
-      <Container>
+      <Container className='min-vh-100'>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/search" element={<SearchHome />} />
         </Routes>
       </Container>
 

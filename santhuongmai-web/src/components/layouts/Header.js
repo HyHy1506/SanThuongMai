@@ -23,7 +23,7 @@ const Header = () => {
 
   const search = (e) => {
     e.preventDefault();
-    nav(`/?kw=${kw}`);
+    nav(`/search?kw=${kw}`);
   };
 
   return (
@@ -38,23 +38,7 @@ const Header = () => {
             <Nav.Link as={Link} to="/" style={{ fontSize: "1.1rem" }}>
               Trang chủ
             </Nav.Link>
-            <NavDropdown
-              title="Danh mục"
-              id="basic-nav-dropdown"
-              style={{ fontSize: "1.1rem" }}
-              renderMenuOnMount={true}
-            >
-              {categories.map((c) => (
-                <NavDropdown.Item
-                  key={c.id}
-                  as={Link}
-                  to={`/?cateId=${c.id}`}
-                  style={{ fontSize: "1rem" }}
-                >
-                  {c.name}
-                </NavDropdown.Item>
-              ))}
-            </NavDropdown>
+           
             {user === null ? (
               <>
                 <Nav.Link
