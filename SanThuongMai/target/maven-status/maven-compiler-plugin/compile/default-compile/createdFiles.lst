@@ -28,6 +28,7 @@ com\txd\repositories\ShopRepository.class
 com\txd\repositories\SellerRepository.class
 com\txd\services\PaymentService.class
 com\txd\pojo\Staff.class
+com\txd\dto\PaymentDTO.class
 com\txd\repositories\impl\CustomerRepositoryImpl.class
 com\txd\formatters\CategoryFormatter.class
 com\txd\pojo\Product.class
@@ -42,14 +43,18 @@ com\txd\services\ProductService.class
 com\txd\configs\ThymeleafConfig.class
 com\txd\repositories\impl\StaffRepositoryImpl.class
 com\txd\repositories\CategoryRepository.class
+com\txd\dto\ShopDTO.class
 com\txd\services\impl\CategoryServiceImpl.class
 com\txd\santhuongmai\JakartaRestConfiguration.class
 com\txd\pojo\Comment.class
 com\txd\repositories\impl\ShopRepositoryImpl.class
+com\txd\dto\SellerDTO.class
 com\txd\santhuongmai\resources\JakartaEE11Resource.class
+com\txd\dto\ProductDTO.class
 com\txd\pojo\Sellerreview.class
 com\txd\pojo\Seller$SellerStatusEnum.class
 com\txd\controllers\ProductController.class
+com\txd\dto\CategoryDTO.class
 com\txd\repositories\impl\SellerRepositoryImpl.class
 com\txd\repositories\AdminRepository.class
 com\txd\pojo\Seller.class
@@ -57,6 +62,7 @@ com\txd\controllers\AuthenticationController.class
 com\txd\pojo\User.class
 com\txd\filters\JwtFilter.class
 com\txd\services\SellerService.class
+com\txd\controllers\apis\ApiCategoryController.class
 com\txd\repositories\CustomerRepository.class
 com\txd\controllers\apis\ApiUserController.class
 com\txd\controllers\apis\ApiTransactionController.class

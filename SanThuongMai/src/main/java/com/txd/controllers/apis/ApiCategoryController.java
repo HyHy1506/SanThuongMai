@@ -4,9 +4,9 @@
  */
 package com.txd.controllers.apis;
 
-import com.txd.dto.ShopDTO;
-import com.txd.pojo.Shop;
-import com.txd.services.ShopService;
+import com.txd.dto.CategoryDTO;
+import com.txd.pojo.Category;
+import com.txd.services.CategoryService;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,12 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,20 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
-public class ApiShopCotroller {
+public class ApiCategoryController {
 
     @Autowired
-    private ShopService shopService;
+    private CategoryService cateService;
 
-    @DeleteMapping("/shops/{shopId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroyShop(@PathVariable(value = "shopId") int id) {
-        this.shopService.deleteShop(id);
-    }
-     @GetMapping("/shops")
-    public ResponseEntity<List<ShopDTO>> list(@RequestParam Map<String, String> params) {
-        List<Shop> shops= this.shopService.getShops(params);
-        List<ShopDTO> proDTOs=shops.stream().map(ShopDTO::new).collect(Collectors.toList());
-        return new ResponseEntity<>(proDTOs, HttpStatus.OK);
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryDTO>> list(@RequestParam Map<String, String> params) {
+        List<Category> categories = this.cateService.getCates();
+        List<CategoryDTO> categoryDTOs = categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
+        return new ResponseEntity<>(categoryDTOs, HttpStatus.OK);
     }
 }

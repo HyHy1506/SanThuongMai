@@ -70,18 +70,38 @@ public class ProductRepositoryImpl implements ProductRepository {
                 predicates.add(b.equal(root.get("categoryId").as(Integer.class),
                         cateId));
             }
-
+            String shopId = params.get("shopId");
+            if (shopId != null && !shopId.isEmpty()) {
+                predicates.add(b.equal(root.get("shopId").as(Integer.class),
+                        shopId));
+            }
             cQ.where(predicates.toArray(Predicate[]::new));
         }
 
-//sap sxep
-        String orderBy = params.get("orderBy");
-        if (orderBy == null || orderBy.isEmpty() || orderBy.equalsIgnoreCase("desc")) {
-            cQ.orderBy(b.desc(root.get("id")));
-        } else if (orderBy.equalsIgnoreCase("asc")) {
-            cQ.orderBy(b.asc(root.get("id")));
+// Sắp xếp
+        String orderBy = params.getOrDefault("orderBy", "desc");
+        String sortBy = params.getOrDefault("sortBy", "id");
+
+        if (sortBy.equalsIgnoreCase("name")) {
+            if (orderBy.equalsIgnoreCase("asc")) {
+                cQ.orderBy(b.asc(root.get("name")));
+            } else {
+                cQ.orderBy(b.desc(root.get("name")));
+            }
+        } else if (sortBy.equalsIgnoreCase("price")) {
+            if (orderBy.equalsIgnoreCase("asc")) {
+                cQ.orderBy(b.asc(root.get("price")));
+            } else {
+                cQ.orderBy(b.desc(root.get("price")));
+            }
+        } else {
+            // Mặc định sắp xếp giảm theo id
+            if (orderBy.equalsIgnoreCase("asc")) {
+                cQ.orderBy(b.asc(root.get("id")));
+            } else {
+                cQ.orderBy(b.desc(root.get("id")));
+            }
         }
-        cQ.orderBy(b.asc(root.get("id")));
 
         Query query = s.createQuery(cQ);
         if (params != null) {
