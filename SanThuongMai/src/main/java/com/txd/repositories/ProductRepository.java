@@ -20,6 +20,8 @@ public interface ProductRepository {
     Product saveOrUpdate(Product p);
 
     Product getProductById(int id);
+
     Long countProducts(Map<String, String> params);
+
     void deleteProduct(int id);
 }

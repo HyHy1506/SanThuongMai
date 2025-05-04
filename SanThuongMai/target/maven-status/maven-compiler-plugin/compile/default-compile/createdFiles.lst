@@ -1,3 +1,4 @@
+com\txd\repositories\ProductattributeRepository.class
 com\txd\services\impl\UserServiceImpl.class
 com\txd\pojo\Payment.class
 com\txd\pojo\Orderdetail.class
@@ -5,6 +6,7 @@ com\txd\controllers\IndexController.class
 com\txd\repositories\ProductRepository.class
 com\txd\utils\GlobalVariables.class
 com\txd\configs\SpringSecurityConfigs.class
+com\txd\services\impl\AttributeServiceImpl.class
 com\txd\pojo\Admin.class
 com\txd\services\impl\ProductServiceImpl.class
 com\txd\repositories\impl\ProductRepositoryImpl.class
@@ -13,6 +15,7 @@ com\txd\controllers\apis\ApiShopCotroller.class
 com\txd\utils\JwtUtils.class
 com\txd\configs\WebAppContextConfigs.class
 com\txd\controllers\ShopController.class
+com\txd\services\AttributeService.class
 com\txd\repositories\impl\CategoryRepositoryImpl.class
 com\txd\repositories\impl\UserRepositoryImpl$1.class
 com\txd\pojo\Shop.class
@@ -27,10 +30,12 @@ com\txd\controllers\UserController.class
 com\txd\repositories\ShopRepository.class
 com\txd\repositories\SellerRepository.class
 com\txd\services\PaymentService.class
+com\txd\controllers\apis\ApiAttributeController.class
 com\txd\pojo\Staff.class
 com\txd\dto\PaymentDTO.class
 com\txd\repositories\impl\CustomerRepositoryImpl.class
 com\txd\formatters\CategoryFormatter.class
+com\txd\repositories\impl\ProductattributeRepositoryImpl.class
 com\txd\pojo\Product.class
 com\txd\services\impl\PaymentServiceImpl.class
 com\txd\dto\UserDTO.class
@@ -66,6 +71,8 @@ com\txd\controllers\apis\ApiCategoryController.class
 com\txd\repositories\CustomerRepository.class
 com\txd\controllers\apis\ApiUserController.class
 com\txd\controllers\apis\ApiTransactionController.class
+com\txd\repositories\AttributeRepository.class
+com\txd\dto\ProductDetailDTO.class
 com\txd\services\UserService.class
 com\txd\pojo\Payment$PaymentMethodEnum.class
 com\txd\repositories\impl\UserRepositoryImpl.class
@@ -80,8 +87,10 @@ com\txd\repositories\impl\PaymentRepositoryImpl.class
 com\txd\pojo\Tag.class
 com\txd\controllers\TransactionController.class
 com\txd\pojo\UserRoleEnum.class
+com\txd\dto\AttributeDTO.class
 com\txd\services\impl\ShopServiceImpl.class
 com\txd\pojo\Productrating.class
 com\txd\repositories\PaymentRepository.class
 com\txd\configs\SecurityWebApplicationInitializer.class
 com\txd\pojo\RatingEnum.class
+com\txd\repositories\impl\AttributeRepositoryImpl.class

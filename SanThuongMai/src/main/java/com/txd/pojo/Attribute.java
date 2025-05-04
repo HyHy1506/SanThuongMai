@@ -14,6 +14,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -49,7 +51,7 @@ public class Attribute implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "name")
     private String name;
-   
+
     @Column(name = "is_active")
     private Boolean isActive = true;
     @Column(name = "update_at")
@@ -73,6 +75,17 @@ public class Attribute implements Serializable {
         this.name = name;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = new Date();
+        this.updateAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateAt = new Date();
+    }
+
     public Integer getId() {
         return id;
     }
@@ -88,8 +101,6 @@ public class Attribute implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-  
 
     public Boolean getIsActive() {
         return isActive;
@@ -147,5 +158,5 @@ public class Attribute implements Serializable {
     public String toString() {
         return "com.txd.pojo.Attribute[ id=" + id + " ]";
     }
-    
+
 }

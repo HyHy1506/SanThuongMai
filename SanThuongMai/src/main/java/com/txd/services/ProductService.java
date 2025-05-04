@@ -7,6 +7,8 @@ package com.txd.services;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.txd.pojo.Product;
 
 /**
@@ -24,4 +26,8 @@ public interface ProductService {
     Long countProducts(Map<String, String> params);
 
     void deleteProduct(int id);
+
+    Product addProduct(Map<String, Object> params, int sellerId, MultipartFile image);
+
+    Product updateProduct(Map<String, Object> params, int productId, MultipartFile image);
 }

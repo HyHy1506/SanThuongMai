@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -122,14 +123,18 @@ public class ProductRepositoryImpl implements ProductRepository {
         } else {
             s.merge(p);
         }
-
+        s.flush();
         return p;
     }
 
     @Override
     public Product getProductById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
-        return s.get(Product.class, id);
+        Product product = s.get(Product.class, id);
+        if (product != null) {
+            Hibernate.initialize(product.getProductattributeSet());
+        }
+        return product;
 
     }
 
@@ -186,8 +191,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void deleteProduct(int id) {
-        Session s = this.factory.getObject().getCurrentSession();
-        Product p = this.getProductById(id);
-        s.remove(p);
+        Session session = factory.getObject().getCurrentSession();
+        Product product = session.get(Product.class, id);
+        if (product != null) {
+            session.remove(product);
+        }
     }
 }

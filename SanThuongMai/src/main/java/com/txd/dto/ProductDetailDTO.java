@@ -10,8 +10,12 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProductDTO {
-
+/**
+ *
+ * @author tran1
+ */
+public class ProductDetailDTO {
+    
     private Integer id;
     private String name;
     private BigDecimal price;
@@ -21,8 +25,9 @@ public class ProductDTO {
     private Integer shopId;
     private String shopName;
     private Boolean isActive;
+    private Map<String, String> attributes = new HashMap<>();
 
-    public ProductDTO(Product product) {
+    public ProductDetailDTO(Product product) {
         if (product != null) {
             this.id = product.getId();
             this.name = product.getName();
@@ -32,6 +37,13 @@ public class ProductDTO {
             this.categoryName = product.getCategoryId() != null ? product.getCategoryId().getName() : null;
             this.shopId = product.getShopId() != null ? product.getShopId().getId() : null;
             this.shopName = product.getShopId() != null ? product.getShopId().getName() : null;
+            if (product.getProductattributeSet() != null) {
+                for (Productattribute pa : product.getProductattributeSet()) {
+                    if (pa.getAttributeId() != null) {
+                        this.attributes.put(pa.getAttributeId().getName(), pa.getValue());
+                    }
+                }
+            }
             this.isActive = product.getIsActive();
         }
     }
@@ -109,4 +121,17 @@ public class ProductDTO {
         this.isActive = isActive;
     }
 
+    /**
+     * @return the attributes
+     */
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    /**
+     * @param attributes the attributes to set
+     */
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
 }

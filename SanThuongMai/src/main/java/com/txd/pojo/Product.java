@@ -87,7 +87,7 @@ public class Product implements Serializable {
     @JoinColumn(name = "shop_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Shop shopId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId",orphanRemoval = true)
     private Set<Productattribute> productattributeSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Productrating> productratingSet;
