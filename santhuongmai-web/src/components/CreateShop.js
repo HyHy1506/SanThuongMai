@@ -22,7 +22,7 @@ const CreateShop = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.address) {
-      setError('Vui lòng điền tên và địa chỉ cửa hàng');
+      toast.info('Vui lòng điền tên và địa chỉ cửa hàng');
       return;
     }
     try {
@@ -35,9 +35,9 @@ const CreateShop = () => {
       console.log(resUser.data.id)
 
       const res = await authApis().post(endpoints.shops, newForm)
+      toast.info(newForm)
       toast.success('Tạo cửa hàng thành công!');
       setFormData({ name: '', description: '', address: '', image: '' });
-      setError('');
     } catch (err) {
       toast.error(err.response.data.error)
     } finally {

@@ -29,6 +29,7 @@ import java.util.Collections;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -87,7 +88,7 @@ public class ApiUserController {
         //neu user khong bi xung dot du lieu thi tao user moi
         try {
             User newUser = userDetailsService.addUser(params, avatar);
-            UserDTO userDto=new UserDTO(newUser);
+            UserDTO userDto = new UserDTO(newUser);
             response.put("status", "success");
             response.put("user", userDto);
             return new ResponseEntity<>(response, HttpStatus.CREATED); // 201 Created
@@ -100,10 +101,34 @@ public class ApiUserController {
 
     @GetMapping("/secure/profile")
     @CrossOrigin
-    public ResponseEntity<UserDTO> getProfile(Principal principal) {
-        User user = this.userDetailsService.getUserByUsername(principal.getName());
-        UserDTO userDTO = new UserDTO(user);
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    public ResponseEntity<Object> getProfile(
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                response.put("status", "fail");
+                response.put("error", "Thiếu hoặc sai định dạng Authorization header");
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            }
+
+            String token = authHeader.substring(7); // Bỏ "Bearer "
+            String username = JwtUtils.validateTokenAndGetUsername(token);
+
+            if (username == null) {
+                response.put("status", "fail");
+                response.put("error", "Token không hợp lệ hoặc đã hết hạn");
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            }
+
+            User user = userDetailsService.getUserByUsername(username);
+            UserDTO userDTO = new UserDTO(user);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", "fail");
+            response.put("error", "Lỗi xac thuc user: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @DeleteMapping("/users/{userId}")

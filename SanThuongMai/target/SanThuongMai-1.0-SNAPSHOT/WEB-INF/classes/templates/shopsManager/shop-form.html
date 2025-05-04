@@ -48,7 +48,7 @@
                 <label for="sellerId" class="form-label">Người bán <span class="text-danger">*</span></label>
                 <select class="form-select" id="sellerId" th:field="*{sellerId}" required>
                   
-                    <option th:each="seller : ${sellers}" th:value="${seller.id}" th:text="${seller.nickname}"></option>
+                    <option th:each="seller : ${sellers}" th:value="${seller.userId}" th:text="${seller.user.nickname}"></option>
                 </select>
                 <div class="invalid-feedback" th:errors="*{sellerId}"></div>
             </div>

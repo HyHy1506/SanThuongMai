@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <Card style={{ width: '18rem', marginBottom: '1rem' }}>
-      <Card.Img variant="top" src={product.image} alt={product.name} />
+      <Card.Img  style={{  height: '150px', objectFit: 'cover' }} variant="top" src={product.image} alt={product.name} />
       <Card.Body>
         <Card.Title>{product.name}</Card.Title>
         <Card.Text>Giá: {product.price.toLocaleString()} VND</Card.Text>

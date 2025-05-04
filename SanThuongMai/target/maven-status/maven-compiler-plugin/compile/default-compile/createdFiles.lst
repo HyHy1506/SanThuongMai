@@ -80,6 +80,7 @@ com\txd\services\CategoryService.class
 com\txd\pojo\Category.class
 com\txd\controllers\CheckController.class
 com\txd\pojo\Paymentdetail.class
+com\txd\controllers\apis\ApiSellerController.class
 com\txd\pojo\Customer.class
 com\txd\pojo\Tagdetail.class
 com\txd\formatters\SellerFormatter.class

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.txd.dto.ShopDTO;
+import com.txd.pojo.Seller;
 import com.txd.pojo.Shop;
 import com.txd.pojo.User;
 import com.txd.services.ShopService;
@@ -63,6 +64,9 @@ public class ApiShopCotroller {
     public ResponseEntity<ShopDTO> single(@PathVariable(value = "userId") int sellerId) {
         Shop shop = this.shopService.getShopBySellerId(sellerId);
         ShopDTO shopDTO = new ShopDTO(shop);
+        if(shopDTO.getId()==null){
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
         return new ResponseEntity<>(shopDTO, HttpStatus.OK);
     }
 
@@ -91,6 +95,14 @@ public class ApiShopCotroller {
 
             User user = userDetailsService.getUserByUsername(username);
             if (user != null) {
+                //kiem tra da approve chua
+                Seller seller = user.getSeller();
+                if (seller.getStatus().equals(Seller.SellerStatusEnum.PENDING) || seller.getStatus().equals(Seller.SellerStatusEnum.REJECT)) {
+                    response.put("status", "fail");
+                    response.put("error", "người dùng chưa được duyệt hoặc đã bị từ chối");
+                    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
                 Shop shop = shopService.addShop(params, user.getId());
                 ShopDTO shopDTO = new ShopDTO(shop);
 
@@ -109,6 +121,7 @@ public class ApiShopCotroller {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PutMapping(path = "/shops/{shopId}")
     public ResponseEntity<Map<String, Object>> update(
             @RequestBody Map<String, String> params,

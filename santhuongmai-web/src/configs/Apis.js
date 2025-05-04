@@ -9,11 +9,14 @@ export const endpoints = {
     'login': '/login',
     'current-user': '/secure/profile',
     'products':'/products',
+    'products-with-id':(productId) => `/products/${productId}`,
     'categories':'/categories',
     'productDetail':(productId)=>`/products/${productId}`,
     'shops':'/shops',
     'shop-with-id':(shopId)=>`/shops/${shopId}`,
     'shop-of-user':(userId)=>`/shops/user/${userId}`,
+    'attributes':'/attributes',
+    'seller-with-id':(sellerId)=> `/seller/${sellerId}`,
 }
 
 export const authApis = () => {

@@ -18,6 +18,8 @@ public class SellerDTO {
     private String nickname;
     private String email;
     private Boolean isActive;
+    private String shopName;
+    private Integer shopId;
 
     public SellerDTO(Seller seller) {
         if (seller != null) {
@@ -27,6 +29,9 @@ public class SellerDTO {
             this.nickname = seller.getUser() != null ? seller.getUser().getNickname() : null;
             this.email = seller.getUser() != null ? seller.getUser().getEmail() : null;
             this.isActive = seller.getUser().getIsActive();
+            this.shopName= seller.getShop().getName();            
+            this.shopId= seller.getShop().getId();
+
         }
     }
 
@@ -76,5 +81,33 @@ public class SellerDTO {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    /**
+     * @return the shopName
+     */
+    public String getShopName() {
+        return shopName;
+    }
+
+    /**
+     * @param shopName the shopName to set
+     */
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    /**
+     * @return the shopId
+     */
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    /**
+     * @param shopId the shopId to set
+     */
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 }
