@@ -33,7 +33,6 @@ import java.util.Set;
     @NamedQuery(name = "Attribute.findAll", query = "SELECT a FROM Attribute a"),
     @NamedQuery(name = "Attribute.findById", query = "SELECT a FROM Attribute a WHERE a.id = :id"),
     @NamedQuery(name = "Attribute.findByName", query = "SELECT a FROM Attribute a WHERE a.name = :name"),
-    @NamedQuery(name = "Attribute.findByValue", query = "SELECT a FROM Attribute a WHERE a.value = :value"),
     @NamedQuery(name = "Attribute.findByIsActive", query = "SELECT a FROM Attribute a WHERE a.isActive = :isActive"),
     @NamedQuery(name = "Attribute.findByUpdateAt", query = "SELECT a FROM Attribute a WHERE a.updateAt = :updateAt"),
     @NamedQuery(name = "Attribute.findByCreateAt", query = "SELECT a FROM Attribute a WHERE a.createAt = :createAt")})

@@ -32,6 +32,7 @@ import jakarta.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Productattribute.findAll", query = "SELECT p FROM Productattribute p"),
     @NamedQuery(name = "Productattribute.findById", query = "SELECT p FROM Productattribute p WHERE p.id = :id"),
+    @NamedQuery(name = "Productattribute.findByValue", query = "SELECT p FROM Productattribute p WHERE p.value = :value"),
     @NamedQuery(name = "Productattribute.findByIsActive", query = "SELECT p FROM Productattribute p WHERE p.isActive = :isActive"),
     @NamedQuery(name = "Productattribute.findByUpdateAt", query = "SELECT p FROM Productattribute p WHERE p.updateAt = :updateAt"),
     @NamedQuery(name = "Productattribute.findByCreateAt", query = "SELECT p FROM Productattribute p WHERE p.createAt = :createAt")})
