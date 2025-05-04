@@ -20,6 +20,8 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  *
@@ -41,6 +43,11 @@ public class Productattribute implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "value")
+    private String value;
     @Column(name = "is_active")
     private Boolean isActive = true;
     @Column(name = "update_at")
@@ -135,5 +142,19 @@ public class Productattribute implements Serializable {
     public String toString() {
         return "com.txd.pojo.Productattribute[ id=" + id + " ]";
     }
-    
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+
 }

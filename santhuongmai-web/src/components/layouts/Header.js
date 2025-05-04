@@ -1,31 +1,31 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row } from "react-bootstrap";
+import { Badge, Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Apis, { endpoints } from "../../configs/Apis";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../../actions/authentication";
-
+import { FaShoppingCart } from "react-icons/fa";
+import cookie from "react-cookies";
 const Header = () => {
   const authentication = useSelector(state => state.authentication);
   const dispatch = useDispatch();
   const user = authentication;
-  const [categories, setCategories] = useState([]);
+
   const [kw, setKw] = useState();
   const nav = useNavigate();
 
-  const loadCates = async () => {
-    // Placeholder for category loading logic
-  };
-
-  useEffect(() => {
-    loadCates();
-  }, []);
+  const cartItems = useSelector((state) => state.cart.items);
+  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const search = (e) => {
     e.preventDefault();
     nav(`/search?kw=${kw}`);
   };
+  const handleLogout = () => {
+    dispatch(logoutAction())
+    cookie.remove("token");
 
+  }
   return (
     <Navbar expand="lg" bg="dark" variant="dark" sticky="top" style={{ boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
       <Container>
@@ -38,7 +38,7 @@ const Header = () => {
             <Nav.Link as={Link} to="/" style={{ fontSize: "1.1rem" }}>
               Trang chủ
             </Nav.Link>
-           
+
             {user === null ? (
               <>
                 <Nav.Link
@@ -60,7 +60,15 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/" className="d-flex align-items-center">
+                <Nav.Link as={Link} to="/cart">
+                  <FaShoppingCart /> Giỏ hàng{' '}
+                  {totalItems > 0 && (
+                    <Badge bg="warning" text="dark">
+                      {totalItems}
+                    </Badge>
+                  )}
+                </Nav.Link>
+                <Nav.Link as={Link} to="/setting" className="d-flex align-items-center">
                   <img
                     src={user.avatar}
                     width="32"
@@ -73,10 +81,11 @@ const Header = () => {
                     Chào {user.username}!
                   </span>
                 </Nav.Link>
+
                 <Button
                   variant="outline-danger"
                   size="sm"
-                  onClick={() => dispatch(logoutAction())}
+                  onClick={handleLogout}
                   style={{ marginLeft: "10px", fontSize: "1rem" }}
                 >
                   Đăng xuất

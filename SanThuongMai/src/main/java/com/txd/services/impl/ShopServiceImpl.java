@@ -4,7 +4,9 @@
  */
 package com.txd.services.impl;
 
+import com.txd.pojo.Seller;
 import com.txd.pojo.Shop;
+import com.txd.pojo.User;
 import com.txd.repositories.ShopRepository;
 import com.txd.services.ShopService;
 import java.util.Date;
@@ -18,10 +20,11 @@ import org.springframework.stereotype.Service;
  * @author tran1
  */
 @Service
-public class ShopServiceImpl implements ShopService{
+public class ShopServiceImpl implements ShopService {
 
     @Autowired
     private ShopRepository shopRepo;
+
     @Override
     public List<Shop> getShops(Map<String, String> params) {
         return shopRepo.getShops(params);
@@ -54,5 +57,18 @@ public class ShopServiceImpl implements ShopService{
     public Long countShops(Map<String, String> params) {
         return shopRepo.countShops(params);
     }
-    
+
+    @Override
+    public Shop addShop(Map<String, String> params,int sellerId) {
+        Shop shop = new Shop();
+        shop.setName(params.get("name"));
+        shop.setSellerId(new Seller(sellerId));
+
+        return this.shopRepo.addShop(shop);
+    }
+
+    @Override
+    public Shop getShopBySellerId(int id) {
+        return shopRepo.getShopBySellerId(id);
+    }
 }

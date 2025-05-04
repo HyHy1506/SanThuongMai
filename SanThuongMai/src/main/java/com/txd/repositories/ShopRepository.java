@@ -13,13 +13,18 @@ import java.util.Map;
  * @author tran1
  */
 public interface ShopRepository {
-     List<Shop> getShops(Map<String, String> params);
+
+    List<Shop> getShops(Map<String, String> params);
 
     Shop getShopById(int id);
+    
+     Shop getShopBySellerId(int sellerId);
 
     void saveOrUpdate(Shop shop);
 
     Long countShops(Map<String, String> params);
 
     void deleteShop(int id);
+
+    Shop addShop(Shop shop);
 }

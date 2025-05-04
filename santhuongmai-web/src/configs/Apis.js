@@ -11,7 +11,9 @@ export const endpoints = {
     'products':'/products',
     'categories':'/categories',
     'productDetail':(productId)=>`/products/${productId}`,
-    'shops':'/shops'
+    'shops':'/shops',
+    'shop-with-id':(shopId)=>`/shops/${shopId}`,
+    'shop-of-user':(userId)=>`/shops/user/${userId}`,
 }
 
 export const authApis = () => {

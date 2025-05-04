@@ -18,9 +18,13 @@ public interface ShopService {
 
     Shop getShopById(int id);
 
+    Shop getShopBySellerId(int id);
+
     void saveOrUpdate(Shop shop);
 
     Long countShops(Map<String, String> params);
 
     void deleteShop(int id);
+
+    Shop addShop(Map<String, String> params,int sellerId);
 }

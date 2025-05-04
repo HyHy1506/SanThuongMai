@@ -66,6 +66,7 @@ public class SpringSecurityConfigs {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("Admin")
                         .requestMatchers("/staff/**").hasAuthority("Staff")
+                        .requestMatchers("/api/shops").authenticated()
         )
                 .formLogin(form -> form.loginPage("/login")
                 .loginProcessingUrl("/login")

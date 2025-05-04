@@ -102,7 +102,7 @@ public class UserRepositoryImpl implements UserRepository {
         } else if (orderBy.equalsIgnoreCase("asc")) {
             query.orderBy(builder.asc(root.get("id")));
         }
-        query.orderBy(builder.asc(root.get("id")));
+        
 
         Query q = session.createQuery(query);
 
@@ -250,7 +250,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User addUser(User u) {
         Session s = this.factory.getObject().getCurrentSession();
         s.persist(u);
-
+        s.refresh(u);
         return u;
     }
 

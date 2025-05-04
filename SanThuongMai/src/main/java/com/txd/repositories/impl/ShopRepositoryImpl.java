@@ -15,6 +15,7 @@ import com.txd.pojo.Shop;
 import com.txd.repositories.SellerRepository;
 import com.txd.repositories.ShopRepository;
 import com.txd.utils.GlobalVariables;
+import jakarta.persistence.NoResultException;
 
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -128,6 +129,39 @@ public class ShopRepositoryImpl implements ShopRepository {
             if (result) {
                 s.remove(shop);
             }
+        }
+    }
+
+    @Override
+    public Shop addShop(Shop shop) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.persist(shop);
+        s.refresh(shop);
+        return shop;
+    }
+
+    @Override
+    public Shop getShopBySellerId(int sellerId) {
+        Session s = factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Shop> cQ = b.createQuery(Shop.class);
+        Root<Shop> root = cQ.from(Shop.class);
+        cQ.select(root);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(b.equal(root.get("sellerId").as(Integer.class),
+                sellerId));
+
+        cQ.where(predicates.toArray(Predicate[]::new));
+
+        Query query = s.createQuery(cQ);
+
+        try {
+            List<Shop> results = query.getResultList();
+            return results.isEmpty() ? null : results.get(0);
+        } catch (NoResultException e) {
+            return null;
         }
     }
 }

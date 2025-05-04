@@ -34,6 +34,7 @@ const Login = () => {
         try {
           const resUser = await authApis().get(endpoints["current-user"]);
           dispatch(loginAction(resUser.data));
+
           nav("/");
         } catch (error) {
           console.error("Lỗi lấy thông tin user hiện tại", error);

@@ -87,8 +87,9 @@ public class ApiUserController {
         //neu user khong bi xung dot du lieu thi tao user moi
         try {
             User newUser = userDetailsService.addUser(params, avatar);
+            UserDTO userDto=new UserDTO(newUser);
             response.put("status", "success");
-            response.put("user", newUser);
+            response.put("user", userDto);
             return new ResponseEntity<>(response, HttpStatus.CREATED); // 201 Created
         } catch (Exception e) {
             response.put("status", "fail");

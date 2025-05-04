@@ -50,11 +50,7 @@ public class Attribute implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "name")
     private String name;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "value")
-    private String value;
+   
     @Column(name = "is_active")
     private Boolean isActive = true;
     @Column(name = "update_at")
@@ -73,10 +69,9 @@ public class Attribute implements Serializable {
         this.id = id;
     }
 
-    public Attribute(Integer id, String name, String value) {
+    public Attribute(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.value = value;
     }
 
     public Integer getId() {
@@ -95,13 +90,7 @@ public class Attribute implements Serializable {
         this.name = name;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
+  
 
     public Boolean getIsActive() {
         return isActive;

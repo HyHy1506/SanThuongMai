@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import { Provider } from 'react-redux';
+import {thunk} from 'redux-thunk';
 import 'bootstrap/dist/css/bootstrap.min.css';
-const store = createStore(rootReducer)
+import 'react-toastify/dist/ReactToastify.css';
+const store = createStore(rootReducer,applyMiddleware(thunk))
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
