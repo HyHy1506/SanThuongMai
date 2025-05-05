@@ -4,18 +4,20 @@
  */
 package com.txd.dto;
 
-import com.txd.pojo.Product;
-import com.txd.pojo.Productattribute;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.txd.pojo.Product;
+import com.txd.pojo.Productattribute;
+import com.txd.pojo.Productrating;
 
 /**
  *
  * @author tran1
  */
 public class ProductDetailDTO {
-    
+
     private Integer id;
     private String name;
     private BigDecimal price;
@@ -26,6 +28,8 @@ public class ProductDetailDTO {
     private String shopName;
     private Boolean isActive;
     private Map<String, String> attributes = new HashMap<>();
+    private Double averageRating=0.0;
+    private Integer totalRatings=0;
 
     public ProductDetailDTO(Product product) {
         if (product != null) {
@@ -45,6 +49,21 @@ public class ProductDetailDTO {
                 }
             }
             this.isActive = product.getIsActive();
+
+            
+            if (product.getProductratingSet() != null && !product.getProductratingSet().isEmpty()) {
+                this.totalRatings = product.getProductratingSet().size();
+                double sum = 0.0;
+                for (Productrating pr : product.getProductratingSet()) {
+                    if (pr.getRate() != null) {
+                        sum += Integer.parseInt(pr.getRate());
+                    }
+                }
+                this.averageRating = sum / this.totalRatings;
+            } else {
+                this.totalRatings = 0;
+                this.averageRating = 0.0;
+            }
         }
     }
 
@@ -133,5 +152,33 @@ public class ProductDetailDTO {
      */
     public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
+    }
+
+    /**
+     * @return the averageRating
+     */
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    /**
+     * @param averageRating the averageRating to set
+     */
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    /**
+     * @return the totalRatings
+     */
+    public Integer getTotalRatings() {
+        return totalRatings;
+    }
+
+    /**
+     * @param totalRatings the totalRatings to set
+     */
+    public void setTotalRatings(Integer totalRatings) {
+        this.totalRatings = totalRatings;
     }
 }

@@ -133,6 +133,8 @@ public class ProductRepositoryImpl implements ProductRepository {
         Product product = s.get(Product.class, id);
         if (product != null) {
             Hibernate.initialize(product.getProductattributeSet());
+            Hibernate.initialize(product.getProductratingSet());
+
         }
         return product;
 

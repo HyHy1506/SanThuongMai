@@ -250,6 +250,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User addUser(User u) {
         Session s = this.factory.getObject().getCurrentSession();
         s.persist(u);
+        createEntityByRoleOfUser(u);
         s.refresh(u);
         return u;
     }

@@ -9,8 +9,10 @@ com\txd\configs\SpringSecurityConfigs.class
 com\txd\services\impl\AttributeServiceImpl.class
 com\txd\pojo\Admin.class
 com\txd\services\impl\ProductServiceImpl.class
+com\txd\repositories\impl\ProductRatingRepositoryImpl.class
 com\txd\repositories\impl\ProductRepositoryImpl.class
 com\txd\repositories\impl\AdminRepositoryImpl.class
+com\txd\utils\AuthHelper.class
 com\txd\controllers\apis\ApiShopCotroller.class
 com\txd\utils\JwtUtils.class
 com\txd\configs\WebAppContextConfigs.class
@@ -18,6 +20,7 @@ com\txd\controllers\ShopController.class
 com\txd\services\AttributeService.class
 com\txd\repositories\impl\CategoryRepositoryImpl.class
 com\txd\repositories\impl\UserRepositoryImpl$1.class
+com\txd\repositories\ProductRatingRepository.class
 com\txd\pojo\Shop.class
 com\txd\pojo\Attribute.class
 com\txd\services\ShopService.class
@@ -25,6 +28,7 @@ com\txd\controllers\apis\ApiProductController.class
 com\txd\controllers\apis\ApiStatisticsController.class
 com\txd\configs\DispatcherServletInit.class
 com\txd\services\impl\SellerServiceImpl.class
+com\txd\services\ProductRatingService.class
 com\txd\configs\HibernateConfigs.class
 com\txd\controllers\UserController.class
 com\txd\repositories\ShopRepository.class
@@ -35,6 +39,8 @@ com\txd\pojo\Staff.class
 com\txd\dto\PaymentDTO.class
 com\txd\repositories\impl\CustomerRepositoryImpl.class
 com\txd\formatters\CategoryFormatter.class
+com\txd\controllers\apis\ApiProductRatingController.class
+com\txd\dto\CommentDTO.class
 com\txd\repositories\impl\ProductattributeRepositoryImpl.class
 com\txd\pojo\Product.class
 com\txd\services\impl\PaymentServiceImpl.class
@@ -48,6 +54,7 @@ com\txd\services\ProductService.class
 com\txd\configs\ThymeleafConfig.class
 com\txd\repositories\impl\StaffRepositoryImpl.class
 com\txd\repositories\CategoryRepository.class
+com\txd\repositories\impl\CommentRepositoryImpl.class
 com\txd\dto\ShopDTO.class
 com\txd\services\impl\CategoryServiceImpl.class
 com\txd\santhuongmai\JakartaRestConfiguration.class
@@ -58,6 +65,7 @@ com\txd\santhuongmai\resources\JakartaEE11Resource.class
 com\txd\dto\ProductDTO.class
 com\txd\pojo\Sellerreview.class
 com\txd\pojo\Seller$SellerStatusEnum.class
+com\txd\controllers\apis\ApiCommentController.class
 com\txd\controllers\ProductController.class
 com\txd\dto\CategoryDTO.class
 com\txd\repositories\impl\SellerRepositoryImpl.class
@@ -66,12 +74,14 @@ com\txd\pojo\Seller.class
 com\txd\controllers\AuthenticationController.class
 com\txd\pojo\User.class
 com\txd\filters\JwtFilter.class
+com\txd\services\impl\CommentServiceImpl.class
 com\txd\services\SellerService.class
 com\txd\controllers\apis\ApiCategoryController.class
 com\txd\repositories\CustomerRepository.class
 com\txd\controllers\apis\ApiUserController.class
 com\txd\controllers\apis\ApiTransactionController.class
 com\txd\repositories\AttributeRepository.class
+com\txd\services\impl\ProductRatingServiceImpl.class
 com\txd\dto\ProductDetailDTO.class
 com\txd\services\UserService.class
 com\txd\pojo\Payment$PaymentMethodEnum.class
@@ -79,6 +89,7 @@ com\txd\repositories\impl\UserRepositoryImpl.class
 com\txd\services\CategoryService.class
 com\txd\pojo\Category.class
 com\txd\controllers\CheckController.class
+com\txd\services\CommentService.class
 com\txd\pojo\Paymentdetail.class
 com\txd\controllers\apis\ApiSellerController.class
 com\txd\pojo\Customer.class
@@ -87,6 +98,7 @@ com\txd\formatters\SellerFormatter.class
 com\txd\repositories\impl\PaymentRepositoryImpl.class
 com\txd\pojo\Tag.class
 com\txd\controllers\TransactionController.class
+com\txd\repositories\CommentRepository.class
 com\txd\pojo\UserRoleEnum.class
 com\txd\dto\AttributeDTO.class
 com\txd\services\impl\ShopServiceImpl.class

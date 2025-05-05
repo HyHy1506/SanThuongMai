@@ -10,8 +10,6 @@ import java.util.Date;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,7 +37,6 @@ import jakarta.validation.constraints.NotNull;
     @NamedQuery(name = "Productrating.findByUpdateAt", query = "SELECT p FROM Productrating p WHERE p.updateAt = :updateAt")})
 public class Productrating implements Serializable {
 
-   
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,9 +45,8 @@ public class Productrating implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Enumerated(EnumType.STRING)
     @Column(name = "rate")
-    private RatingEnum rate;
+    private String rate;
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
@@ -73,7 +69,7 @@ public class Productrating implements Serializable {
         this.id = id;
     }
 
-    public Productrating(Integer id, RatingEnum rate) {
+    public Productrating(Integer id, String rate) {
         this.id = id;
         this.rate = rate;
     }
@@ -86,11 +82,11 @@ public class Productrating implements Serializable {
         this.id = id;
     }
 
-    public RatingEnum getRate() {
+    public String getRate() {
         return rate;
     }
 
-    public void setRate(RatingEnum rate) {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 
