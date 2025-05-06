@@ -31,6 +31,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.txd.dto.ProductDTO;
 import com.txd.dto.ProductDetailDTO;
 import com.txd.pojo.Product;
+import com.txd.pojo.Seller;
+import com.txd.pojo.User;
 import com.txd.services.ProductService;
 import com.txd.services.UserService;
 import com.txd.utils.AuthHelper;
@@ -53,12 +55,6 @@ public class ApiProductController {
     @Autowired
     private AuthHelper authHelper;
     private ObjectMapper objectMapper = GlobalVariables.getObjectMapper();
-
-    @DeleteMapping("/products/{productId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable(value = "productId") int id) {
-        this.productService.deleteProduct(id);
-    }
 
     @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> list(@RequestParam Map<String, String> params) {
@@ -91,6 +87,15 @@ public class ApiProductController {
         }
         try {
             String username = (String) authResult.get("username");
+            //kiem tra co nguoi ban co du quyen tao san pham khong
+            User user = userDetailsService.getUserByUsername(username);
+            Seller seller = user.getSeller();
+            if (seller.getStatus().equals(Seller.SellerStatusEnum.PENDING) || seller.getStatus().equals(Seller.SellerStatusEnum.REJECT)) {
+                response.put("status", "fail");
+                response.put("error", "người dùng chưa được duyệt hoặc đã bị từ chối");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
             // doi string json sang map
             Map<String, Object> params = objectMapper.readValue(paramsJson, Map.class);
             Integer userId = userDetailsService.getUserByUsername(username).getId();
@@ -120,6 +125,16 @@ public class ApiProductController {
         }
         try {
             String username = (String) authResult.get("username");
+
+            //kiem tra co nguoi ban co du quyen tao san pham khong
+            User user = userDetailsService.getUserByUsername(username);
+            Seller seller = user.getSeller();
+            if (seller.getStatus().equals(Seller.SellerStatusEnum.PENDING) || seller.getStatus().equals(Seller.SellerStatusEnum.REJECT)) {
+                response.put("status", "fail");
+                response.put("error", "người dùng chưa được duyệt hoặc đã bị từ chối");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
             // doi string json sang map
             Map<String, Object> params = objectMapper.readValue(paramsJson, Map.class);
             Product product = productService.updateProduct(params, productId, image);
@@ -132,4 +147,11 @@ public class ApiProductController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/products/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void destroy(@PathVariable(value = "productId") int id) {
+        this.productService.deleteProduct(id);
+    }
+
 }

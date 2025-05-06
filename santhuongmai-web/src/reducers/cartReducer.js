@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from '../actions/cartActions';
+import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY,RELOAD_CART } from '../actions/cartActions';
 
 const initialState = {
   items: JSON.parse(localStorage.getItem('cart')|| "[]") || [],
@@ -34,6 +34,9 @@ const cartReducer = (state = initialState, action) => {
       );
       localStorage.setItem('cart', JSON.stringify(newItems));
       return { ...state, items: newItems };
+    }
+    case RELOAD_CART:{
+      return initialState;
     }
     default:
       return state;

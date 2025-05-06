@@ -50,12 +50,6 @@ public class ApiShopCotroller {
     @Autowired
     private AuthHelper authHelper;
 
-    @DeleteMapping("/shops/{shopId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroyShop(@PathVariable(value = "shopId") int id) {
-        this.shopService.deleteShop(id);
-    }
-
     @GetMapping("/shops")
     public ResponseEntity<List<ShopDTO>> list(@RequestParam Map<String, String> params) {
         List<Shop> shops = this.shopService.getShops(params);
@@ -128,7 +122,17 @@ public class ApiShopCotroller {
         try {
             String username = (String) authResult.get("username");
             User user = userDetailsService.getUserByUsername(username);
+
             if (user != null) {
+
+                //kiem tra co nguoi ban co du quyen tao san pham khong
+                Seller seller = user.getSeller();
+                if (seller.getStatus().equals(Seller.SellerStatusEnum.PENDING) || seller.getStatus().equals(Seller.SellerStatusEnum.REJECT)) {
+                    response.put("status", "fail");
+                    response.put("error", "người dùng chưa được duyệt hoặc đã bị từ chối");
+                    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
                 Shop shop = shopService.getShopById(id);
                 shop.setName(params.get("name"));
                 shop.setIsActive(Boolean.valueOf(params.get("isActive")));
@@ -147,5 +151,11 @@ public class ApiShopCotroller {
             response.put("error", "Lỗi khi tạo shop: " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @DeleteMapping("/shops/{shopId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void destroyShop(@PathVariable(value = "shopId") int id) {
+        this.shopService.deleteShop(id);
     }
 }

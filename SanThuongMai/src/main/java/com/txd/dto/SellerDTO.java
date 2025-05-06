@@ -28,9 +28,9 @@ public class SellerDTO {
             this.userId = seller.getUser() != null ? seller.getUser().getId() : null;
             this.nickname = seller.getUser() != null ? seller.getUser().getNickname() : null;
             this.email = seller.getUser() != null ? seller.getUser().getEmail() : null;
-            this.isActive = seller.getUser().getIsActive();
-            this.shopName= seller.getShop().getName();            
-            this.shopId= seller.getShop().getId();
+            this.isActive = seller.getUser() != null ? seller.getUser().getIsActive():null;
+            this.shopName=seller.getShop()  != null ? seller.getShop().getName():null;            
+            this.shopId=seller.getShop()  != null ? seller.getShop().getId():null;
 
         }
     }

@@ -1,3 +1,4 @@
+com\txd\repositories\impl\PaymentdetailRepositoryImpl.class
 com\txd\repositories\ProductattributeRepository.class
 com\txd\services\impl\UserServiceImpl.class
 com\txd\pojo\Payment.class
@@ -30,6 +31,7 @@ com\txd\configs\DispatcherServletInit.class
 com\txd\services\impl\SellerServiceImpl.class
 com\txd\services\ProductRatingService.class
 com\txd\configs\HibernateConfigs.class
+com\txd\controllers\apis\ApiPaymentController.class
 com\txd\controllers\UserController.class
 com\txd\repositories\ShopRepository.class
 com\txd\repositories\SellerRepository.class
@@ -62,8 +64,10 @@ com\txd\pojo\Comment.class
 com\txd\repositories\impl\ShopRepositoryImpl.class
 com\txd\dto\SellerDTO.class
 com\txd\santhuongmai\resources\JakartaEE11Resource.class
+com\txd\repositories\PaymentdetailRepository.class
 com\txd\dto\ProductDTO.class
 com\txd\pojo\Sellerreview.class
+com\txd\dto\OrderDetailDTO.class
 com\txd\pojo\Seller$SellerStatusEnum.class
 com\txd\controllers\apis\ApiCommentController.class
 com\txd\controllers\ProductController.class
@@ -79,6 +83,7 @@ com\txd\services\SellerService.class
 com\txd\controllers\apis\ApiCategoryController.class
 com\txd\repositories\CustomerRepository.class
 com\txd\controllers\apis\ApiUserController.class
+com\txd\repositories\impl\OrderdetailRepositoryImpl.class
 com\txd\controllers\apis\ApiTransactionController.class
 com\txd\repositories\AttributeRepository.class
 com\txd\services\impl\ProductRatingServiceImpl.class
@@ -95,12 +100,14 @@ com\txd\controllers\apis\ApiSellerController.class
 com\txd\pojo\Customer.class
 com\txd\pojo\Tagdetail.class
 com\txd\formatters\SellerFormatter.class
+com\txd\dto\PaymentRequestDTO.class
 com\txd\repositories\impl\PaymentRepositoryImpl.class
 com\txd\pojo\Tag.class
 com\txd\controllers\TransactionController.class
 com\txd\repositories\CommentRepository.class
 com\txd\pojo\UserRoleEnum.class
 com\txd\dto\AttributeDTO.class
+com\txd\repositories\OrderdetailRepository.class
 com\txd\services\impl\ShopServiceImpl.class
 com\txd\pojo\Productrating.class
 com\txd\repositories\PaymentRepository.class

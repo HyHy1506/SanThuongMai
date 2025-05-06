@@ -18,7 +18,7 @@ const ManageProduct = () => {
     try {
       const res = await Apis.get(endpoints['seller-with-id'](user.id))
       setSeller(res.data)
-      
+
     } catch (error) {
       toast.error(error)
     }
@@ -26,7 +26,7 @@ const ManageProduct = () => {
 
   useEffect(() => {
     loadSeller()
-    
+
   }, []);
   useEffect(() => {
     if (seller.shopId) {
@@ -42,7 +42,7 @@ const ManageProduct = () => {
       setError('');
     } catch (err) {
       const message = err.response?.data?.error || 'Lỗi khi tải danh sách sản phẩm';
-      
+
       toast.error(message);
     } finally {
       setLoading(false);
@@ -166,6 +166,8 @@ const ManageProduct = () => {
               <Table striped bordered hover responsive>
                 <thead>
                   <tr>
+                    <th>ID</th>
+
                     <th>Tên</th>
                     <th>Giá (VND)</th>
                     <th>Danh mục</th>
@@ -177,6 +179,7 @@ const ManageProduct = () => {
                 <tbody>
                   {products.map((product) => (
                     <tr key={product.id}>
+                      <td>{product.id}</td>
                       <td>{product.name}</td>
                       <td>{parseFloat(product.price).toLocaleString('vi-VN')}</td>
                       <td>{product.categoryName}</td>

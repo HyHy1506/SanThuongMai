@@ -7,6 +7,7 @@ D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiAttributeController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiCategoryController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiCommentController.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiPaymentController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiProductController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiProductRatingController.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\controllers\apis\ApiSellerController.java
@@ -25,7 +26,9 @@ D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\AttributeDTO.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\CategoryDTO.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\CommentDTO.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\OrderDetailDTO.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\PaymentDTO.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\PaymentRequestDTO.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\ProductDetailDTO.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\ProductDTO.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\dto\SellerDTO.java
@@ -65,6 +68,8 @@ D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\CategoryRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\CommentRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\CustomerRepositoryImpl.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\OrderdetailRepositoryImpl.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\PaymentdetailRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\PaymentRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\ProductattributeRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\ProductRatingRepositoryImpl.java
@@ -73,6 +78,8 @@ D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\ShopRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\StaffRepositoryImpl.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\impl\UserRepositoryImpl.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\OrderdetailRepository.java
+D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\PaymentdetailRepository.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\PaymentRepository.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\ProductattributeRepository.java
 D:\Diux\hoctap\PhatTrienHeThongWeb\SanThuongMaiGithub\SanThuongMai\src\main\java\com\txd\repositories\ProductRatingRepository.java

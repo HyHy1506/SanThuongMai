@@ -15,6 +15,7 @@ import SearchHome from './components/Search/SearchHome';
 import Cart from './components/Cart';
 import { ToastContainer } from 'react-toastify';
 import Setting from './components/SettingManager/Setting';
+import Checkout from './components/Checkout/Checkout';
 function App() {
   const dispatch=useDispatch()
   useEffect(()=>{
@@ -38,6 +39,7 @@ function App() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/search" element={<SearchHome />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/setting" element={<Setting />} />
         </Routes>
       </Container>

@@ -4,6 +4,7 @@
  */
 package com.txd.services;
 
+import com.txd.pojo.Orderdetail;
 import com.txd.pojo.Payment;
 import java.util.List;
 import java.util.Map;
@@ -21,4 +22,6 @@ public interface PaymentService {
     Payment getPaymentById(int id);
 
     void deletePayment(int id);
+
+    Payment createPayment(Payment payment, List<Orderdetail> orderDetails);
 }

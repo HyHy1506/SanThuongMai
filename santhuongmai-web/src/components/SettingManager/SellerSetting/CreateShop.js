@@ -42,7 +42,7 @@ const CreateShop = () => {
       toast.error(err.response.data.error)
     } finally {
 
-      setLoading(true)
+      setLoading(false)
     }
 
   };

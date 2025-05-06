@@ -170,5 +170,17 @@ public class PaymentRepositoryImpl implements PaymentRepository {
             // session.delete(payment);
         }
     }
+     @Override
+    public Payment save(Payment payment) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        if (payment.getId() == null) {
+            session.persist(payment);
+        } else {
+            session.merge(payment);
+        }
+        session.flush();
+        session.refresh(payment);
+        return payment;
+    }
 
 }

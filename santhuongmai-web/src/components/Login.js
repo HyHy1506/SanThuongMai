@@ -46,10 +46,10 @@ const Login = () => {
       } else {
         setMsg("Đăng nhập thất bại: " + error);
       }
-    }
-    setTimeout(() => {
+    }finally{
       setLoading(false);
-    }, 5000);
+
+    }
   };
 
   return (
