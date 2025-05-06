@@ -33,7 +33,8 @@ public class TransactionController {
         int pageSize = GlobalVariables.PAGE_SIZE;
         long totalPayments = paymentService.countPayments(params);
         int totalPages = (int) Math.ceil((double) totalPayments / pageSize);
-
+        // gan lai param page để tránh lấy tất cả payment
+        params.compute("page", (k,v)-> String.valueOf(page) );
         model.addAttribute("payments", paymentService.getPayments(params));
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages > 0 ? totalPages : 1);

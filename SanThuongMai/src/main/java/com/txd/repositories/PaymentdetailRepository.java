@@ -4,7 +4,7 @@
  */
 package com.txd.repositories;
 
-import com.txd.pojo.Paymentdetail;
+//import com.txd.pojo.Paymentdetail;
 
 /**
  *
@@ -12,5 +12,5 @@ import com.txd.pojo.Paymentdetail;
  */
 public interface PaymentdetailRepository {
 
-    Paymentdetail save(Paymentdetail paymentdetail);
+//    Paymentdetail save(Paymentdetail paymentdetail);
 }

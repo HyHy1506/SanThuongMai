@@ -6,7 +6,6 @@ package com.txd.services.impl;
 
 import com.txd.pojo.Orderdetail;
 import com.txd.pojo.Payment;
-import com.txd.pojo.Paymentdetail;
 import com.txd.repositories.OrderdetailRepository;
 import com.txd.repositories.PaymentRepository;
 import com.txd.repositories.PaymentdetailRepository;
@@ -58,14 +57,10 @@ public class PaymentServiceImpl implements PaymentService {
 
         // Save OrderDetails va tao PaymentDetails
         for (Orderdetail od : orderDetails) {
+            od.setPaymentId(savedPayment);
             Orderdetail savedOrderDetail = orderdetailRepository.save(od);
 
-            // tao PaymentDetail
-            Paymentdetail pd = new Paymentdetail();
-            pd.setPaymentId(savedPayment);
-            pd.setOrderDetailId(savedOrderDetail);
-
-            paymentdetailRepository.save(pd);
+          
         }
 
         return savedPayment;

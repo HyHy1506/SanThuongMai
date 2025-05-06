@@ -21,6 +21,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -67,14 +68,17 @@ public class Orderdetail implements Serializable {
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderDetailId")
-    private Set<Paymentdetail> paymentdetailSet;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderDetailId")
+//    private Set<Paymentdetail> paymentdetailSet;
     @JoinColumn(name = "customer_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     private Customer customerId;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
+    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    @OneToOne(optional = false)
+    private Payment paymentId;
 
     public Orderdetail() {
     }
@@ -148,13 +152,13 @@ public class Orderdetail implements Serializable {
         this.createAt = createAt;
     }
 
-    public Set<Paymentdetail> getPaymentdetailSet() {
-        return paymentdetailSet;
-    }
-
-    public void setPaymentdetailSet(Set<Paymentdetail> paymentdetailSet) {
-        this.paymentdetailSet = paymentdetailSet;
-    }
+//    public Set<Paymentdetail> getPaymentdetailSet() {
+//        return paymentdetailSet;
+//    }
+//
+//    public void setPaymentdetailSet(Set<Paymentdetail> paymentdetailSet) {
+//        this.paymentdetailSet = paymentdetailSet;
+//    }
 
     public Customer getCustomerId() {
         return customerId;
@@ -195,6 +199,20 @@ public class Orderdetail implements Serializable {
     @Override
     public String toString() {
         return "com.txd.pojo.Orderdetail[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the paymentId
+     */
+    public Payment getPaymentId() {
+        return paymentId;
+    }
+
+    /**
+     * @param paymentId the paymentId to set
+     */
+    public void setPaymentId(Payment paymentId) {
+        this.paymentId = paymentId;
     }
 
 }

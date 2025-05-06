@@ -78,11 +78,13 @@ public class Payment implements Serializable {
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId", fetch = FetchType.EAGER)
-    private Set<Paymentdetail> paymentdetailSet;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId", fetch = FetchType.EAGER)
+//    private Set<Paymentdetail> paymentdetailSet;
     @JoinColumn(name = "customer_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     private Customer customerId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId")
+    private Set<Orderdetail> orderdetailSet;
 
     public Payment() {
     }
@@ -164,13 +166,13 @@ public class Payment implements Serializable {
         this.createAt = createAt;
     }
 
-    public Set<Paymentdetail> getPaymentdetailSet() {
-        return paymentdetailSet;
-    }
-
-    public void setPaymentdetailSet(Set<Paymentdetail> paymentdetailSet) {
-        this.paymentdetailSet = paymentdetailSet;
-    }
+//    public Set<Paymentdetail> getPaymentdetailSet() {
+//        return paymentdetailSet;
+//    }
+//
+//    public void setPaymentdetailSet(Set<Paymentdetail> paymentdetailSet) {
+//        this.paymentdetailSet = paymentdetailSet;
+//    }
 
     public Customer getCustomerId() {
         return customerId;
@@ -203,6 +205,20 @@ public class Payment implements Serializable {
     @Override
     public String toString() {
         return "com.txd.pojo.Payment[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the orderdetailSet
+     */
+    public Set<Orderdetail> getOrderdetailSet() {
+        return orderdetailSet;
+    }
+
+    /**
+     * @param orderdetailSet the orderdetailSet to set
+     */
+    public void setOrderdetailSet(Set<Orderdetail> orderdetailSet) {
+        this.orderdetailSet = orderdetailSet;
     }
 
 }

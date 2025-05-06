@@ -16,13 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.txd.pojo.Payment;
 import com.txd.repositories.PaymentRepository;
+import com.txd.services.impl.ProductServiceImpl;
 import com.txd.utils.GlobalVariables;
+import jakarta.persistence.Query;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.util.logging.Logger;
+import org.hibernate.Hibernate;
 
 /**
  *
@@ -34,14 +39,18 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
+    private static final Logger logger = Logger.getLogger(PaymentRepositoryImpl.class.getName());
 
     @Override
     public List<Payment> getPayments(Map<String, String> params) {
-
+        int pageSize = GlobalVariables.PAGE_SIZE;
         Session session = sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Payment> query = builder.createQuery(Payment.class);
         Root<Payment> root = query.from(Payment.class);
+
+        // Sử dụng fetch join để tải OrderdetailSet
+        root.fetch("orderdetailSet", JoinType.INNER);
         query.select(root);
 
         List<Predicate> predicates = new ArrayList<>();
@@ -95,16 +104,34 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         } else if (orderBy.equalsIgnoreCase("asc")) {
             query.orderBy(builder.asc(root.get("id")));
         }
-        query.orderBy(builder.asc(root.get("id")));
 
-//phân trang
-        int page = params != null && params.containsKey("page") ? Integer.parseInt(params.get("page")) : 1;
-        int pageSize = GlobalVariables.PAGE_SIZE;
+        Query q = session.createQuery(query);
+        if (params.containsKey("page")) {
 
-        return session.createQuery(query)
-                .setFirstResult((page - 1) * pageSize)
-                .setMaxResults(pageSize)
-                .getResultList();
+            int page = Integer.parseInt(params.getOrDefault("page", "1"));
+            int start = (page - 1) * pageSize;
+            q.setFirstResult(start);
+            q.setMaxResults(pageSize);
+
+        }
+        // chuyển SubList thành  ArrayList
+        List<Payment> payments = new ArrayList<>(q.getResultList());
+        return payments;
+//        //phân trang
+//        int page = params != null && params.containsKey("page") ? Integer.parseInt(params.get("page")) : 1;
+//
+//        // Lấy danh sách Payment
+//        List<Payment> payments = session.createQuery(query)
+//                .setFirstResult((page - 1) * pageSize)
+//                .setMaxResults(pageSize)
+//                .getResultList();
+//
+//        // Khởi tạo OrderdetailSet cho từng Payment
+//        for (Payment payment : payments) {
+//            Hibernate.initialize(payment.getOrderdetailSet());
+//        }
+//
+//        return payments;
     }
 
     @Override
@@ -157,7 +184,9 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     @Override
     public Payment getPaymentById(int id) {
         Session session = sessionFactory.getObject().getCurrentSession();
-        return session.get(Payment.class, id);
+        Payment p = session.get(Payment.class, id);
+        Hibernate.initialize(p.getOrderdetailSet());
+        return p;
     }
 
     @Override
@@ -170,7 +199,8 @@ public class PaymentRepositoryImpl implements PaymentRepository {
             // session.delete(payment);
         }
     }
-     @Override
+
+    @Override
     public Payment save(Payment payment) {
         Session session = sessionFactory.getObject().getCurrentSession();
         if (payment.getId() == null) {

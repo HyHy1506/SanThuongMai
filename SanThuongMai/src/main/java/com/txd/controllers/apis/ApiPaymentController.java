@@ -5,7 +5,6 @@ import com.txd.dto.PaymentRequestDTO;
 import com.txd.pojo.Customer;
 import com.txd.pojo.Orderdetail;
 import com.txd.pojo.Payment;
-import com.txd.pojo.Paymentdetail;
 import com.txd.pojo.Product;
 import com.txd.pojo.User;
 import com.txd.services.PaymentService;

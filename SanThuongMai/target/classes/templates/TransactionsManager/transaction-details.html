@@ -39,12 +39,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="detail : ${payment.paymentdetailSet}">
-                            <td th:text="${detail.orderDetailId.productId.name}"></td>
-                            <td th:text="${detail.orderDetailId.quantity}"></td>
-                            <td th:text="${detail.orderDetailId.price} + ' VNĐ'"></td>
+                        <tr th:each="detail : ${payment.orderdetailSet}">
+                            <td th:text="${detail.productId.name}"></td>
+                            <td th:text="${detail.quantity}"></td>
+                            <td th:text="${detail.price} + ' VNĐ'"></td>
                         </tr>
-                        <tr th:if="${payment.paymentdetailSet.isEmpty}">
+                        <tr th:if="${payment.orderdetailSet.isEmpty}">
                             <td colspan="3" class="text-center">Không có chi tiết đơn hàng</td>
                         </tr>
                     </tbody>

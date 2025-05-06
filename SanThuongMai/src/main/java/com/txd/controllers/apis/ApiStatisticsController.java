@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.txd.pojo.Category;
+import com.txd.pojo.Orderdetail;
 import com.txd.pojo.Payment;
-import com.txd.pojo.Paymentdetail;
 import com.txd.services.PaymentService;
+import com.txd.services.impl.ProductServiceImpl;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api")
@@ -30,6 +32,7 @@ public class ApiStatisticsController {
 
     @Autowired
     private PaymentService paymentService;
+    private static final Logger logger = Logger.getLogger(ProductServiceImpl.class.getName());
 
     @GetMapping("/statistics/revenue")
     public ResponseEntity<Map<String, Object>> getRevenueStatistics(
@@ -43,7 +46,10 @@ public class ApiStatisticsController {
 
         Map<String, Object> response = new HashMap<>();
         List<Payment> payments = paymentService.getPayments(new HashMap<>());
+        for (Payment p : payments) {
+            logger.info("Processing======" + p.getId());
 
+        }
         // Lọc các giao dịch đã thanh toán
         payments = payments.stream()
                 .filter(Payment::getIsPay)
@@ -66,8 +72,6 @@ public class ApiStatisticsController {
             response.put("labels", new ArrayList<>(revenueByMonth.keySet()));
             response.put("data", new ArrayList<>(revenueByMonth.values()));
 
-
-
         } else if ("quarter".equals(period)) {
             // Thống kê theo quý
             Map<String, Double> revenueByQuarter = new TreeMap<>();
@@ -86,29 +90,43 @@ public class ApiStatisticsController {
             response.put("labels", new ArrayList<>(revenueByQuarter.keySet()));
             response.put("data", new ArrayList<>(revenueByQuarter.values()));
 
-
-
         } else {
             // Thống kê theo năm (phân theo các mục hoặc lấy hết)
             Map<String, Double> revenueByCategory = new TreeMap<>();
-            for (Payment payment : payments) {
-                for (Paymentdetail detail : payment.getPaymentdetailSet()) {
-                    if (detail.getOrderDetailId() != null && detail.getOrderDetailId().getProductId() != null) {
-                        Category category = detail.getOrderDetailId().getProductId().getCategoryId();
+//            for (Payment payment : payments) {
+//                for (Paymentdetail detail : payment.getPaymentdetailSet()) {
+//                    if (detail.getOrderDetailId() != null && detail.getOrderDetailId().getProductId() != null) {
+//                        Category category = detail.getOrderDetailId().getProductId().getCategoryId();
+//                        if (categoryId == null || category.getId() == categoryId) {
+//                            String categoryName = category.getName();
+//                            double revenue;
+//                            revenue = detail.getOrderDetailId().getPrice()
+//                                    .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue();
+//                            revenueByCategory.compute(categoryName, (k, v) -> v == null ? revenue : v + revenue);
+//                        }
+//                    }
+//                }
+//            }
+
+            ///////////////
+             for (Payment payment : payments) {
+                for (Orderdetail detail : payment.getOrderdetailSet()) {
+                    if (detail.getProductId() != null) {
+                        Category category = detail.getProductId().getCategoryId();
                         if (categoryId == null || category.getId() == categoryId) {
                             String categoryName = category.getName();
                             double revenue;
-                            revenue = detail.getOrderDetailId().getPrice()
-                                    .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue();
+                            revenue = detail.getPrice()
+                                    .multiply(BigDecimal.valueOf(detail.getQuantity())).doubleValue();
                             revenueByCategory.compute(categoryName, (k, v) -> v == null ? revenue : v + revenue);
                         }
                     }
                 }
             }
 
+            ////////////////
             response.put("labels", new ArrayList<>(revenueByCategory.keySet()));
             response.put("data", new ArrayList<>(revenueByCategory.values()));
-
 
         }
 
@@ -117,15 +135,25 @@ public class ApiStatisticsController {
 
     private double calculateRevenue(Payment payment, Integer categoryId) {
         double revenue = 0.0;
-        for (Paymentdetail detail : payment.getPaymentdetailSet()) {
-            if (detail.getOrderDetailId() != null && detail.getOrderDetailId().getProductId() != null) {
-                Category category = detail.getOrderDetailId().getProductId().getCategoryId();
+        for (Orderdetail detail : payment.getOrderdetailSet()) {
+            if (detail.getProductId() != null) {
+                Category category = detail.getProductId().getCategoryId();
                 if (categoryId == null || category.getId() == categoryId) {
-                    revenue += detail.getOrderDetailId().getPrice()
-                            .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue();
+                    revenue += detail.getPrice()
+                            .multiply(BigDecimal.valueOf(detail.getQuantity())).doubleValue();
                 }
             }
         }
+
+//        for (Paymentdetail detail : payment.getPaymentdetailSet()) {
+//            if (detail.getOrderDetailId() != null && detail.getOrderDetailId().getProductId() != null) {
+//                Category category = detail.getOrderDetailId().getProductId().getCategoryId();
+//                if (categoryId == null || category.getId() == categoryId) {
+//                    revenue += detail.getOrderDetailId().getPrice()
+//                            .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue();
+//                }
+//            }
+//        }
         return revenue;
     }
 }
