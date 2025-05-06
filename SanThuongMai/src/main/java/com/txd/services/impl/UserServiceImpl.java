@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
             user.setNickname(user.getNickname().trim());
             user.setUsername(user.getUsername().trim());
             user.setEmail(user.getEmail().trim());
-            user.setPassword(this.passwordEncoder.encode(user.getPassword().trim()));
+//            user.setPassword(this.passwordEncoder.encode(user.getPassword().trim()));
 
         }
         if (!user.getFile().isEmpty()) {
@@ -132,6 +132,23 @@ public class UserServiceImpl implements UserService {
         }
 
         return this.userRepo.addUser(u);
+    }
+
+    @Override
+    public User updateUser(Map<String, String> params, MultipartFile avatar, User u) {
+        u.setNickname(params.get("nickname"));
+        u.setEmail(params.get("email"));
+
+        if (avatar != null && !avatar.isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return this.userRepo.saveOrUpdate(u);
     }
 
     @Override

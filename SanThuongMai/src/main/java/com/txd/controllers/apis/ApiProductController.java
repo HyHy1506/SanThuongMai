@@ -33,6 +33,7 @@ import com.txd.dto.ProductDetailDTO;
 import com.txd.pojo.Product;
 import com.txd.services.ProductService;
 import com.txd.services.UserService;
+import com.txd.utils.AuthHelper;
 import com.txd.utils.GlobalVariables;
 import com.txd.utils.JwtUtils;
 
@@ -49,7 +50,8 @@ public class ApiProductController {
     private ProductService productService;
     @Autowired
     private UserService userDetailsService;
-
+    @Autowired
+    private AuthHelper authHelper;
     private ObjectMapper objectMapper = GlobalVariables.getObjectMapper();
 
     @DeleteMapping("/products/{productId}")
@@ -83,25 +85,16 @@ public class ApiProductController {
             @RequestHeader(value = "Authorization", required = false) String authHeader,
             @RequestParam(value = "image") MultipartFile image) {
         Map<String, Object> response = new HashMap<>();
-
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, "Seller");
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
         try {
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                response.put("status", "fail");
-                response.put("error", "Thiếu hoặc sai định dạng Authorization header");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-
-            String token = authHeader.substring(7);
-            String username = JwtUtils.validateTokenAndGetUsername(token);
-            if (username == null) {
-                response.put("status", "fail");
-                response.put("error", "Token không hợp lệ hoặc đã hết hạn");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
+            String username = (String) authResult.get("username");
             // doi string json sang map
             Map<String, Object> params = objectMapper.readValue(paramsJson, Map.class);
             Integer userId = userDetailsService.getUserByUsername(username).getId();
-            Product product = productService.addProduct(params, userId,image);
+            Product product = productService.addProduct(params, userId, image);
             response.put("status", "success");
             response.put("productId", product.getId());
             return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -121,21 +114,12 @@ public class ApiProductController {
             @RequestHeader(value = "Authorization", required = false) String authHeader,
             @RequestParam(value = "image") MultipartFile image) {
         Map<String, Object> response = new HashMap<>();
-
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, "Seller");
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
         try {
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                response.put("status", "fail");
-                response.put("error", "Thiếu hoặc sai định dạng Authorization header");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-
-            String token = authHeader.substring(7);
-            String username = JwtUtils.validateTokenAndGetUsername(token);
-            if (username == null) {
-                response.put("status", "fail");
-                response.put("error", "oken không hợp lệ hoặc đã hết hạn");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
+            String username = (String) authResult.get("username");
             // doi string json sang map
             Map<String, Object> params = objectMapper.readValue(paramsJson, Map.class);
             Product product = productService.updateProduct(params, productId, image);

@@ -31,6 +31,7 @@ import com.txd.pojo.Shop;
 import com.txd.pojo.User;
 import com.txd.services.ShopService;
 import com.txd.services.UserService;
+import com.txd.utils.AuthHelper;
 import com.txd.utils.JwtUtils;
 
 /**
@@ -46,6 +47,8 @@ public class ApiShopCotroller {
     private ShopService shopService;
     @Autowired
     private UserService userDetailsService;
+    @Autowired
+    private AuthHelper authHelper;
 
     @DeleteMapping("/shops/{shopId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -64,7 +67,7 @@ public class ApiShopCotroller {
     public ResponseEntity<ShopDTO> single(@PathVariable(value = "userId") int sellerId) {
         Shop shop = this.shopService.getShopBySellerId(sellerId);
         ShopDTO shopDTO = new ShopDTO(shop);
-        if(shopDTO.getId()==null){
+        if (shopDTO.getId() == null) {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         return new ResponseEntity<>(shopDTO, HttpStatus.OK);
@@ -76,23 +79,12 @@ public class ApiShopCotroller {
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
 
         Map<String, Object> response = new HashMap<>();
-
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, "Seller");
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
         try {
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                response.put("status", "fail");
-                response.put("error", "Thiếu hoặc sai định dạng Authorization header");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-
-            String token = authHeader.substring(7); // Bỏ "Bearer "
-            String username = JwtUtils.validateTokenAndGetUsername(token);
-
-            if (username == null) {
-                response.put("status", "fail");
-                response.put("error", "Token không hợp lệ hoặc đã hết hạn");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-
+            String username = (String) authResult.get("username");
             User user = userDetailsService.getUserByUsername(username);
             if (user != null) {
                 //kiem tra da approve chua
@@ -129,23 +121,12 @@ public class ApiShopCotroller {
             @PathVariable(value = "shopId") int id) {
 
         Map<String, Object> response = new HashMap<>();
-
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, "Seller");
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
         try {
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                response.put("status", "fail");
-                response.put("error", "Thiếu hoặc sai định dạng Authorization header");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-
-            String token = authHeader.substring(7); // Bỏ "Bearer "
-            String username = JwtUtils.validateTokenAndGetUsername(token);
-
-            if (username == null) {
-                response.put("status", "fail");
-                response.put("error", "Token không hợp lệ hoặc đã hết hạn");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-
+            String username = (String) authResult.get("username");
             User user = userDetailsService.getUserByUsername(username);
             if (user != null) {
                 Shop shop = shopService.getShopById(id);

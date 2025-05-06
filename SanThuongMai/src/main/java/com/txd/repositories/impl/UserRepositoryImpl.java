@@ -158,7 +158,7 @@ public class UserRepositoryImpl implements UserRepository {
         } else {
             session.merge(user);
         }
-
+        session.refresh(user);
         return user;
     }
 

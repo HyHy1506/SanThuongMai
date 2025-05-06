@@ -1,7 +1,7 @@
 import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from '../actions/cartActions';
 
 const initialState = {
-  items: JSON.parse(localStorage.getItem('cart')) || [],
+  items: JSON.parse(localStorage.getItem('cart')|| "[]") || [],
 };
 
 const cartReducer = (state = initialState, action) => {

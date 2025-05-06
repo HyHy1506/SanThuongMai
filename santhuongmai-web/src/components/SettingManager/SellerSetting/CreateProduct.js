@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button, Alert, Card, Col, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import Apis, { authApis, endpoints } from '../configs/Apis';
+import Apis, { authApis, endpoints } from '../../../configs/Apis';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
 import { toast } from 'react-toastify';
-import Apis, { authApis, endpoints } from '../configs/Apis';
+import Apis, { authApis, endpoints } from '../../../configs/Apis';
 
 const CreateShop = () => {
   const [formData, setFormData] = useState({

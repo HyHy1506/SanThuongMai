@@ -5,6 +5,8 @@ export  const authenticationReducer=(state=null,action)=>{
             return action.payload
         case "LOGOUT":
             localStorage.setItem('user', null)
+            localStorage.setItem('cart', [])
+
             return null;
         default:
             return state

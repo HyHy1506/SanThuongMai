@@ -22,12 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.txd.pojo.User;
 import com.txd.services.UserService;
+import com.txd.utils.AuthHelper;
 import com.txd.utils.JwtUtils;
 import java.security.Principal;
 
 import java.util.Collections;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,6 +45,8 @@ public class ApiUserController {
 
     @Autowired
     private UserService userDetailsService;
+    @Autowired
+    private AuthHelper authHelper;
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody User u) {
@@ -68,7 +72,9 @@ public class ApiUserController {
     @PostMapping(path = "/users",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> create(@RequestParam Map<String, String> params, @RequestParam(value = "avatar") MultipartFile avatar) {
+    public ResponseEntity<Map<String, Object>> create(
+            @RequestParam Map<String, String> params, 
+            @RequestParam(value = "avatar") MultipartFile avatar) {
         Map<String, Object> response = new HashMap<>();
         //kiem tra user name
         User user1 = userDetailsService.getUserByUsername(params.get("username"));
@@ -104,22 +110,12 @@ public class ApiUserController {
     public ResponseEntity<Object> getProfile(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader,null);
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
         try {
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                response.put("status", "fail");
-                response.put("error", "Thiếu hoặc sai định dạng Authorization header");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-
-            String token = authHeader.substring(7); // Bỏ "Bearer "
-            String username = JwtUtils.validateTokenAndGetUsername(token);
-
-            if (username == null) {
-                response.put("status", "fail");
-                response.put("error", "Token không hợp lệ hoặc đã hết hạn");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-
+            String username = (String) authResult.get("username");
             User user = userDetailsService.getUserByUsername(username);
             UserDTO userDTO = new UserDTO(user);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
@@ -148,4 +144,35 @@ public class ApiUserController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping(path = "/users/{userId}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> update(
+            @PathVariable("userId") int userId,
+            @RequestParam Map<String, String> params,
+            @RequestParam(value = "avatar",required = false) MultipartFile avatar,
+            @RequestHeader(value = "Authorization", required = false) String authHeader
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, null);
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
+        //neu user khong bi xung dot du lieu thi tao user moi
+        try {
+            String username = (String) authResult.get("username");
+            User user = userDetailsService.getUserByUsername(username);
+            User newUser = userDetailsService.updateUser(params, avatar,user);
+            UserDTO userDto = new UserDTO(newUser);
+            response.put("status", "success");
+            response.put("user", userDto);
+            return new ResponseEntity<>(response, HttpStatus.CREATED); // 201 Created
+        } catch (Exception e) {
+            response.put("status", "fail");
+            response.put("error", "Lỗi khi tạo user: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
+    }
+
 }

@@ -1,60 +1,40 @@
-import { useEffect, useState } from "react";
-import { Alert, Button, Card, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Alert, Button, Card, Col, Container, Form, ListGroup, Row, Table, Modal } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import MySpinner from "../layouts/MySpinner";
-import Apis, { endpoints } from "../../configs/Apis";
+import Apis, { authApis, endpoints } from "../../configs/Apis";
+import StarRating from "./StarRating";
+import CommentSection from "./CommentSection";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../actions/cartActions";
+import { toast } from "react-toastify";
 
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [commentText, setCommentText] = useState("");
-
-    // Sample comments data
-    const comments = [
-        {
-            id: 1,
-            user: "JohnDoe",
-            text: "Great phone, amazing camera quality!",
-            date: "2025-04-10",
-            replies: [
-                { id: 2, user: "ShopOwner", text: "Thank you for your feedback!", date: "2025-04-11" }
-            ]
-        },
-        {
-            id: 3,
-            user: "JaneSmith",
-            text: "Battery life could be better.",
-            date: "2025-04-12",
-            replies: []
-        }
-    ];
-
-    // Sample rating data
-    const rating = 4.5;
-    const reviews = 120;
-
+    const [showPairwiseCompareModal, setShowPairwiseCompareModal] = useState(false);
+    const [selectedCompareProduct, setSelectedCompareProduct] = useState(null);
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.authentication);
     // Fetch product details and related products
     useEffect(() => {
         const fetchProduct = async () => {
             setLoading(true);
             try {
                 const response = await Apis.get(endpoints.productDetail(id));
-                setProduct({
-                    ...response.data,
-                    description: "A high-performance smartphone with advanced camera and sleek design."
-                });
+                setProduct(response.data);
 
-                // Fetch related products
-                const relatedResponse = await axios.get(
-                    `http://localhost:8080/SanThuongMai/api/products?categoryId=${response.data.categoryId}&page=1`
+                // Fetch related products in the same category
+                const relatedResponse = await Apis.get(
+                    `${endpoints.products}?categoryId=${response.data.categoryId}&page=1`
                 );
                 setRelatedProducts(relatedResponse.data.filter((p) => p.id !== parseInt(id)));
             } catch (error) {
                 console.error("Error fetching product:", error);
+                toast.error("Lỗi khi tải thông tin sản phẩm");
             } finally {
                 setLoading(false);
             }
@@ -77,15 +57,38 @@ const ProductDetail = () => {
         return stars;
     };
 
-    // Handle comment submission (mock)
-    const handleCommentSubmit = (e) => {
-        e.preventDefault();
-        console.log("New comment:", commentText);
-        setCommentText("");
+    // Handle add to cart
+    const handleAddToCart = () => {
+        if (user == null) {
+            toast.error("Vui lòng đăng nhập để theo vào giỏ hàng!")
+            return
+        }
+        dispatch(
+            addToCart({
+                productId: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+            })
+        );
+        toast.success("Đã thêm sản phẩm vào giỏ hàng");
+    };
+
+    // Handle pairwise comparison
+    const handlePairwiseCompare = async (relatedProduct) => {
+        try {
+            const res = await Apis.get(endpoints["products-with-id"](relatedProduct.id))
+
+            setSelectedCompareProduct(res.data);
+            setShowPairwiseCompareModal(true);
+        } catch (err) {
+            toast.error("Lỗi khi so sánh")
+        }
+
     };
 
     if (loading) return <MySpinner />;
-    if (!product) return <Alert variant="danger">Product not found!</Alert>;
+    if (!product) return <Alert variant="danger">Không tìm thấy sản phẩm!</Alert>;
 
     return (
         <Container fluid className="py-4">
@@ -103,61 +106,68 @@ const ProductDetail = () => {
                 <Col md={6}>
                     <h2 className="fw-bold">{product.name}</h2>
                     <div className="d-flex align-items-center mb-2">
-                        {renderStars(rating)}
-                        <span className="ms-2 text-muted">({reviews} reviews)</span>
+                        {renderStars(product.averageRating)}
+                        <span className="ms-2 text-muted">({product.totalRatings} đánh giá)</span>
                     </div>
                     <h4 className="text-primary">{product.price.toLocaleString()} VNĐ</h4>
-                    <p className="text-muted">Category: {product.categoryName}</p>
-                    <p className="text-muted">Shop: {product.shopName}</p>
-                    <p>{product.description}</p>
-                    <Button variant="primary" size="lg">
-                        Add to Cart
-                    </Button>
+                    <p className="text-muted">Danh mục: {product.categoryName}</p>
+                    <p className="text-muted">Cửa hàng: {product.shopName}</p>
+
+                    <div className="mt-3">
+                        <Button variant="primary" size="lg" onClick={handleAddToCart} className="me-2">
+                            Thêm vào giỏ hàng
+                        </Button>
+
+                    </div>
+                </Col>
+                <Col lg={4}>
+                    <h4 className="mt-3"><strong>Thông số kỹ thuật</strong></h4>
+                    <Table variant="flush" striped bordered hover responsive>
+                        <thead>
+                            <tr>
+                                <th>Thuộc tính</th>
+                                <th>Thông tin</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                                
+
+                                {Object.entries(product.attributes).length == 0 ? <h5>Chưa có thông số</h5> : Object.entries(product.attributes).map(([key, value]) => (
+                                    // <ListGroup.Item key={key}>
+                                    //     <strong>{key}:</strong> {value}
+                                    // </ListGroup.Item>
+                                    <tr key={key}>
+                                        <td>{key}</td>
+                                        <td>{value}</td>
+                                    </tr>
+                                ))}
+                            
+                        </tbody>
+                    </Table>
+                </Col>
+            </Row>
+
+            {/* Star Rating Section */}
+            <Row className="mb-5">
+                <Col>
+                    <StarRating productId={product.id} />
                 </Col>
             </Row>
 
             {/* Comments Section */}
             <Row className="mb-5">
                 <Col>
-                    <h3 className="fw-bold mb-3">Comments</h3>
-                    <ListGroup variant="flush">
-                        {comments.map((comment) => (
-                            <ListGroup.Item key={comment.id} className="border-0">
-                                <div>
-                                    <strong>{comment.user}</strong> <small>{comment.date}</small>
-                                    <p>{comment.text}</p>
-                                    {comment.replies.map((reply) => (
-                                        <div key={reply.id} className="ms-4 mt-2">
-                                            <strong>{reply.user}</strong> <small>{reply.date}</small>
-                                            <p>{reply.text}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-                    <Form onSubmit={handleCommentSubmit} className="mt-3">
-                        <Form.Group className="mb-3">
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                placeholder="Write your comment..."
-                                value={commentText}
-                                onChange={(e) => setCommentText(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Button type="submit" variant="primary">
-                            Submit Comment
-                        </Button>
-                    </Form>
+                    <CommentSection productId={product.id} />
                 </Col>
             </Row>
 
             {/* Related Products */}
             <Row>
-                <h3 className="fw-bold mb-3">Related Products</h3>
+                <h3 className="fw-bold mb-3">Sản phẩm liên quan</h3>
                 {relatedProducts.length === 0 && (
-                    <Alert variant="info">No related products found!</Alert>
+                    <Alert variant="info">Không tìm thấy sản phẩm liên quan!</Alert>
                 )}
                 {relatedProducts.map((related) => (
                     <Col key={related.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
@@ -166,7 +176,7 @@ const ProductDetail = () => {
                                 variant="top"
                                 src={related.image}
                                 alt={related.name}
-                                style={{ height: "200px", objectFit: "cover" }}
+                                style={{ height: "200px", objectFit: "contain" }}
                             />
                             <Card.Body>
                                 <Card.Title className="fs-6 fw-bold">{related.name}</Card.Title>
@@ -177,14 +187,35 @@ const ProductDetail = () => {
                                 <div className="d-flex justify-content-between">
                                     <Button
                                         as={Link}
-                                        to={`/product/${related.id}`}
+                                        to={`/products/${related.id}`}
                                         variant="outline-primary"
                                         size="sm"
                                     >
-                                        View Details
+                                        Xem chi tiết
                                     </Button>
-                                    <Button variant="primary" size="sm">
-                                        Add to Cart
+                                    <Button
+                                        variant="outline-secondary"
+                                        size="sm"
+                                        onClick={() => handlePairwiseCompare(related)}
+                                    >
+                                        So sánh
+                                    </Button>
+                                    <Button
+                                        variant="primary"
+                                        size="sm"
+                                        onClick={() => {
+                                            dispatch(
+                                                addToCart({
+                                                    productId: related.id,
+                                                    name: related.name,
+                                                    price: related.price,
+                                                    image: related.image,
+                                                })
+                                            );
+                                            toast.success("Đã thêm sản phẩm vào giỏ hàng");
+                                        }}
+                                    >
+                                        Thêm vào giỏ
                                     </Button>
                                 </div>
                             </Card.Body>
@@ -192,6 +223,73 @@ const ProductDetail = () => {
                     </Col>
                 ))}
             </Row>
+
+
+
+            {/* Pairwise Comparison Modal */}
+            <Modal
+                show={showPairwiseCompareModal}
+                onHide={() => setShowPairwiseCompareModal(false)}
+                size="lg"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        So sánh: {product.name} vs {selectedCompareProduct?.name}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedCompareProduct && (
+                        <Table striped bordered hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>Thuộc tính</th>
+                                    <th>{product.name}</th>
+                                    <th>{selectedCompareProduct.name}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Giá (VNĐ)</td>
+                                    <td>{product.price.toLocaleString()}</td>
+                                    <td>{selectedCompareProduct.price.toLocaleString()}</td>
+                                </tr>
+                                <tr>
+                                    <td>Đánh giá</td>
+                                    <td>{product.averageRating} ({product.totalRatings} lượt)</td>
+                                    <td>
+                                        {selectedCompareProduct.averageRating} ({selectedCompareProduct.totalRatings} lượt)
+                                    </td>
+                                </tr>
+                                {Object.keys(product.attributes).map((key) => (
+                                    <tr key={key}>
+                                        <td>{key}</td>
+                                        <td>{product.attributes[key]}</td>
+                                        <td>{selectedCompareProduct.attributes[key] || "N/A"}</td>
+                                    </tr>
+                                ))}
+                                {Object.keys(selectedCompareProduct.attributes)
+                                    .filter((key) => !product.attributes[key])
+                                    .map((key) => (
+                                        <tr key={key}>
+                                            <td>{key}</td>
+                                            <td>N/A</td>
+                                            <td>{selectedCompareProduct.attributes[key]}</td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </Table>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowPairwiseCompareModal(false)}
+                    >
+                        Đóng
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 };

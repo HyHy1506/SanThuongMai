@@ -12,11 +12,13 @@ import java.util.Date;
  * @author tran1
  */
 public class CommentDTO {
+
     private Integer id;
     private String content;
     private Integer productId;
     private Integer customerId;
     private String customerNickname;
+    private String customerAvatar;
     private Date createAt;
     private Boolean isActive;
 
@@ -29,10 +31,12 @@ public class CommentDTO {
             this.content = comment.getContent();
             this.productId = comment.getProductId() != null ? comment.getProductId().getId() : null;
             this.customerId = comment.getCustomerId() != null ? comment.getCustomerId().getUserId() : null;
-            this.customerNickname = comment.getCustomerId() != null && comment.getCustomerId().getUserId() != null 
-                ? comment.getCustomerId().getUser().getNickname() : null;
+            this.customerNickname = comment.getCustomerId() != null && comment.getCustomerId().getUserId() != null
+                    ? comment.getCustomerId().getUser().getNickname() : null;
             this.createAt = comment.getCreateAt();
             this.isActive = comment.getIsActive();
+            this.customerAvatar = comment.getCustomerId().getUser().getAvatar();
+
         }
     }
 
@@ -91,5 +95,19 @@ public class CommentDTO {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    /**
+     * @return the customerAvatar
+     */
+    public String getCustomerAvatar() {
+        return customerAvatar;
+    }
+
+    /**
+     * @param customerAvatar the customerAvatar to set
+     */
+    public void setCustomerAvatar(String customerAvatar) {
+        this.customerAvatar = customerAvatar;
     }
 }

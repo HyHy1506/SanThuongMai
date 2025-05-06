@@ -14,7 +14,7 @@ import ProductDetail from './components/Product/ProductDetail';
 import SearchHome from './components/Search/SearchHome';
 import Cart from './components/Cart';
 import { ToastContainer } from 'react-toastify';
-import Setting from './components/Setting';
+import Setting from './components/SettingManager/Setting';
 function App() {
   const dispatch=useDispatch()
   useEffect(()=>{

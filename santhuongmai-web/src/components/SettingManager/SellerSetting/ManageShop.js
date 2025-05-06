@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Alert, Modal, } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import Apis, { authApis, endpoints } from '../configs/Apis';
+import Apis, { authApis, endpoints } from '../../../configs/Apis';
 import { useDispatch, useSelector } from 'react-redux';
 
 const ManageShop = () => {
