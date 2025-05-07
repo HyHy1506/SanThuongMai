@@ -23,4 +23,6 @@ public interface PaymentRepository {
     void deletePayment(int id);
 
     Payment save(Payment payment);
+
+    List<Payment> getPaymentsByCustomerId(int customerId);
 }

@@ -4,11 +4,14 @@
  */
 package com.txd.dto;
 
+import com.txd.pojo.Orderdetail;
+
 /**
  *
  * @author tran1
  */
 public class OrderDetailDTO {
+
     private int productId;
     private String name;
     private double price;
@@ -24,6 +27,16 @@ public class OrderDetailDTO {
         this.price = price;
         this.image = image;
         this.quantity = quantity;
+    }
+
+    public OrderDetailDTO(Orderdetail orderDetail) {
+        if (orderDetail != null) {
+            this.productId = orderDetail.getProductId() != null ? orderDetail.getProductId().getId() : null;
+            this.quantity = orderDetail.getQuantity(); 
+            this.image = orderDetail.getProductId().getImage();
+            this.name = orderDetail.getProductId().getName();
+            this.price = orderDetail.getPrice().doubleValue();
+        }
     }
 
     // Getters and Setters

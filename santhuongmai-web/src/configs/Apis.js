@@ -20,7 +20,8 @@ export const endpoints = {
   'comments': `/comments`,
   'replies': (commentId) => `/comments/${commentId}/replies`,
   'updateUser': (userId) => `/users/${userId}`,
-  'payments': '/payments'
+  'payments': '/payments',
+  'paymentHistory': '/payments/history'
 }
 
 export const authApis = () => {

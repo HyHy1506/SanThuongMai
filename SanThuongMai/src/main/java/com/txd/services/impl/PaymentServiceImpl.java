@@ -65,4 +65,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         return savedPayment;
     }
+
+    @Override
+    public List<Payment> getPaymentsByCustomerId(int customerId) {
+        return paymentRepository.getPaymentsByCustomerId(customerId);
+    }
 }

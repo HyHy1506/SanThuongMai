@@ -102,7 +102,8 @@ const UserInfo = () => {
                                     onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
                                 />
                                 <h2 className="mt-3 fw-bold">{user.nickname}</h2>
-                                <p className="text-muted">@{user.username}</p>
+                                <span className="text-muted">@{user.username} - </span>
+                                <span className="text-muted">ID: {user.id}</span>
                             </div>
                             <ListGroup variant="flush">
                                 <ListGroup.Item className="py-3">

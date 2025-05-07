@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container, Table, Button, Form, Row, Col, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import MySpinner from '../layouts/MySpinner';
 import Apis, { authApis, endpoints } from '../../configs/Apis';
+import { reloadCart } from '../../actions/cartActions';
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const user = useSelector((state) => state.authentication);
+  const dispatch=useDispatch()
   const [paymentMethod, setPaymentMethod] = useState('COD');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -47,6 +49,7 @@ const Checkout = () => {
         toast.success('Đơn hàng đã được tạo thành công! Mã đơn hàng: ' + response.data.paymentId);
         // Clear cart after successful payment
         localStorage.setItem('cart', JSON.stringify([]));
+        dispatch(reloadCart())
         navigate('/');
       } else {
         toast.error('Lỗi khi tạo đơn hàng: ' + response.data.error);

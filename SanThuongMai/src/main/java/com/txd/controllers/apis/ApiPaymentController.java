@@ -1,6 +1,7 @@
 package com.txd.controllers.apis;
 
 import com.txd.dto.OrderDetailDTO;
+import com.txd.dto.PaymentDTO;
 import com.txd.dto.PaymentRequestDTO;
 import com.txd.pojo.Customer;
 import com.txd.pojo.Orderdetail;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api")
@@ -70,7 +72,7 @@ public class ApiPaymentController {
 
                 return od;
             }).collect(Collectors.toList());
-            
+
             // tinh tong so tien trong orderDetailEntities
             double totalAmount = orderDetailEntities.stream().mapToDouble(od
                     -> (od.getPrice().multiply(BigDecimal.valueOf(od.getQuantity()))).doubleValue())
@@ -88,6 +90,38 @@ public class ApiPaymentController {
             response.put("status", "fail");
             response.put("error", "Error creating payment: " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/payments/history")
+    public ResponseEntity<Map<String, Object>> getPaymentHistory(
+            @RequestHeader(value = "Authorization", required = false) String authHeader
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, "Customer");
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            String username = (String) authResult.get("username");
+            User user = userService.getUserByUsername(username);
+
+            List<Payment> payments = paymentService.getPaymentsByCustomerId(user.getId());
+
+            // Convert to DTO
+            List<PaymentDTO> paymentDTOs = payments.stream().map(payment -> {
+                PaymentDTO dto = new PaymentDTO(payment);
+                return dto;
+            }).collect(Collectors.toList());
+            response.compute("status", (k, v) -> "success");
+            response.compute("payment", (k, v) -> paymentDTOs);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.compute("status", (k, v) -> "fail");
+            response.compute("error", (k, v) -> "Lỗi lấy danh sách thanh toán "+e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
 }

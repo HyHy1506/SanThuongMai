@@ -24,4 +24,6 @@ public interface PaymentService {
     void deletePayment(int id);
 
     Payment createPayment(Payment payment, List<Orderdetail> orderDetails);
+
+    List<Payment> getPaymentsByCustomerId(int customerId);
 }

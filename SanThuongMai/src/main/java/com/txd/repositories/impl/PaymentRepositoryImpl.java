@@ -49,7 +49,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         CriteriaQuery<Payment> query = builder.createQuery(Payment.class);
         Root<Payment> root = query.from(Payment.class);
 
-        // Sử dụng fetch join để tải OrderdetailSet
+        // Sử dụng fetch join để tải OrderdetailSet, inner để chỉ lấy payment có order :v
         root.fetch("orderdetailSet", JoinType.INNER);
         query.select(root);
 
@@ -117,21 +117,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         // chuyển SubList thành  ArrayList
         List<Payment> payments = new ArrayList<>(q.getResultList());
         return payments;
-//        //phân trang
-//        int page = params != null && params.containsKey("page") ? Integer.parseInt(params.get("page")) : 1;
-//
-//        // Lấy danh sách Payment
-//        List<Payment> payments = session.createQuery(query)
-//                .setFirstResult((page - 1) * pageSize)
-//                .setMaxResults(pageSize)
-//                .getResultList();
-//
-//        // Khởi tạo OrderdetailSet cho từng Payment
-//        for (Payment payment : payments) {
-//            Hibernate.initialize(payment.getOrderdetailSet());
-//        }
-//
-//        return payments;
+
     }
 
     @Override
@@ -179,6 +165,23 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         }
 
         return session.createQuery(query).getSingleResult();
+    }
+
+    @Override
+    public List<Payment> getPaymentsByCustomerId(int customerId) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Payment> query = builder.createQuery(Payment.class);
+        Root<Payment> root = query.from(Payment.class);
+        // Sử dụng fetch join để tải OrderdetailSet, inner để chỉ lấy payment có order :v
+        root.fetch("orderdetailSet", JoinType.INNER);
+        query.select(root);
+
+        // Thêm điều kiện lọc theo customer_id
+        query.where(builder.equal(root.get("customerId").get("userId"), customerId));
+        query.orderBy(builder.desc(root.get("id")));
+        // Thực thi truy vấn
+        return session.createQuery(query).getResultList();
     }
 
     @Override
