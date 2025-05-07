@@ -21,7 +21,9 @@ export const endpoints = {
   'replies': (commentId) => `/comments/${commentId}/replies`,
   'updateUser': (userId) => `/users/${userId}`,
   'payments': '/payments',
-  'paymentHistory': '/payments/history'
+  'paymentHistory': '/payments/history',
+  'create-paypal-order': '/paypal/create-order', // New endpoint for PayPal
+  'capture-paypal-order': '/paypal/capture-order'
 }
 
 export const authApis = () => {

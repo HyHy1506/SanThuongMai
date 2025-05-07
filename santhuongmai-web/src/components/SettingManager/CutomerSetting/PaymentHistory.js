@@ -76,7 +76,7 @@ const PaymentHistory = () => {
             {payments.map((payment) => (
               <tr key={payment.id}>
                 <td>{payment.id}</td>
-                <td>{new Date(payment.createAt).toLocaleDateString('vi-VN')}</td>
+                <td>{new Date(payment.createAt).toLocaleString('vi-VN')}</td>
                 <td>{payment.amount.toLocaleString()} VND</td>
                 <td>{payment.paymentMethod}</td>
                 {payment.isPay === true ? (
