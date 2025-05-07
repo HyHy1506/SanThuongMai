@@ -1,9 +1,15 @@
 import { useRef, useState } from "react";
 import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import Apis, { endpoints } from "../configs/Apis";
+import Apis, { authApis, endpoints } from "../configs/Apis";
 import MySpinner from "./layouts/MySpinner";
 import { useNavigate } from "react-router-dom";
-
+import cookie from "react-cookies";
+import { loginAction } from "../actions/authentication";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../configs/FirebaseConfig";
+import googleLogo from "../image/google-logo.png";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 const Register = () => {
   const info = [
     { title: "Họ và tên", field: "nickname", type: "text" },
@@ -12,12 +18,19 @@ const Register = () => {
     { title: "Mật khẩu", field: "password", type: "password" },
     { title: "Xác nhận mật khẩu", field: "confirm", type: "password" },
   ];
+  const infoGoogleAccount = {
+    displayName: '',
+    email: '',
+    photoURL: '',
+    uid: '',
+    userRole: '',
+  }
   const [user, setUser] = useState({ userRole: "Customer" });
   const avatar = useRef();
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
-
+  const dispatch = useDispatch()
   const setState = (value, field) => {
     setUser({ ...user, [field]: value });
   };
@@ -51,7 +64,39 @@ const Register = () => {
       }
     }
   };
+  const googleSignIn = async () => {
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const userGoogle = result.user;
 
+      infoGoogleAccount.displayName = userGoogle.displayName
+      infoGoogleAccount.email = userGoogle.email
+      infoGoogleAccount.uid = userGoogle.uid
+      infoGoogleAccount.photoURL = userGoogle.photoURL
+      infoGoogleAccount.userRole = user.userRole
+      console.log(result.user)
+      // // Gửi token Google đến backend để xác thực
+      const res = await Apis.post(endpoints.googleLogin, infoGoogleAccount);
+
+      if (res.data.status === "success") {
+        cookie.save("token", res.data.token);
+        try {
+          const resUser = await authApis().get(endpoints["current-user"]);
+          dispatch(loginAction(resUser.data));
+          nav("/");
+        } catch (error) {
+          console.error("Lỗi lấy thông tin user hiện tại", error);
+          setMsg("Lỗi lấy thông tin người dùng sau khi đăng nhập Google");
+        }
+      }
+    } catch (error) {
+      toast.error("Lỗi đăng nhập Google:"+ error.response?.data?.error);
+      setMsg("Đăng nhập Google thất bại: " + error.response?.data?.error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
       <Row className="w-100">
@@ -101,16 +146,30 @@ const Register = () => {
                     <MySpinner />
                   </div>
                 ) : (
-                  <Button
-                    type="submit"
-                    variant="success"
-                    className="w-100"
-                    style={{ fontSize: "1.1rem", padding: "10px" }}
-                  >
-                    Đăng Ký
-                  </Button>
+                  <>
+                    <Button
+                      type="submit"
+                      variant="success"
+                      className="w-100"
+                      style={{ fontSize: "1.1rem", padding: "10px" }}
+                    >
+                      Đăng Ký
+                    </Button>
+                    <div className="text-center mt-3">
+                      <h5>Hoặc đăng nhập với</h5>
+                      <img
+                        src={googleLogo}
+                        alt="Đăng nhập với Google"
+                        style={{ width: "40px", cursor: "pointer" }}
+                        onClick={googleSignIn}
+                      />
+                    </div>
+                  </>
+
+
                 )}
               </Form>
+
             </Card.Body>
           </Card>
         </Col>

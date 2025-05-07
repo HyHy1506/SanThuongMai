@@ -161,4 +161,25 @@ public class UserServiceImpl implements UserService {
         return userRepo.getUserByEmail(email);
     }
 
+    @Override
+    public User addUserByGoogle(Map<String, String> params) {
+        String displayName = params.get("displayName");
+        String email = params.get("email");
+        String photoURL = params.get("photoURL");
+        String uid = params.get("uid");        
+        String userRole = params.get("userRole");
+
+        User u = new User();
+        u.setNickname(displayName);
+        u.setEmail(email);
+        u.setUsername(uid);
+        u.setPassword(this.passwordEncoder.encode(uid));
+        u.setUserRole(userRole);
+        u.setAvatar(photoURL);
+
+       
+
+        return this.userRepo.addUser(u);
+    }
+
 }

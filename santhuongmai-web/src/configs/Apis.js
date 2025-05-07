@@ -23,7 +23,8 @@ export const endpoints = {
   'payments': '/payments',
   'paymentHistory': '/payments/history',
   'create-paypal-order': '/paypal/create-order', // New endpoint for PayPal
-  'capture-paypal-order': '/paypal/capture-order'
+  'capture-paypal-order': '/paypal/capture-order',
+  'googleLogin':'/google-login'
 }
 
 export const authApis = () => {

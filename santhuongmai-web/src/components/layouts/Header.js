@@ -77,7 +77,7 @@ const Header = () => {
                     style={{ objectFit: "cover" }}
                   />
                   <span className="text-light" style={{ fontSize: "1.1rem" }}>
-                    {user.username}
+                    {user.nickname}
                   </span>
                 </Nav.Link>
                 <Button

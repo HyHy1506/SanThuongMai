@@ -69,11 +69,48 @@ public class ApiUserController {
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
+    @PostMapping("/google-login")
+    public ResponseEntity<Map<String, Object>> googleLogin(@RequestBody Map<String, String> params) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        try {
+            String uid = params.get("uid");
+            String userRole = params.get("userRole");
+            if (userRole == null || userRole.isBlank()) {
+                response.compute("status", (k, v) -> "fail");
+                response.compute("error", (k, v) -> "Hãy đăng ký và chọn vai trò trước");
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            }
+            User user = userDetailsService.getUserByUsername(uid);
+            if (user == null) {
+                //create user
+                user = userDetailsService.addUserByGoogle(params);
+            }
+            //kiem tra tai khoan, tao jwt
+
+            try {
+                String token = JwtUtils.generateToken(user.getUsername());
+                response.compute("status", (k, v) -> "success");
+                response.compute("token", (k, v) -> token);
+
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } catch (Exception e) {
+                response.compute("status", (k, v) -> "fail");
+                response.compute("error", (k, v) -> "Loi tao toke JWT");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception e) {
+            response.compute("status", (k, v) -> "fail");
+            response.compute("error", (k, v) -> "Lỗi dữ liệu đầu vào");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+
     @PostMapping(path = "/users",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> create(
-            @RequestParam Map<String, String> params, 
+            @RequestParam Map<String, String> params,
             @RequestParam(value = "avatar") MultipartFile avatar) {
         Map<String, Object> response = new HashMap<>();
         //kiem tra user name
@@ -110,7 +147,7 @@ public class ApiUserController {
     public ResponseEntity<Object> getProfile(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader,null);
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, null);
         if (!"success".equals(authResult.get("status"))) {
             return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
         }
@@ -151,7 +188,7 @@ public class ApiUserController {
     public ResponseEntity<Map<String, Object>> update(
             @PathVariable("userId") int userId,
             @RequestParam Map<String, String> params,
-            @RequestParam(value = "avatar",required = false) MultipartFile avatar,
+            @RequestParam(value = "avatar", required = false) MultipartFile avatar,
             @RequestHeader(value = "Authorization", required = false) String authHeader
     ) {
         Map<String, Object> response = new HashMap<>();
@@ -163,7 +200,7 @@ public class ApiUserController {
         try {
             String username = (String) authResult.get("username");
             User user = userDetailsService.getUserByUsername(username);
-            User newUser = userDetailsService.updateUser(params, avatar,user);
+            User newUser = userDetailsService.updateUser(params, avatar, user);
             UserDTO userDto = new UserDTO(newUser);
             response.put("status", "success");
             response.put("user", userDto);
