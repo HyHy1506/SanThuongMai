@@ -70,4 +70,13 @@ public class PaymentServiceImpl implements PaymentService {
     public List<Payment> getPaymentsByCustomerId(int customerId) {
         return paymentRepository.getPaymentsByCustomerId(customerId);
     }
+     @Override
+    public List<Map<String, Object>> getSalesFrequencyByShop(Map<String, Object> params) {
+        return paymentRepository.getSalesFrequencyByShop(params);
+    }
+
+    @Override
+    public List<Map<String, Object>> getTotalProductsSoldByShop(Map<String, Object> params) {
+        return paymentRepository.getTotalProductsSoldByShop(params);
+    }
 }

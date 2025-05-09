@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import com.txd.pojo.Payment;
 import com.txd.pojo.Shop;
 import com.txd.services.PaymentService;
 import com.txd.services.impl.ProductServiceImpl;
-import java.util.logging.Logger;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api")
@@ -97,20 +98,6 @@ public class ApiStatisticsController {
         } else {
             // Thống kê theo năm (phân theo các mục hoặc lấy hết)
             Map<String, Double> revenueByCategory = new TreeMap<>();
-//            for (Payment payment : payments) {
-//                for (Paymentdetail detail : payment.getPaymentdetailSet()) {
-//                    if (detail.getOrderDetailId() != null && detail.getOrderDetailId().getProductId() != null) {
-//                        Category category = detail.getOrderDetailId().getProductId().getCategoryId();
-//                        if (categoryId == null || category.getId() == categoryId) {
-//                            String categoryName = category.getName();
-//                            double revenue;
-//                            revenue = detail.getOrderDetailId().getPrice()
-//                                    .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue();
-//                            revenueByCategory.compute(categoryName, (k, v) -> v == null ? revenue : v + revenue);
-//                        }
-//                    }
-//                }
-//            }
 
             ///////////////
              for (Payment payment : payments) {
@@ -158,13 +145,87 @@ public class ApiStatisticsController {
 
         return revenue;
     }
+
+    @GetMapping("/statistics/frequency/transaction")
+    public ResponseEntity<Map<String, Object>> getFrequencyStatistics(
+            @RequestParam(name = "period") String period,
+            @RequestParam(name = "year") int year,
+            @RequestParam(name = "month", required = false) Integer month,
+            @RequestParam(name = "quarter", required = false) Integer quarter,
+            @RequestParam(name = "shopId", required = false) Integer shopId
+    ) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("period", period);
+        params.put("year", year);
+        params.put("month", month);
+        params.put("quarter", quarter);
+        params.put("shopId", shopId);
+        Map<String, Object> response = new HashMap<>();
+        try {
+            List<Map<String, Object>> fre = paymentService.getSalesFrequencyByShop(params);
+
+            List<String> labels = new ArrayList<>();
+            List<Long> data = new ArrayList<>();
+
+            for (Map<String, Object> record : fre) {
+                long count = (long) record.get("transactionCount");
+                labels.add((String) record.get("shopName"));
+                data.add(count);
+            }
+
+            response.put("labels", labels);
+            response.put("data", data);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("errror", e);
+
+            response.put("status", "fail");
+            response.put("data", new ArrayList<>());
+            response.put("labels", new ArrayList<>());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+
+    }
+    @GetMapping("/statistics/frequency/product")
+    public ResponseEntity<Map<String, Object>> getTotalStatistics(
+            @RequestParam(name = "period") String period,
+            @RequestParam(name = "year") int year,
+            @RequestParam(name = "month", required = false) Integer month,
+            @RequestParam(name = "quarter", required = false) Integer quarter,
+            @RequestParam(name = "shopId", required = false) Integer shopId
+    ) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("period", period);
+        params.put("year", year);
+        params.put("month", month);
+        params.put("quarter", quarter);
+        params.put("shopId", shopId);
+        Map<String, Object> response = new HashMap<>();
+        try {
+            List<Map<String, Object>> total = paymentService.getTotalProductsSoldByShop(params);
+
+            List<String> labels = new ArrayList<>();
+            List<Integer> data = new ArrayList<>();
+
+            for (Map<String, Object> record : total) {
+                int count = (int) record.get("totalProducts");
+                labels.add((String) record.get("shopName"));
+                data.add(count);
+            }
+
+            response.put("labels", labels);
+            response.put("data", data);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("errror", e);
+
+            response.put("status", "fail");
+            response.put("data", new ArrayList<>());
+            response.put("labels", new ArrayList<>());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+
+    }
 }
-//        for (Paymentdetail detail : payment.getPaymentdetailSet()) {
-//            if (detail.getOrderDetailId() != null && detail.getOrderDetailId().getProductId() != null) {
-//                Category category = detail.getOrderDetailId().getProductId().getCategoryId();
-//                if (categoryId == null || category.getId() == categoryId) {
-//                    revenue += detail.getOrderDetailId().getPrice()
-//                            .multiply(BigDecimal.valueOf(detail.getOrderDetailId().getQuantity())).doubleValue();
-//                }
-//            }
-//        }

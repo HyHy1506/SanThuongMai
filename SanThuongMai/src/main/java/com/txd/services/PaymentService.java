@@ -4,10 +4,11 @@
  */
 package com.txd.services;
 
-import com.txd.pojo.Orderdetail;
-import com.txd.pojo.Payment;
 import java.util.List;
 import java.util.Map;
+
+import com.txd.pojo.Orderdetail;
+import com.txd.pojo.Payment;
 
 /**
  *
@@ -26,4 +27,8 @@ public interface PaymentService {
     Payment createPayment(Payment payment, List<Orderdetail> orderDetails);
 
     List<Payment> getPaymentsByCustomerId(int customerId);
+
+    List<Map<String, Object>> getSalesFrequencyByShop(Map<String, Object> params);
+
+    List<Map<String, Object>> getTotalProductsSoldByShop(Map<String, Object> params);
 }

@@ -4,9 +4,10 @@
  */
 package com.txd.repositories;
 
-import com.txd.pojo.Payment;
 import java.util.List;
 import java.util.Map;
+
+import com.txd.pojo.Payment;
 
 /**
  *
@@ -25,4 +26,8 @@ public interface PaymentRepository {
     Payment save(Payment payment);
 
     List<Payment> getPaymentsByCustomerId(int customerId);
+
+    List<Map<String, Object>> getSalesFrequencyByShop(Map<String, Object> params);
+
+    List<Map<String, Object>> getTotalProductsSoldByShop(Map<String, Object> params);
 }

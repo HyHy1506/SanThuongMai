@@ -5,29 +5,32 @@
 package com.txd.repositories.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.txd.pojo.Orderdetail;
 import com.txd.pojo.Payment;
+import com.txd.pojo.Product;
+import com.txd.pojo.Shop;
 import com.txd.repositories.PaymentRepository;
-import com.txd.services.impl.ProductServiceImpl;
 import com.txd.utils.GlobalVariables;
-import jakarta.persistence.Query;
 
+import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import java.util.logging.Logger;
-import org.hibernate.Hibernate;
 
 /**
  *
@@ -216,4 +219,117 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         return payment;
     }
 
+    @Override
+    public List<Map<String, Object>> getSalesFrequencyByShop(Map<String, Object> params) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+        Root<Payment> paymentRoot = query.from(Payment.class);
+        Join<Payment, Orderdetail> orderDetailJoin = paymentRoot.join("orderdetailSet", JoinType.INNER);
+        Join<Orderdetail, Product> productJoin = orderDetailJoin.join("productId", JoinType.INNER);
+        Join<Product, Shop> shopJoin = productJoin.join("shopId", JoinType.INNER);
+
+        // lấy tham số
+        String period =(String) params.getOrDefault("period", "year");
+        int year = (Integer)params.getOrDefault("year", String.valueOf(java.time.LocalDate.now().getYear()));
+        Integer month = params.containsKey("month") ? (Integer)params.get("month") : null;
+        Integer quarter = params.containsKey("quarter") ? (Integer)params.get("quarter") : null;
+        Integer shopId = (Integer)params.get("shopId");
+
+        // mặc đinh lọc năm
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.equal(paymentRoot.get("isPay"), true));
+        predicates.add(builder.equal(builder.function("YEAR", Integer.class, paymentRoot.get("createAt")), year));
+
+        //còn khong thì lọc tháng , quý
+        if ("month".equals(period) && month != null) {
+            predicates.add(builder.equal(builder.function("MONTH", Integer.class, paymentRoot.get("createAt")), month));
+        } else if ("quarter".equals(period) && quarter != null) {
+            predicates.add(builder.equal(builder.function("QUARTER", Integer.class, paymentRoot.get("createAt")), quarter));
+        }
+
+        // lọc shop
+        if (shopId != null ) {
+            predicates.add(builder.equal(shopJoin.get("id"),shopId));
+        }
+
+        // đếm tổng giao dịch
+        query.multiselect(
+                shopJoin.get("name").alias("shopName"),
+                builder.count(paymentRoot).alias("transactionCount")
+        );
+
+        // Group by 
+        query.groupBy(shopJoin.get("id"), shopJoin.get("name"));
+
+        // tiến hành where
+        query.where(builder.and(predicates.toArray(Predicate[]::new)));
+
+        
+        query.orderBy(builder.asc(shopJoin.get("name")));
+
+        //truy lấy thông tin
+        List<Object[]> results = session.createQuery(query).getResultList();
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        for (Object[] row : results) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("shopName", row[0]);
+            map.put("transactionCount", row[1]);
+            resultList.add(map);
+        }
+        return resultList;
+    }
+
+    @Override
+    public List<Map<String, Object>> getTotalProductsSoldByShop(Map<String, Object> params) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+        Root<Payment> paymentRoot = query.from(Payment.class);
+        Join<Payment, Orderdetail> orderDetailJoin = paymentRoot.join("orderdetailSet", JoinType.INNER);
+        Join<Orderdetail, Product> productJoin = orderDetailJoin.join("productId", JoinType.INNER);
+        Join<Product, Shop> shopJoin = productJoin.join("shopId", JoinType.INNER);
+
+        // lấy tham số
+        String period =(String) params.getOrDefault("period", "year");
+        int year = (Integer)params.getOrDefault("year", String.valueOf(java.time.LocalDate.now().getYear()));
+        Integer month = params.containsKey("month") ? (Integer)params.get("month") : null;
+        Integer quarter = params.containsKey("quarter") ? (Integer)params.get("quarter") : null;
+        Integer shopId = (Integer)params.get("shopId");
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.equal(paymentRoot.get("isPay"), true));
+        predicates.add(builder.equal(builder.function("YEAR", Integer.class, paymentRoot.get("createAt")), year));
+
+        if ("month".equals(period) && month != null) {
+            predicates.add(builder.equal(builder.function("MONTH", Integer.class, paymentRoot.get("createAt")), month));
+        } else if ("quarter".equals(period) && quarter != null) {
+            predicates.add(builder.equal(builder.function("QUARTER", Integer.class, paymentRoot.get("createAt")), quarter));
+        }
+
+        if (shopId != null ) {
+            predicates.add(builder.equal(shopJoin.get("id"), (shopId)));
+        }
+
+        query.multiselect(
+                shopJoin.get("name").alias("shopName"),
+                builder.sum(orderDetailJoin.get("quantity")).alias("totalProducts")
+        );
+
+        query.groupBy(shopJoin.get("id"), shopJoin.get("name"));
+
+        query.where(builder.and(predicates.toArray(Predicate[]::new)));
+
+        query.orderBy(builder.asc(shopJoin.get("name")));
+
+        List<Object[]> results = session.createQuery(query).getResultList();
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        for (Object[] row : results) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("shopName", row[0]);
+            map.put("totalProducts", row[1]);
+            resultList.add(map);
+        }
+        return resultList;
+    }
 }
