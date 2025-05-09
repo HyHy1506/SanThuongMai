@@ -111,7 +111,11 @@ const ProductDetail = () => {
                     </div>
                     <h4 className="text-primary">{product.price.toLocaleString()} VNĐ</h4>
                     <p className="text-muted">Danh mục: {product.categoryName}</p>
-                    <p className="text-muted">Cửa hàng: {product.shopName}</p>
+                    <p className="text-muted">Cửa hàng: {" "}
+                        <Link to={`/shops/${product.shopId}`} style={{ color: '#2e7d32' }}>
+                            {product.shopName}
+                        </Link>
+                    </p>
 
                     <div className="mt-3">
                         <Button variant="primary" size="lg" onClick={handleAddToCart} className="me-2">
@@ -131,19 +135,19 @@ const ProductDetail = () => {
                             </tr>
                         </thead>
                         <tbody>
-                           
-                                
 
-                                {Object.entries(product.attributes).length == 0 ? <h5>Chưa có thông số</h5> : Object.entries(product.attributes).map(([key, value]) => (
-                                    // <ListGroup.Item key={key}>
-                                    //     <strong>{key}:</strong> {value}
-                                    // </ListGroup.Item>
-                                    <tr key={key}>
-                                        <td>{key}</td>
-                                        <td>{value}</td>
-                                    </tr>
-                                ))}
-                            
+
+
+                            {Object.entries(product.attributes).length == 0 ? <h5>Chưa có thông số</h5> : Object.entries(product.attributes).map(([key, value]) => (
+                                // <ListGroup.Item key={key}>
+                                //     <strong>{key}:</strong> {value}
+                                // </ListGroup.Item>
+                                <tr key={key}>
+                                    <td>{key}</td>
+                                    <td>{value}</td>
+                                </tr>
+                            ))}
+
                         </tbody>
                     </Table>
                 </Col>

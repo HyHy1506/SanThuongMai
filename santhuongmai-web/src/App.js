@@ -17,6 +17,7 @@ import { ToastContainer } from 'react-toastify';
 import Setting from './components/SettingManager/Setting';
 import Checkout from './components/Checkout/Checkout';
 import PaymentHistory from './components/SettingManager/CutomerSetting/PaymentHistory';
+import ShopDetail from './components/Shop/ShopDetail';
 function App() {
   const dispatch=useDispatch()
   useEffect(()=>{
@@ -43,6 +44,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/payment-history" element={<PaymentHistory />} />
+          <Route path="/shops/:id" element={<ShopDetail />} />
         </Routes>
       </Container>
 

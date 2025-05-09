@@ -24,7 +24,9 @@ export const endpoints = {
   'paymentHistory': '/payments/history',
   'create-paypal-order': '/paypal/create-order', // New endpoint for PayPal
   'capture-paypal-order': '/paypal/capture-order',
-  'googleLogin':'/google-login'
+  'googleLogin': '/google-login',
+  'revenueStatistics': (period, year, categoryId, shopId) =>
+    `/statistics/revenue?period=${period}&year=${year}&categoryId=${categoryId || ''}&shopId=${shopId || ''}`
 }
 
 export const authApis = () => {

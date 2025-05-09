@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import Apis, { endpoints } from '../../../configs/Apis';
 import UserInfo from '../UserInfo';
 import { useSelector } from 'react-redux';
+import RevenueStatistics from './RevenueStatistics';
 
 
 const SellerSettingHome = () => {
@@ -49,6 +50,9 @@ const SellerSettingHome = () => {
                 <Nav.Item>
                     <Nav.Link eventKey="product">Tạo Sản Phẩm</Nav.Link>
                 </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="statistics">Thống kê Doanh thu</Nav.Link>
+                </Nav.Item>
             </Nav>
             <Row>
                 <Col>
@@ -57,6 +61,7 @@ const SellerSettingHome = () => {
                     {activeTab === 'manageProduct' && <ManageProduct />}
                     {activeTab === 'shop' && <CreateShop />}
                     {activeTab === 'product' && <CreateProduct />}
+                    {activeTab === 'statistics' && <RevenueStatistics />}
                 </Col>
             </Row>
         </>

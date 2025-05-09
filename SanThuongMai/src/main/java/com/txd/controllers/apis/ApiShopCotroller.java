@@ -67,6 +67,30 @@ public class ApiShopCotroller {
         return new ResponseEntity<>(shopDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/shops/{shopId}")
+    public ResponseEntity<Map<String, Object>> getShopById(@PathVariable(value = "shopId") int shopId) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Shop shop = this.shopService.getShopById(shopId);
+            ShopDTO shopDTO = new ShopDTO(shop);
+            if (shopDTO.getId() == null) {
+                response.put("status", "fail");
+                response.put("error", "Không có thông tin về cửa hàng");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+            response.put("status", "success");
+            response.put("shop", shopDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            response.put("status", "fail");
+            response.put("error", "Lỗi get shop: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
     @PostMapping(path = "/shops")
     public ResponseEntity<Map<String, Object>> create(
             @RequestBody Map<String, String> params,

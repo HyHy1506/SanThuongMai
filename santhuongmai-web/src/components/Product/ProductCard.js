@@ -44,23 +44,27 @@ const ProductCard = ({ product }) => {
         alt={product.name}
       />
       <Card.Body style={{ flexGrow: 1 }}>
-        <Card.Title style={{ fontSize: "1.1rem",overflow: "hidden",
+        <Card.Title style={{
+          fontSize: "1.1rem", overflow: "hidden",
           textOverflow: "ellipsis",
-          whiteSpace: "nowrap" }}>{product.name}</Card.Title>
+          whiteSpace: "nowrap"
+        }}>{product.name}</Card.Title>
         <Card.Text style={{
           overflow: "hidden",
           textOverflow: "ellipsis",
           whiteSpace: "nowrap"
         }}>Giá: {product.price.toLocaleString()} VND</Card.Text>
-        <Card.Text
-          style={{
+       
+        <Card.Text style={{
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
-            
-          }}
-        >
-          Cửa hàng: {product.shopName}
+
+          }}>
+          Cửa hàng:{' '}
+          <Link to={`/shops/${product.shopId}`} style={{ color: '#2e7d32' }}>
+            {product.shopName}
+          </Link>
         </Card.Text>
       </Card.Body>
       <Card.Footer style={{ background: "white", borderTop: "none" }}>

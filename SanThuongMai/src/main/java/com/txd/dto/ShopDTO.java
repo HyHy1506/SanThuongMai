@@ -17,14 +17,17 @@ public class ShopDTO {
     private Integer sellerId;
     private String sellerNickname;
     private Boolean isActive;
+    private String avatar;
 
     public ShopDTO(Shop shop) {
         if (shop != null) {
             this.id = shop.getId();
             this.name = shop.getName();
-            this.sellerId = shop.getSellerId()!= null ? shop.getSellerId().getUserId(): null;
-            this.sellerNickname = shop.getSellerId()!= null ? shop.getSellerId().getUser().getNickname() : null;
+            this.sellerId = shop.getSellerId() != null ? shop.getSellerId().getUserId() : null;
+            this.sellerNickname = shop.getSellerId() != null ? shop.getSellerId().getUser().getNickname() : null;
             this.isActive = shop.getIsActive();
+            this.avatar = shop.getSellerId().getUser().getAvatar() != null ? shop.getSellerId().getUser().getAvatar() : null;
+
         }
     }
 
@@ -66,5 +69,19 @@ public class ShopDTO {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    /**
+     * @return the avatar
+     */
+    public String getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * @param avatar the avatar to set
+     */
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

@@ -14,7 +14,7 @@ const ManageShop = () => {
   const loadShop = async () => {
     setLoading(true);
     try {
-      const userId = user.id; 
+      const userId = user.id;
       const res = await Apis.get(endpoints['shop-of-user'](userId));
       setShop(res.data); // Lưu dữ liệu shop vào state
     } catch (err) {
@@ -39,14 +39,14 @@ const ManageShop = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res =await authApis().put(endpoints['shop-with-id'](shop.id), editShop);
+      const res = await authApis().put(endpoints['shop-with-id'](shop.id), editShop);
       console.log(editShop)
       setShop({ ...shop, name: editShop.name, isActive: editShop.isActive });
       setEditShop(null);
       toast.success('Cập nhật cửa hàng thành công!');
     } catch (err) {
-      if(err.response!=null)
-      toast.error('Lỗi khi cập nhật cửa hàng '+ err.response.data.error);
+      if (err.response != null)
+        toast.error('Lỗi khi cập nhật cửa hàng ' + err.response.data.error);
       console.error(err);
     } finally {
       setLoading(false);
@@ -62,8 +62,8 @@ const ManageShop = () => {
       setShowDeleteModal(false);
       toast.success('Xóa cửa hàng thành công!');
     } catch (err) {
-      if(err.response!=null)
-      toast.error('Lỗi khi xóa cửa hàng '+err.response.data.error);
+      if (err.response != null)
+        toast.error('Lỗi khi xóa cửa hàng ' + err.response.data.error);
       console.error(err);
     } finally {
       setLoading(false);
@@ -91,6 +91,7 @@ const ManageShop = () => {
           <Table striped bordered hover responsive>
             <thead>
               <tr>
+                <th>ID</th>
                 <th>Tên</th>
                 <th>Chủ sở hữu</th>
                 <th>Trạng thái</th>
@@ -99,6 +100,7 @@ const ManageShop = () => {
             </thead>
             <tbody>
               <tr>
+                <td>{shop.id}</td>
                 <td>{shop.name}</td>
                 <td>{shop.sellerNickname}</td>
                 <td>{shop.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>

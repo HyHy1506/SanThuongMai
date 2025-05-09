@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.txd.pojo.Category;
 import com.txd.pojo.Orderdetail;
 import com.txd.pojo.Payment;
+import com.txd.pojo.Shop;
 import com.txd.services.PaymentService;
 import com.txd.services.impl.ProductServiceImpl;
 import java.util.logging.Logger;
@@ -38,18 +39,21 @@ public class ApiStatisticsController {
     public ResponseEntity<Map<String, Object>> getRevenueStatistics(
             @RequestParam(name = "period") String period,
             @RequestParam(name = "year") int year,
-            @RequestParam(name = "categoryId", required = false, defaultValue = "") String sCategoryId) {
+            @RequestParam(name = "categoryId", required = false, defaultValue = "") String sCategoryId,
+            @RequestParam(name = "shopId", required = false, defaultValue = "") String sShopId
+    ) {
         Integer categoryId = null;
+        Integer shopId = null;
+
         if (sCategoryId != null && !sCategoryId.isBlank()) {
             categoryId = Integer.valueOf(sCategoryId);
         }
-
+        if (sShopId != null && !sShopId.isBlank()) {
+            shopId = Integer.valueOf(sShopId);
+        }
         Map<String, Object> response = new HashMap<>();
         List<Payment> payments = paymentService.getPayments(new HashMap<>());
-        for (Payment p : payments) {
-            logger.info("Processing======" + p.getId());
 
-        }
         // Lọc các giao dịch đã thanh toán
         payments = payments.stream()
                 .filter(Payment::getIsPay)
@@ -65,7 +69,7 @@ public class ApiStatisticsController {
 
             for (Payment payment : payments) {
                 int month = payment.getCreateAt().getMonth() + 1;
-                double revenue = calculateRevenue(payment, categoryId);
+                double revenue = calculateRevenue(payment, categoryId, shopId);
                 revenueByMonth.compute("Tháng " + month, (k, v) -> v == null ? revenue : v + revenue);
             }
 
@@ -83,7 +87,7 @@ public class ApiStatisticsController {
             for (Payment payment : payments) {
                 int month = payment.getCreateAt().getMonth() + 1;
                 String quarter = "Quý " + ((month - 1) / 3 + 1);
-                double revenue = calculateRevenue(payment, categoryId);
+                double revenue = calculateRevenue(payment, categoryId, shopId);
                 revenueByQuarter.compute(quarter, (k, v) -> v == null ? revenue : v + revenue);
             }
 
@@ -113,12 +117,15 @@ public class ApiStatisticsController {
                 for (Orderdetail detail : payment.getOrderdetailSet()) {
                     if (detail.getProductId() != null) {
                         Category category = detail.getProductId().getCategoryId();
-                        if (categoryId == null || category.getId() == categoryId) {
-                            String categoryName = category.getName();
-                            double revenue;
-                            revenue = detail.getPrice()
-                                    .multiply(BigDecimal.valueOf(detail.getQuantity())).doubleValue();
-                            revenueByCategory.compute(categoryName, (k, v) -> v == null ? revenue : v + revenue);
+                        Shop shop = detail.getProductId().getShopId();
+                        if (shopId == null || shop.getId() == shopId) {
+                            if (categoryId == null || category.getId() == categoryId) {
+                                String categoryName = category.getName();
+                                double revenue;
+                                revenue = detail.getPrice()
+                                        .multiply(BigDecimal.valueOf(detail.getQuantity())).doubleValue();
+                                revenueByCategory.compute(categoryName, (k, v) -> v == null ? revenue : v + revenue);
+                            }
                         }
                     }
                 }
@@ -133,18 +140,25 @@ public class ApiStatisticsController {
         return ResponseEntity.ok(response);
     }
 
-    private double calculateRevenue(Payment payment, Integer categoryId) {
+    private double calculateRevenue(Payment payment, Integer categoryId, Integer shopId) {
         double revenue = 0.0;
         for (Orderdetail detail : payment.getOrderdetailSet()) {
             if (detail.getProductId() != null) {
                 Category category = detail.getProductId().getCategoryId();
-                if (categoryId == null || category.getId() == categoryId) {
-                    revenue += detail.getPrice()
-                            .multiply(BigDecimal.valueOf(detail.getQuantity())).doubleValue();
+                Shop shop = detail.getProductId().getShopId();
+                if (shopId == null || shop.getId() == shopId) {
+                    if (categoryId == null || category.getId() == categoryId) {
+                        revenue += detail.getPrice()
+                                .multiply(BigDecimal.valueOf(detail.getQuantity())).doubleValue();
+                    }
                 }
+
             }
         }
 
+        return revenue;
+    }
+}
 //        for (Paymentdetail detail : payment.getPaymentdetailSet()) {
 //            if (detail.getOrderDetailId() != null && detail.getOrderDetailId().getProductId() != null) {
 //                Category category = detail.getOrderDetailId().getProductId().getCategoryId();
@@ -154,6 +168,3 @@ public class ApiStatisticsController {
 //                }
 //            }
 //        }
-        return revenue;
-    }
-}
