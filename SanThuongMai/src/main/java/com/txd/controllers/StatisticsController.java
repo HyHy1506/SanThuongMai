@@ -26,8 +26,8 @@ public class StatisticsController {
     @Autowired
     private PaymentService paymentService;
 
-    @GetMapping("/statistics")
-    public String showStatistics(Model model, @RequestParam Map<String, String> params) {
+    @GetMapping("/statistics/revenue")
+    public String showStatisticsRevenue(Model model, @RequestParam Map<String, String> params) {
     
 
         
@@ -41,6 +41,14 @@ public class StatisticsController {
         model.addAttribute("selectedYear", year);
         model.addAttribute("selectedCategoryId", categoryId != null && !categoryId.isEmpty() ? Integer.valueOf(categoryId) : null);
 
-        return "StatisticsManager/statistics";
+        return "StatisticsManager/statistics-revenue";
+    }
+    @GetMapping("/statistics/frequency")
+    public String showStatisticsFrequency(Model model, @RequestParam Map<String, String> params) {
+    
+
+        
+        
+        return "StatisticsManager/statistics-frequency";
     }
 }
