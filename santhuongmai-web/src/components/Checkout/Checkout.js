@@ -16,10 +16,8 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Calculate total amount
   const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
-  // Handle another checkout
   const handleCheckout = async (e) => {
     e.preventDefault();
     if (!user) {
@@ -61,7 +59,7 @@ const Checkout = () => {
       setLoading(false);
     }
   };
-  // Handle paypal checkout
+
   const handleCheckoutWithPaypal = async () => {
     if (!user) {
       toast.error('Vui lòng đăng nhập để thanh toán!');
@@ -101,126 +99,229 @@ const Checkout = () => {
     } finally {
       setLoading(false);
     }
-  }; 
-  // PayPal configuration
-  const paypalClientId = process.env.REACT_APP_PAYPAL_CLIENT_ID
+  };
+
+  const paypalClientId = process.env.REACT_APP_PAYPAL_CLIENT_ID;
+
   return (
-    <Container className="py-4">
-      <h2>Thanh Toán</h2>
-      {cartItems.length === 0 ? (
-        <Alert variant="info">Giỏ hàng của bạn đang trống.</Alert>
-      ) : (
-        <>
-          <Table striped bordered hover responsive>
-            <thead>
-              <tr>
-                <th>Sản phẩm</th>
-                <th>Giá</th>
-                <th>Số lượng</th>
-                <th>Tổng</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cartItems.map((item) => (
-                <tr key={item.productId}>
-                  <td>
-                    <Row className="align-items-center">
-                      <Col xs={3}>
-                        <img src={item.image} alt={item.name} style={{ width: '50px' }} className="rounded" />
-                      </Col>
-                      <Col>{item.name}</Col>
-                    </Row>
-                  </td>
-                  <td>{item.price.toLocaleString()} VND</td>
-                  <td>{item.quantity}</td>
-                  <td>{(item.price * item.quantity).toLocaleString()} VND</td>
+    <>
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+          
+          .checkout-container-custom {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFFFFF;
+            padding: 2rem 0;
+            min-height: 100vh;
+          }
+          
+          .checkout-title-custom {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #537D5D;
+            margin-bottom: 1.5rem;
+          }
+          
+          .checkout-table-custom {
+            background-color: #FFFFFF;
+            border: 1px solid #9EBC8A;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(83, 125, 93, 0.1);
+          }
+          
+          .checkout-table-custom th {
+            background-color: #537D5D;
+            color: #FFFFFF;
+            font-weight: 500;
+          }
+          
+          .checkout-table-custom td {
+            vertical-align: middle;
+            color: #537D5D;
+          }
+          
+          .checkout-image-custom {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #9EBC8A;
+            transition: all 0.3s ease;
+          }
+          
+          .checkout-image-custom:hover {
+            transform: scale(1.05);
+            border-color: #73946B;
+          }
+          
+          .payment-select-custom {
+            border: 1px solid #9EBC8A;
+            border-radius: 10px;
+            background-color: #F9F9F9;
+            color: #537D5D;
+            transition: all 0.3s ease;
+          }
+          
+          .payment-select-custom:focus {
+            border-color: #73946B;
+            box-shadow: 0 0 5px rgba(115, 148, 107, 0.5);
+          }
+          
+          .btn-checkout-custom {
+            background-color: #73946B;
+            border: none;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+          }
+          
+          .btn-checkout-custom:hover {
+            background-color: #9EBC8A;
+            transform: scale(1.05);
+          }
+          
+          .btn-checkout-custom:disabled {
+            background-color: #9EBC8A;
+            opacity: 0.6;
+          }
+          
+          .total-text-custom {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #537D5D;
+          }
+        `}
+      </style>
+      <Container className="checkout-container-custom">
+        <h2 className="checkout-title-custom">Thanh Toán</h2>
+        {cartItems.length === 0 ? (
+          <Alert variant="info" style={{ color: '#537D5D' }}>Giỏ hàng của bạn đang trống.</Alert>
+        ) : (
+          <>
+            <Table striped bordered hover responsive className="checkout-table-custom">
+              <thead>
+                <tr>
+                  <th>Sản phẩm</th>
+                  <th>Giá</th>
+                  <th>Số lượng</th>
+                  <th>Tổng</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Row className="mt-3">
-            <Col md={6}>
-              <Form onSubmit={handleCheckout}>
-                <Form.Group className="mb-3" controlId="paymentMethod">
-                  <Form.Label>Phương thức thanh toán</Form.Label>
-                  <Form.Select
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    required
-                  >
-                    <option value="COD">Tiền mặt khi nhận hàng (COD)</option>
-                    <option value="Paypal">Thanh toán bằng Paypal</option>
-                    <option value="ZaloPay">Thanh toán bằng ZaloPay</option>
-                    <option value="Momo">Thanh toán bằng Momo</option>
-                  </Form.Select>
-                </Form.Group>
-                {paymentMethod === 'Paypal' ? (
-                  <PayPalScriptProvider options={{ "client-id": paypalClientId, currency: "USD" }}>
-                    <PayPalButtons
-                      createOrder={(data, actions) => {
-                        return actions.order.create({
-                          purchase_units: [
-                            {
-                              amount: {
-                                currency_code: "USD",
-                                value: (totalAmount / 26000).toFixed(2), // Convert VND to USD (approximate rate)
-                                breakdown: {
-                                  item_total: {
+              </thead>
+              <tbody>
+                {cartItems.map((item) => (
+                  <tr key={item.productId}>
+                    <td>
+                      <Row className="align-items-center">
+                        <Col xs={3}>
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="checkout-image-custom rounded"
+                          />
+                        </Col>
+                        <Col>{item.name}</Col>
+                      </Row>
+                    </td>
+                    <td>{item.price.toLocaleString()} VND</td>
+                    <td>{item.quantity}</td>
+                    <td>{(item.price * item.quantity).toLocaleString()} VND</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Row className="mt-3">
+              <Col md={6}>
+                <Form onSubmit={handleCheckout}>
+                  <Form.Group className="mb-3" controlId="paymentMethod">
+                    <Form.Label>Phương thức thanh toán</Form.Label>
+                    <Form.Select
+                      value={paymentMethod}
+                      onChange={(e) => {
+                        setPaymentMethod(e.target.value);
+                        
+                      }}
+                      className="payment-select-custom"
+                      required
+                    >
+                      <option value="COD">Tiền mặt khi nhận hàng (COD)</option>
+                      <option value="Paypal">Thanh toán bằng Paypal</option>
+                      <option value="ZaloPay">Thanh toán bằng ZaloPay</option>
+                      <option value="Momo">Thanh toán bằng Momo</option>
+                    </Form.Select>
+                  </Form.Group>
+                  {paymentMethod === 'Paypal' ? (
+                     (
+                      <PayPalScriptProvider options={{ "client-id": paypalClientId, currency: "USD" }}>
+                        <PayPalButtons
+                          createOrder={(data, actions) => {
+                            return actions.order.create({
+                              purchase_units: [
+                                {
+                                  amount: {
                                     currency_code: "USD",
                                     value: (totalAmount / 26000).toFixed(2),
+                                    breakdown: {
+                                      item_total: {
+                                        currency_code: "USD",
+                                        value: (totalAmount / 26000).toFixed(2),
+                                      },
+                                    },
                                   },
+                                  items: cartItems.map((item) => ({
+                                    name: item.name,
+                                    unit_amount: {
+                                      currency_code: "USD",
+                                      value: (item.price / 26000).toFixed(2),
+                                    },
+                                    quantity: item.quantity,
+                                  })),
                                 },
-                              },
-                              items: cartItems.map((item) => ({
-                                name: item.name,
-                                unit_amount: {
-                                  currency_code: "USD",
-                                  value: (item.price / 26000).toFixed(2),
-                                },
-                                quantity: item.quantity,
-                              })),
-                            },
-                          ],
-                        });
-                      }}
-                      onApprove={async (data, actions) => {
-                        try {
-                          const details = await actions.order.capture();
+                              ],
+                            });
+                          }}
+                          onApprove={async (data, actions) => {
+                            try {
+                              const details = await actions.order.capture();
+                              toast.success(`Thanh toán PayPal thành công! Mã giao dịch: ${details.id}`);
+                              handleCheckoutWithPaypal();
+                            } catch (err) {
+                              toast.error('Lỗi khi xác nhận thanh toán PayPal');
+                              console.error(err);
+                            }
+                          }}
+                          onError={(err) => {
+                            toast.error('Lỗi khi xử lý thanh toán PayPal');
+                            console.error(err);
+                          }}
+                          onCancel={() => {
+                            toast.info('Thanh toán PayPal đã bị hủy');
+                          }}
                           
-                          toast.success(`Thanh toán PayPal thành công! Mã giao dịch: ${details.id}`);
-                          handleCheckoutWithPaypal()
-                        } catch (err) {
-                          toast.error('Lỗi khi xác nhận thanh toán PayPal');
-                          console.error(err);
-                        }
-                      }}
-                      onError={(err) => {
-                        toast.error('Lỗi khi xử lý thanh toán PayPal');
-                        console.error(err);
-                      }}
-                      onCancel={() => {
-                        toast.info('Thanh toán PayPal đã bị hủy');
-                      }}
-                    />
-                  </PayPalScriptProvider>
-                ) : (
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    disabled={loading}
-                  >
-                    {loading ? <MySpinner size="sm" /> : 'Xác nhận thanh toán'}
-                  </Button>
-                )}
-              </Form>
-            </Col>
-            <Col md={6} className="text-end">
-              <h5>Tổng tiền: {totalAmount.toLocaleString()} VND</h5>
-            </Col>
-          </Row>
-        </>
-      )}
-    </Container>
+                        />
+                      </PayPalScriptProvider>
+                    )
+                  ) : (
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      disabled={loading}
+                      className="btn-checkout-custom"
+                    >
+                      {loading ? <MySpinner size="sm" /> : 'Xác nhận thanh toán'}
+                    </Button>
+                  )}
+                </Form>
+              </Col>
+              <Col md={6} className="text-end">
+                <h5 className="total-text-custom">Tổng tiền: {totalAmount.toLocaleString()} VND</h5>
+              </Col>
+            </Row>
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 

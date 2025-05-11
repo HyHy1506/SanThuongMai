@@ -6,8 +6,10 @@ import { authApis, endpoints } from "../configs/Apis";
 import MySpinner from "../components/layouts/MySpinner";
 
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { unselectedConversationAction } from "../actions/chatAction";
 
-const MessageView = ({ conversation, currentUser, users, onBack }) => {
+const MessageView = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [imagePreview, setImagePreview] = useState(null); // State để lưu URL ảnh xem trước
@@ -15,7 +17,9 @@ const MessageView = ({ conversation, currentUser, users, onBack }) => {
   const [otherUser, setOtherUser] = useState([]);
   const [loading, setLoading] = useState(false);
   const image = useRef();
-
+  const dispatch = useDispatch()
+  const conversation=useSelector(state => state.chat).conversation
+  const currentUser = useSelector((state) => state.authentication);
   const loadOtherUser = async () => {
     try {
       const res = await authApis().get(endpoints["user-with-id"](otherUserId));
@@ -119,7 +123,7 @@ const MessageView = ({ conversation, currentUser, users, onBack }) => {
   return (
     <div className="d-flex flex-column h-100">
       <div className="p-3 border-bottom d-flex align-items-center">
-        <Button variant="link" onClick={onBack} className="me-2 p-0">
+        <Button variant="link" onClick={() => dispatch(unselectedConversationAction())} className="me-2 p-0">
           <i className="fas fa-arrow-left" />
         </Button>
         <Image

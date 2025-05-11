@@ -5,13 +5,16 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Image, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { getUserConversations, testFirebaseConnection, testGet } from "../utils/ChatFunctions";
-const ChatModal = ({ show, onHide, user, users }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { hideChatAction } from "../actions/chatAction";
+const ChatModal = ({ user }) => {
     const [conversations, setConversations] = useState([]);
-    const [selectedConversation, setSelectedConversation] = useState(null);
-  
+    const showChat = useSelector(state => state.chat).showChat
+    const selectedConversation = useSelector(state => state.chat).conversation
+    const dispatch = useDispatch()
     useEffect(() => {
 
-        if (user && show) {
+        if (user) {
 
 
             const unsubscribe = getUserConversations(user.id, (arrayConversations) => {
@@ -20,20 +23,12 @@ const ChatModal = ({ show, onHide, user, users }) => {
             });
             return unsubscribe;
         }
-    }, [user, show]);
-
-    const handleSelectConversation = (conv) => {
-        setSelectedConversation(conv);
-    };
-
-    const handleBack = () => {
-        setSelectedConversation(null);
-    };
+    }, [user]);
 
     return (
         <Modal
-            show={show}
-            onHide={onHide}
+            show={showChat}
+            onHide={() => dispatch(hideChatAction())}
             size="lg"
             centered
             className="chat-modal"
@@ -45,15 +40,12 @@ const ChatModal = ({ show, onHide, user, users }) => {
             <Modal.Body>
                 {selectedConversation ? (
                     <MessageView
-                        conversation={selectedConversation}
-                        currentUser={user}
-                        users={users}
-                        onBack={handleBack}
+
                     />
                 ) : (
                     <ConversationList
                         conversations={conversations}
-                        onSelectConversation={handleSelectConversation}
+
                     />
                 )}
             </Modal.Body>

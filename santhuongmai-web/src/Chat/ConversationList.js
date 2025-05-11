@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import ConversationItem from "./ConversationItem";
 import { authApis, endpoints } from "../configs/Apis";
 import { useState } from "react";
-const ConversationList = ({ conversations, onSelectConversation }) => {
+const ConversationList = ({ conversations }) => {
 
     const user = useSelector((state) => state.authentication);
 
@@ -17,7 +17,7 @@ const ConversationList = ({ conversations, onSelectConversation }) => {
                 conversations.map((conv) => {
                     const otherUserId = conv.participants.user_1 === user.id ? conv.participants.user_2 : conv.participants.user_1;
                     return (
-                       <ConversationItem otherUserId={otherUserId} onSelectConversation={onSelectConversation} conv={conv} key={otherUserId}/>
+                       <ConversationItem otherUserId={otherUserId}conv={conv} key={otherUserId}/>
                     );
                 }))}
         </ListGroup>

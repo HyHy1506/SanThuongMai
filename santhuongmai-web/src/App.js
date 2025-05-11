@@ -27,24 +27,15 @@ function App() {
   useEffect(() => {
 
     let user = JSON.parse(localStorage.getItem("user"))
-
-    if (user != null && user.id != null) {
+    let token = localStorage.getItem('token')
+    if (user != null && user.id != null && token != null) {
       dispatch(loginAction(user))
     }
   }, [])
-  const handleToggleChat = () => {
+  // const handleToggleChat = () => {
 
-    setShowChat(!showChat);
-  };
-  const users = {
-    1: { id: 1, nickname: "User1", avatar: "https://picsum.photos/200/300" },
-    2: { id: 2, nickname: "Trần Đức", avatar: "https://picsum.photos/200/300" },
-    3: { id: 3, nickname: "THi hoa", avatar: "https://picsum.photos/200/300" },
-    15: { id: 15, nickname: "User15", avatar: "https://picsum.photos/200/300" },
-    32: { id: 32, nickname: "User32", avatar: "https://picsum.photos/200/300" },
-    38: { id: 38, nickname: "User38", avatar: "https://picsum.photos/200/300" },
-    40: { id: 40, nickname: "User40", avatar: "https://picsum.photos/200/300" }
-  };
+  //   setShowChat(!showChat);
+  // };
 
   return (
     <BrowserRouter>
@@ -65,13 +56,15 @@ function App() {
           <Route path="/shops/:id" element={<ShopDetail />} />
         </Routes>
       </Container>
-      <ChatIcon onClick={handleToggleChat} />
-      <ChatModal
-        show={showChat}
-        onHide={() => setShowChat(false)}
-        user={user}
-        users={users}
-      />
+      {user != null && <>
+        <ChatIcon />
+        <ChatModal
+
+          user={user}
+
+        />
+      </>}
+
       <Footer />
     </BrowserRouter>
   );

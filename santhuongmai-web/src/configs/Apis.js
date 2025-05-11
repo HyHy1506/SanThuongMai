@@ -1,5 +1,5 @@
 import axios from "axios";
-import cookie from 'react-cookies'
+
 
 const BASE_URL = 'http://localhost:8080/SanThuongMai/api/';
 
@@ -33,7 +33,7 @@ export const authApis = () => {
   return axios.create({
     baseURL: BASE_URL,
     headers: {
-      'Authorization': `Bearer ${cookie.load('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   })
 }

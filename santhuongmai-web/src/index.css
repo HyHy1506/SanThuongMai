@@ -16,7 +16,7 @@ code {
   bottom: 20px;
   right: 20px;
   z-index: 1000;
-  background-color: #28a745;
+  background-color: #537D5D;
   color: white;
   border: none;
   border-radius: 50%;
@@ -37,7 +37,7 @@ code {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 .chat-modal .modal-header {
-  background-color: #28a745;
+  background-color: #537D5D;
   color: white;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
@@ -54,11 +54,11 @@ code {
 }
 .conversation-item:hover {
   background-color: #e9ecef;
-  border-left-color: #28a745;
+  border-left-color: #537D5D;
 }
 .conversation-item.active {
   background-color: #e9ecef;
-  border-left-color: #28a745;
+  border-left-color: #537D5D;
 }
 .message-bubble {
   max-width: 70%;
@@ -68,7 +68,7 @@ code {
   position: relative;
 }
 .message-bubble.sent {
-  background-color: #28a745;
+  background-color: #537D5D;
   color: white;
   margin-left: auto;
   border-bottom-right-radius: 5px;
@@ -81,10 +81,10 @@ code {
 }
 .message-input {
   border-radius: 20px;
-  border: 1px solid #28a745;
+  border: 1px solid #537D5D;
 }
 .send-button {
-  background-color: #28a745;
+  background-color: #537D5D;
   border: none;
   border-radius: 50%;
   width: 40px;

@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import { ListGroup, Row, Col, Image } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authApis, endpoints } from "../configs/Apis";
-const ConversationItem = ({ otherUserId, onSelectConversation, conv }) => {
+import { toast } from "react-toastify";
+import { selectedConversationAction } from "../actions/chatAction";
+const ConversationItem = ({ otherUserId, conv }) => {
     const [otherUser, setOtherUser] = useState([])
+    const dispatch = useDispatch()
+
     const loadOtherUser = async () => {
-        const res = await authApis().get(endpoints["user-with-id"](otherUserId))
-        setOtherUser(res.data.data)
+        try {
+            const res = await authApis().get(endpoints["user-with-id"](otherUserId))
+            setOtherUser(res.data.data)
+
+        } catch (error) {
+            toast.error(error.response?.data?.error)
+        }
     }
     useEffect(() => {
         loadOtherUser()
@@ -15,7 +24,7 @@ const ConversationItem = ({ otherUserId, onSelectConversation, conv }) => {
         <ListGroup.Item
             key={conv.id}
             className="conversation-item"
-            onClick={() => onSelectConversation(conv)}
+            onClick={() => dispatch(selectedConversationAction(conv))}
             action
         >
             <Row className="align-items-center">

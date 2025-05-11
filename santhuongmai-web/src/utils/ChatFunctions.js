@@ -37,7 +37,11 @@ const createConversation = async (userId1, userId2) => {
         //kiem tra co ton ton conversation giua 2 user nay chua
         const snapshot = await get(conversationRef)
         if (snapshot.exists()) {
-            return { success: false, error: "Conversation already exists" };
+            return {
+                success: false,
+                exist: true,
+                error: "Conversation already exists"
+            };
         }
         await set(conversationRef, {
             "participants": {
@@ -109,7 +113,7 @@ const createImageMessage = async (conversationId, userIdsend, imageMessage) => {
         const messageId = messageRef.key
         const message = {
             "image": imageMessage,
-            "text":"Đã gửi 1 ảnh",
+            "text": "Đã gửi 1 ảnh",
             "sender_id": userIdsend,
             "created_at": serverTimestamp(),
             "type": "image"
@@ -158,7 +162,7 @@ const getMessages = (conversationId, callback) => {
     }
 }
 const testGet = async () => {
-   try {
+    try {
         const userConversationRef = ref(db, `users/19/conversations`);
         let a = await get(userConversationRef);
         console.log("chat functions 1", a);
@@ -169,37 +173,37 @@ const testGet = async () => {
 
 }
 const testFirebaseConnection = async () => {
-  try {
-    // Tạo một đường dẫn kiểm tra tạm thời
-    const testRef = ref(db, "testConnection/test");
-    
-    // Thử ghi dữ liệu
-    await set(testRef, {
-      timestamp: Date.now(),
-      message: "Kiểm tra kết nối Firebase",
-    });
-    console.log("Ghi dữ liệu kiểm tra thành công");
+    try {
+        // Tạo một đường dẫn kiểm tra tạm thời
+        const testRef = ref(db, "testConnection/test");
 
-    // Thử đọc dữ liệu
-    const snapshot = await get(testRef);
-    if (snapshot.exists()) {
-      console.log("Đọc dữ liệu thành công:", snapshot.val());
-      return { success: true, data: snapshot.val() };
-    } else {
-      console.log("Không tìm thấy dữ liệu tại đường dẫn kiểm tra");
-      return { success: false, error: "No data found" };
+        // Thử ghi dữ liệu
+        await set(testRef, {
+            timestamp: Date.now(),
+            message: "Kiểm tra kết nối Firebase",
+        });
+        console.log("Ghi dữ liệu kiểm tra thành công");
+
+        // Thử đọc dữ liệu
+        const snapshot = await get(testRef);
+        if (snapshot.exists()) {
+            console.log("Đọc dữ liệu thành công:", snapshot.val());
+            return { success: true, data: snapshot.val() };
+        } else {
+            console.log("Không tìm thấy dữ liệu tại đường dẫn kiểm tra");
+            return { success: false, error: "No data found" };
+        }
+    } catch (error) {
+        console.error("Lỗi khi kiểm tra Firebase:", error);
+        return {
+            success: false,
+            error: error.message || "Không thể kết nối với Firebase",
+        };
     }
-  } catch (error) {
-    console.error("Lỗi khi kiểm tra Firebase:", error);
-    return {
-      success: false,
-      error: error.message || "Không thể kết nối với Firebase",
-    };
-  }
 };
 const getUserConversations = (userId, callback) => {
     const userConversationRef = ref(db, `users/${userId}/conversations`)
-    
+
 
     const unsubscribe = onValue(userConversationRef, async (snapshot) => {
         const conversations = (snapshot.val() || {})
@@ -227,6 +231,21 @@ const getUserConversations = (userId, callback) => {
     }
 
 }
+const getStaticConversation = async (conversationId) => {
+    try {
+        const conversationRef = ref(db, `conversations/${conversationId}`)
+        const result = await get(conversationRef)
+        if (result.val()) {
+            return result.val()
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        return null
+    }
+
+}
 const checkExistConversation = async (userId1, userId2) => {
 
     const idKey = createConversationId(userId1, userId2)
@@ -245,5 +264,7 @@ const checkExistConversation = async (userId1, userId2) => {
         }
     }
 }
-export { createConversation, createTextMessage, createUser, getMessages,
-     getUserConversations, checkExistConversation, createConversationId,testGet,testFirebaseConnection,createImageMessage }
+export {
+    createConversation, createTextMessage, createUser, getMessages,
+    getUserConversations, checkExistConversation, createConversationId, testGet, testFirebaseConnection, createImageMessage, getStaticConversation
+}

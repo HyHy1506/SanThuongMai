@@ -3,7 +3,6 @@ import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap"
 import Apis, { authApis, endpoints } from "../configs/Apis";
 import MySpinner from "./layouts/MySpinner";
 import { useNavigate } from "react-router-dom";
-import cookie from "react-cookies";
 import { loginAction } from "../actions/authentication";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../configs/FirebaseConfig";
@@ -80,7 +79,7 @@ const Register = () => {
       const res = await Apis.post(endpoints.googleLogin, infoGoogleAccount);
 
       if (res.data.status === "success") {
-        cookie.save("token", res.data.token);
+        localStorage.setItem("token", res.data.token)
         try {
           const resUser = await authApis().get(endpoints["current-user"]);
           dispatch(loginAction(resUser.data));
@@ -91,7 +90,7 @@ const Register = () => {
         }
       }
     } catch (error) {
-      toast.error("Lỗi đăng nhập Google:"+ error.response?.data?.error);
+      toast.error("Lỗi đăng nhập Google:" + error.response?.data?.error);
       setMsg("Đăng nhập Google thất bại: " + error.response?.data?.error);
     } finally {
       setLoading(false);

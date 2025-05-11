@@ -4,7 +4,6 @@ import MySpinner from "./layouts/MySpinner";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Apis, { authApis, endpoints } from "../configs/Apis";
-import cookie from "react-cookies";
 import { loginAction } from "../actions/authentication";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../configs/FirebaseConfig";
@@ -23,12 +22,12 @@ const Login = () => {
     { title: "Tên đăng nhập", field: "username", type: "text" },
     { title: "Mật khẩu", field: "password", type: "password" },
   ];
-  const infoGoogleAccount={
-    displayName:'',
-    email:'',
-    photoURL:'',
-    uid:'',
-    
+  const infoGoogleAccount = {
+    displayName: '',
+    email: '',
+    photoURL: '',
+    uid: '',
+
 
   }
   const setState = (value, field) => {
@@ -41,7 +40,7 @@ const Login = () => {
     try {
       const res = await Apis.post(endpoints.login, user);
       if (res.data.status === "success") {
-        cookie.save("token", res.data.token);
+        localStorage.setItem("token", res.data.token)
         try {
           const resUser = await authApis().get(endpoints["current-user"]);
           dispatch(loginAction(resUser.data));
@@ -67,16 +66,16 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const idToken = await user.getIdToken();
-      infoGoogleAccount.displayName=user.displayName
-      infoGoogleAccount.email=user.email
-      infoGoogleAccount.uid=user.uid
-      infoGoogleAccount.photoURL=user.photoURL
+      infoGoogleAccount.displayName = user.displayName
+      infoGoogleAccount.email = user.email
+      infoGoogleAccount.uid = user.uid
+      infoGoogleAccount.photoURL = user.photoURL
       console.log(result.user)
       // // Gửi token Google đến backend để xác thực
       const res = await Apis.post(endpoints.googleLogin, infoGoogleAccount);
 
       if (res.data.status === "success") {
-        cookie.save("token", res.data.token);
+        localStorage.setItem("token", res.data.token)
         try {
           const resUser = await authApis().get(endpoints["current-user"]);
           dispatch(loginAction(resUser.data));
@@ -87,8 +86,8 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.log( error.response.data.error)
-      toast.error("Lỗi đăng nhập Google:"+ error.response?.data?.error);
+      console.log(error.response.data.error)
+      toast.error("Lỗi đăng nhập Google:" + error.response?.data?.error);
       setMsg("Đăng nhập Google thất bại: " + error.response?.data?.error);
     } finally {
       setLoading(false);

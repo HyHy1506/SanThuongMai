@@ -4,6 +4,10 @@ import { Container, Row, Col, Card, Button, Form, Alert, Spinner } from 'react-b
 import Apis, { endpoints } from '../../configs/Apis';
 import ProductCard from '../Product/ProductCard';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { createConversation, createConversationId, createTextMessage, getStaticConversation } from '../../utils/ChatFunctions';
+import { selectedConversationAction, showChatAction } from '../../actions/chatAction';
+import MySpinner from '../layouts/MySpinner';
 
 const ShopDetail = () => {
   const { id } = useParams();
@@ -16,6 +20,9 @@ const ShopDetail = () => {
   const [sortBy, setSortBy] = useState('price');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [loadingSendMsg, setloadingSendMsg] = useState(false);
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.authentication);
 
   // Fetch shop details
   const fetchShop = async () => {
@@ -84,7 +91,36 @@ const ShopDetail = () => {
     setSortOrder(newSortOrder);
     setPage(1);
   };
+  const handleClickChat = async () => {
+    setloadingSendMsg(true)
+    try {
+      // Gửi tin nhắn văn bản
+      if (user != null && shop.sellerId != null) {
+        const conversationId = createConversationId(user.id, shop.sellerId)
+        const newMessage = "Xin chào"
+        const result = await createConversation(user.id, shop.sellerId)
+        if (result.success ||result.exist!=null ) {
+          const resultCreate = await createTextMessage(conversationId, user.id, newMessage);
+          const resultConservation = await getStaticConversation(conversationId)
+          if (resultConservation) {
+            dispatch(showChatAction())
+            // dispatch(selectedConversationAction(resultConservation))
 
+          } else {
+            toast.error("Lỗi gửi tin nhắn");
+          }
+        } else   {
+          toast.error("Lỗi gửi tin nhắn");
+        }
+
+      }
+    } catch (error) {
+      toast.error("Lỗi gửi tin nhắn");
+    } finally {
+      setloadingSendMsg(false)
+
+    }
+  }
   const loadMore = () => {
     if (!loading) setPage(page + 1);
   };
@@ -103,7 +139,7 @@ const ShopDetail = () => {
                   style={{ width: '100px', height: '100px', borderRadius: '50%' }}
                 />
               </Col>
-              <Col md={10}>
+              <Col md={8}>
                 <h2 style={{ color: '#2e7d32' }}>{shop.name}</h2>
                 <p className="mb-1">
                   <strong>Chủ sở hữu:</strong> {shop.sellerNickname}
@@ -118,6 +154,15 @@ const ShopDetail = () => {
                   <strong>Địa chỉ:</strong> 123 Đường Công Nghệ, Quận 1, TP. HCM
                 </p>
               </Col>
+              {user == null || (user != null && user.id == shop.sellerId) ? <></> :
+
+                <Col md={2} >
+                  {loadingSendMsg ? <MySpinner /> :
+
+                    <Button style={{ backgroundColor: "darkgreen" }} onClick={handleClickChat}>Chat Ngay</Button>
+                  }
+                </Col>
+              }
             </Row>
           </Card.Body>
         </Card>
