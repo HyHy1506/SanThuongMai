@@ -65,7 +65,7 @@ const UserInfo = () => {
 
                 form.append("avatar", avatar.current.files[0]);
             }
-            await authApis().put(endpoints.updateUser(user.id), form,
+            await authApis().put(endpoints['user-with-id'](user.id), form,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",

@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cloudinary/react": "^1.14.1",
+    "@cloudinary/url-gen": "^1.21.0",
+    "@fortawesome/fontawesome-free": "^6.7.2",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
     "@paypal/react-paypal-js": "^8.8.3",

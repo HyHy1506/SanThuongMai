@@ -18,19 +18,37 @@ import Setting from './components/SettingManager/Setting';
 import Checkout from './components/Checkout/Checkout';
 import PaymentHistory from './components/SettingManager/CutomerSetting/PaymentHistory';
 import ShopDetail from './components/Shop/ShopDetail';
+import ChatIcon from './Chat/ChatIcon';
+import ChatModal from './Chat/ChatModal';
 function App() {
-  const dispatch=useDispatch()
-  useEffect(()=>{
-    
-    let user=JSON.parse(localStorage.getItem("user"))
+  const dispatch = useDispatch()
+  const [showChat, setShowChat] = useState(false);
+  const user = useSelector((state) => state.authentication);
+  useEffect(() => {
 
-    if(user!=null && user.id!=null){
+    let user = JSON.parse(localStorage.getItem("user"))
+
+    if (user != null && user.id != null) {
       dispatch(loginAction(user))
     }
-  },[])
+  }, [])
+  const handleToggleChat = () => {
+
+    setShowChat(!showChat);
+  };
+  const users = {
+    1: { id: 1, nickname: "User1", avatar: "https://picsum.photos/200/300" },
+    2: { id: 2, nickname: "Trần Đức", avatar: "https://picsum.photos/200/300" },
+    3: { id: 3, nickname: "THi hoa", avatar: "https://picsum.photos/200/300" },
+    15: { id: 15, nickname: "User15", avatar: "https://picsum.photos/200/300" },
+    32: { id: 32, nickname: "User32", avatar: "https://picsum.photos/200/300" },
+    38: { id: 38, nickname: "User38", avatar: "https://picsum.photos/200/300" },
+    40: { id: 40, nickname: "User40", avatar: "https://picsum.photos/200/300" }
+  };
+
   return (
     <BrowserRouter>
-    <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={3000} />
       <Header />
 
       <Container className='min-vh-100'>
@@ -47,7 +65,13 @@ function App() {
           <Route path="/shops/:id" element={<ShopDetail />} />
         </Routes>
       </Container>
-
+      <ChatIcon onClick={handleToggleChat} />
+      <ChatModal
+        show={showChat}
+        onHide={() => setShowChat(false)}
+        user={user}
+        users={users}
+      />
       <Footer />
     </BrowserRouter>
   );

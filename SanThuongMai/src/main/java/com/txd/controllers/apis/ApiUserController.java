@@ -164,6 +164,36 @@ public class ApiUserController {
 
     }
 
+    @GetMapping("/users/{userId}")
+    @CrossOrigin
+    public ResponseEntity<Object> getProfileSimpleOneUser(
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
+            @PathVariable("userId") int id
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, null);
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            User user = userDetailsService.getUserById(id);
+            if (user == null) {
+                response.put("status", "fail");
+                response.put("error", "Không tồn tại user id: " + id);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            UserDTO userDTO = new UserDTO(user);
+            response.put("status", "succues");
+            response.put("data", userDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", "fail");
+            response.put("error", "Lỗi xac thuc user: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<Map<String, String>> destroy(@PathVariable("userId") int id) {
         try {

@@ -19,7 +19,7 @@ export const endpoints = {
   'ratings': '/product-ratings',
   'comments': `/comments`,
   'replies': (commentId) => `/comments/${commentId}/replies`,
-  'updateUser': (userId) => `/users/${userId}`,
+  'user-with-id': (userId) => `/users/${userId}`,
   'payments': '/payments',
   'paymentHistory': '/payments/history',
   'create-paypal-order': '/paypal/create-order', // New endpoint for PayPal
