@@ -66,14 +66,7 @@ public class ProductServiceImpl implements ProductService {
                 Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (p.getId() == null) {
-            p.setCreateAt(new Date());
-            p.setUpdateAt(new Date());
-            p.setIsActive(true); // Default for new products
-        } else {
-            p.setUpdateAt(new Date());
-            p.setCreateAt(proRepo.getProductById(p.getId()).getCreateAt());
-        }
+        
         return proRepo.saveOrUpdate(p);
     }
 

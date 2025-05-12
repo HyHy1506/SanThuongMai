@@ -64,4 +64,9 @@ public class UserController {
         return "redirect:/admin/users";
     }
 
+    @PostMapping("/users")
+    public String createUser(@ModelAttribute("user") User user) {
+        userService.saveOrUpdate(user);
+        return "redirect:/admin/users";
+    }
 }

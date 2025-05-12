@@ -12,6 +12,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -20,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class CommentRepositoryImpl implements CommentRepository{
+public class CommentRepositoryImpl implements CommentRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
+    private static final Logger logger = Logger.getLogger(CommentRepositoryImpl.class.getName());
 
     @Override
     public List<Comment> getCommentsByProductId(int productId) {
@@ -46,7 +49,7 @@ public class CommentRepositoryImpl implements CommentRepository{
     public Comment addComment(Comment comment) {
         Session session = factory.getObject().getCurrentSession();
         session.persist(comment);
-        session.refresh(comment);
+     
         return comment;
     }
 

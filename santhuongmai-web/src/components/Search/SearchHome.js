@@ -4,6 +4,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import Apis, { endpoints } from "../../configs/Apis";
 import MySpinner from "../layouts/MySpinner";
 import ProductCard from "../Product/ProductCard";
+import { Xanh4 } from "../../utils/MyColors";
 
 const SearchHome = () => {
     const [products, setProducts] = useState([]);
@@ -20,7 +21,7 @@ const SearchHome = () => {
         fromPrice: "",
         toPrice: "",
         sortBy: "",
-        orderBy:""
+        orderBy: ""
     });
 
     const fetchCategories = async () => {
@@ -34,7 +35,7 @@ const SearchHome = () => {
 
     const fetchShops = async () => {
         try {
-            const response = await Apis.get(endpoints.shops );
+            const response = await Apis.get(endpoints.shops);
             setShops(response.data);
         } catch (error) {
             console.error("Error fetching shops:", error);
@@ -54,26 +55,30 @@ const SearchHome = () => {
 
     // Update keyword from URL
     useEffect(() => {
+        console.log("loadddd")
         const kw = searchParams.get("kw") || "";
         setFilters((prev) => ({ ...prev, kw }));
         setPage(1);
         setProducts([]);
-        setTriger(pre=>!pre)
+        setTriger(pre => !pre)
     }, [searchParams]);
 
     // Fetch products based on filters and page
     const loadProducts = async () => {
         setLoading(true);
         try {
+            const kw = searchParams.get("kw") || "";
             const params = new URLSearchParams();
             params.append("page", page);
-            if (filters.kw) params.append("kw", filters.kw);
+            params.append("kw", kw);
             if (filters.categoryId) params.append("categoryId", filters.categoryId);
             if (filters.shopId) params.append("shopId", filters.shopId);
             if (filters.fromPrice) params.append("fromPrice", filters.fromPrice);
             if (filters.toPrice) params.append("toPrice", filters.toPrice);
             if (filters.sortBy) params.append("sortBy", filters.sortBy);
             if (filters.orderBy) params.append("orderBy", filters.orderBy);
+            params.append("isActive", true);
+
             const response = await Apis.get(`${endpoints.products}?${params}`);
             console.log(`${endpoints.products}?${params}`)
             setProducts((prev) => (page === 1 ? response.data : [...prev, ...response.data]));
@@ -86,7 +91,7 @@ const SearchHome = () => {
 
     useEffect(() => {
         if (page > 0) loadProducts();
-    }, [page,triger]);
+    }, [page, triger]);
 
     // Handle filter changes
     const handleFilterChange = (e) => {
@@ -97,7 +102,7 @@ const SearchHome = () => {
     const handleClickFilter = (e) => {
         setPage(1);
         setProducts([]);
-        setTriger(pre=>!pre)
+        setTriger(pre => !pre)
 
     };
     // Load more products
@@ -179,7 +184,7 @@ const SearchHome = () => {
                                     <option value="price">Theo giá</option>
                                 </Form.Select>
                                 <Form.Select
-                                className="mt-2"
+                                    className="mt-2"
                                     name="orderBy"
                                     value={filters.orderBy}
                                     onChange={handleFilterChange}
@@ -197,8 +202,8 @@ const SearchHome = () => {
                 {/* Products Grid */}
                 <Col md={9}>
                     {products.length === 0 && !loading && (
-                        <Alert variant="info" className="text-center">
-                            No products found!
+                        <Alert variant="success" className="text-center">
+                            Không có sản phẩm!
                         </Alert>
                     )}
                     <Row>
@@ -211,10 +216,11 @@ const SearchHome = () => {
                     {page > 0 && products.length > 0 && (
                         <div className="text-center mt-4">
                             <Button
-                                variant="primary"
+
                                 onClick={loadMore}
                                 disabled={loading}
                                 className="rounded-pill px-4"
+                                style={{ backgroundColor: Xanh4 }}
                             >
                                 {loading ? <Spinner animation="border" size="sm" /> : "Load More"}
                             </Button>

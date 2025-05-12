@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.logging.Logger;
 
 import com.txd.dto.CommentDTO;
 import com.txd.pojo.Comment;
@@ -29,6 +30,7 @@ import com.txd.pojo.Customer;
 import com.txd.pojo.Product;
 import com.txd.pojo.User;
 import com.txd.services.CommentService;
+import com.txd.services.ProductService;
 import com.txd.services.UserService;
 import com.txd.utils.AuthHelper;
 
@@ -43,11 +45,14 @@ public class ApiCommentController {
 
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private UserService userDetailsService;
     @Autowired
     private AuthHelper authHelper;
+    private static final Logger logger = Logger.getLogger(ApiCommentController.class.getName());
 
     @GetMapping("/comments")
     public ResponseEntity<List<CommentDTO>> getCommentsByProduct(@RequestParam("productId") int productId) {
@@ -69,12 +74,17 @@ public class ApiCommentController {
             String username = (String) authResult.get("username");
             User user = userDetailsService.getUserByUsername(username);
 
+            Product p = productService.getProductById(commentDTO.getProductId());
+            Customer cus = user.getCustomer();
+
             Comment comment = new Comment();
             comment.setContent(commentDTO.getContent());
-            comment.setProductId(new Product(commentDTO.getProductId()));
-            comment.setCustomerId(new Customer(user.getId()));
+            comment.setProductId(p);
+            comment.setCustomerId(cus);
+ 
 
             Comment savedComment = commentService.addComment(comment);
+        
             response.put("status", "success");
             response.put("comment", new CommentDTO(savedComment));
             return new ResponseEntity<>(response, HttpStatus.CREATED);

@@ -29,8 +29,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Comment addComment(Comment comment) {
-        comment.setCreateAt(new Date());
-        comment.setIsActive(true);
+        
         return commentRepository.addComment(comment);
     }
 

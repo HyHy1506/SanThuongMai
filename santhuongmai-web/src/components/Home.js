@@ -32,6 +32,7 @@ const Home = () => {
     try {
       const params = new URLSearchParams();
       params.append("page", page);
+      params.append("isActive", true);
       let url = `${endpoints.products}?${params}`;
       const response = await Apis.get(url);
       setProducts((prev) => (page === 1 ? response.data : [...prev, ...response.data]));
@@ -162,8 +163,8 @@ const Home = () => {
 
         {/* Show Products */}
         {products.length === 0 && !loading && (
-          <Alert variant="info" className="text-center">
-            No products found!
+          <Alert variant="success" className="text-center">
+            Không có sản phẩm!
           </Alert>
         )}
         <Row>

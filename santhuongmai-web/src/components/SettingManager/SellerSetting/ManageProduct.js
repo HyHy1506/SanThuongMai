@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Form, Alert, Modal, Card, Row, Col, InputGroup } from 'react-bootstrap';
+import { Table, Buttons, Form, Alert, Modal, Card, Row, Col, InputGroup,Button } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Apis, { authApis, endpoints } from '../../../configs/Apis';
@@ -12,42 +12,61 @@ const ManageProduct = () => {
   const [productToDelete, setProductToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [seller, setSeller] = useState({})
-  const user = useSelector(state => state.authentication)
+  const [seller, setSeller] = useState({});
+  const [page, setPage] = useState(1); // State for pagination
+  const [hasMore, setHasMore] = useState(true); // State to track if more data is available
+  const user = useSelector((state) => state.authentication);
+
   const loadSeller = async () => {
     try {
-      const res = await Apis.get(endpoints['seller-with-id'](user.id))
-      setSeller(res.data)
-
+      const res = await Apis.get(endpoints['seller-with-id'](user.id));
+      setSeller(res.data);
     } catch (error) {
-      toast.error(error)
+      toast.error(error);
     }
-  }
+  };
 
   useEffect(() => {
-    loadSeller()
-
+    loadSeller();
   }, []);
+
   useEffect(() => {
     if (seller.shopId) {
-      loadProducts();
+      loadProducts(true); // Reset products on shopId change
     }
   }, [seller.shopId]);
-  const loadProducts = async () => {
+
+  const loadProducts = async (reset = false) => {
     setLoading(true);
     try {
-      console.log(seller.shopId);
-      const res = await Apis.get(`${endpoints['products']}?shopId=${seller.shopId}`);
-      setProducts(res.data);
+      const res = await Apis.get(
+        `${endpoints['products']}?shopId=${seller.shopId}&isActive=true&page=${page}`
+      );
+      const newProducts = res.data;
+
+      // If reset is true, replace products; otherwise, append
+      setProducts((prev) => (reset ? newProducts : [...prev, ...newProducts]));
+
+      // If no data is returned, disable further loading
+      setHasMore(newProducts.length > 0);
       setError('');
     } catch (err) {
       const message = err.response?.data?.error || 'Lỗi khi tải danh sách sản phẩm';
-
       toast.error(message);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1); // Increment page
+  };
+
+  useEffect(() => {
+    if (seller.shopId && page > 1) {
+      loadProducts(); // Load additional products when page changes
+    }
+  }, [page, seller.shopId]);
 
   const handleEdit = (product) => {
     setEditProduct({
@@ -57,7 +76,7 @@ const ManageProduct = () => {
       description: product.description || '',
       categoryId: product.categoryId,
       stock: product.stock || '',
-      image: null, // File input starts empty
+      image: null,
       attributes: product.attributes || [{ attributeId: '', value: '' }],
     });
   };
@@ -92,13 +111,12 @@ const ManageProduct = () => {
     setError('');
     setLoading(true);
 
-    // Validation
     if (!editProduct.name || !editProduct.price || !editProduct.categoryId || !editProduct.stock) {
       setError('Vui lòng điền đầy đủ tên, giá, danh mục và số lượng tồn kho');
       setLoading(false);
       return;
     }
-    if (editProduct.attributes.some(attr => !attr.attributeId || !attr.value)) {
+    if (editProduct.attributes.some((attr) => !attr.attributeId || !attr.value)) {
       setError('Vui lòng điền đầy đủ ID thuộc tính và giá trị');
       setLoading(false);
       return;
@@ -111,7 +129,7 @@ const ManageProduct = () => {
         price: editProduct.price,
         description: editProduct.description,
         categoryId: parseInt(editProduct.categoryId),
-        attributes: editProduct.attributes.map(attr => ({
+        attributes: editProduct.attributes.map((attr) => ({
           attributeId: parseInt(attr.attributeId),
           value: attr.value,
         })),
@@ -126,7 +144,7 @@ const ManageProduct = () => {
       });
       toast.success('Cập nhật sản phẩm thành công!');
       setEditProduct(null);
-      loadProducts();
+      loadProducts(true); // Reset products after update
     } catch (err) {
       const message = err.response?.data?.error || 'Lỗi khi cập nhật sản phẩm';
       setError(message);
@@ -142,13 +160,13 @@ const ManageProduct = () => {
       await authApis().delete(endpoints['products-with-id'](productToDelete));
       toast.success('Xóa sản phẩm thành công!');
       setProductToDelete(null);
-      loadProducts();
+      loadProducts(true); // Reset products after delete
     } catch (err) {
       const message = err.response?.data?.error || 'Lỗi khi xóa sản phẩm';
       toast.error(message);
     } finally {
       setLoading(false);
-      setShowDeleteModal(false)
+      setShowDeleteModal(false);
     }
   };
 
@@ -167,11 +185,9 @@ const ManageProduct = () => {
                 <thead>
                   <tr>
                     <th>ID</th>
-
                     <th>Tên</th>
                     <th>Giá (VND)</th>
                     <th>Danh mục</th>
-                    {/* <th>Tồn kho</th> */}
                     <th>Hình ảnh</th>
                     <th>Hành động</th>
                   </tr>
@@ -183,7 +199,6 @@ const ManageProduct = () => {
                       <td>{product.name}</td>
                       <td>{parseFloat(product.price).toLocaleString('vi-VN')}</td>
                       <td>{product.categoryName}</td>
-                      {/* <td>{product.stock}</td> */}
                       <td>
                         {product.image ? (
                           <img src={product.image} alt={product.name} width="50" className="rounded" />
@@ -215,6 +230,17 @@ const ManageProduct = () => {
                   ))}
                 </tbody>
               </Table>
+              {hasMore && (
+                <div className="text-center mt-3">
+                  <Button
+                    variant="success"
+                    onClick={handleLoadMore}
+                    disabled={loading}
+                  >
+                    {loading ? 'Đang tải...' : 'Tải thêm'}
+                  </Button>
+                </div>
+              )}
             </Card.Body>
           </Card>
 

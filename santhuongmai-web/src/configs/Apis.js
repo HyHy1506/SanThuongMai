@@ -25,6 +25,8 @@ export const endpoints = {
   'create-paypal-order': '/paypal/create-order', // New endpoint for PayPal
   'capture-paypal-order': '/paypal/capture-order',
   'googleLogin': '/google-login',
+  'soft-delete-shop-with-id': (shopId) => `/shops/soft/${shopId}`,
+  'soft-delete-product-with-id': (productId) => `/products/soft/${productId}`,
   'revenueStatistics': (period, year, categoryId, shopId) =>
     `/statistics/revenue?period=${period}&year=${year}&categoryId=${categoryId || ''}&shopId=${shopId || ''}`
 }

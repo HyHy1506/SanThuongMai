@@ -92,9 +92,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         if (user.getId() == null) {
-            user.setCreateAt(new Date());
-            user.setUpdateAt(new Date());
-            user.setIsActive(true); // Default for new products
+            user.setPassword(this.passwordEncoder.encode(user.getPassword().trim()));
         } else {
             user.setUpdateAt(new Date());
             Date d = userRepo.getUserById(user.getId()).getCreateAt();
@@ -166,7 +164,7 @@ public class UserServiceImpl implements UserService {
         String displayName = params.get("displayName");
         String email = params.get("email");
         String photoURL = params.get("photoURL");
-        String uid = params.get("uid");        
+        String uid = params.get("uid");
         String userRole = params.get("userRole");
 
         User u = new User();
@@ -176,8 +174,6 @@ public class UserServiceImpl implements UserService {
         u.setPassword(this.passwordEncoder.encode(uid));
         u.setUserRole(userRole);
         u.setAvatar(photoURL);
-
-       
 
         return this.userRepo.addUser(u);
     }

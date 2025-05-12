@@ -10,6 +10,7 @@ import Apis, { endpoints } from '../../../configs/Apis';
 import UserInfo from '../UserInfo';
 import { useSelector } from 'react-redux';
 import RevenueStatistics from './RevenueStatistics';
+import { Xanh1, Xanh2, Xanh3, Xanh4, Xanh5 } from '../../../utils/MyColors';
 
 
 const SellerSettingHome = () => {
@@ -36,22 +37,22 @@ const SellerSettingHome = () => {
             </span>
             <Nav variant="tabs" activeKey={activeTab} onSelect={(key) => setActiveTab(key)} className="mb-3 mt-2">
                 <Nav.Item>
-                    <Nav.Link eventKey="userInfo">Thông tin cá nhân</Nav.Link>
+                    <Nav.Link style={{ color: activeTab === "userInfo" ? "green" : "black" }} eventKey="userInfo">Thông tin cá nhân</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="manageShop">Quản lý Shop</Nav.Link>
+                    <Nav.Link style={{ color: activeTab === "manageShop" ? "green" : "black" }} eventKey="manageShop">Quản lý Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="manageProduct">Quản lý Sản Phẩm</Nav.Link>
+                    <Nav.Link  style={{ color: activeTab === "manageProduct" ? "green" : "black" }} eventKey="manageProduct">Quản lý Sản Phẩm</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="shop">Tạo Shop</Nav.Link>
+                    <Nav.Link  style={{ color: activeTab === "shop" ? "green" : "black" }} eventKey="shop">Tạo Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="product">Tạo Sản Phẩm</Nav.Link>
+                    <Nav.Link  style={{ color: activeTab === "product" ? "green" : "black" }} eventKey="product">Tạo Sản Phẩm</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="statistics">Thống kê Doanh thu</Nav.Link>
+                    <Nav.Link  style={{ color: activeTab === "statistics" ? "green" : "black" }} eventKey="statistics">Thống kê Doanh thu</Nav.Link>
                 </Nav.Item>
             </Nav>
             <Row>

@@ -154,4 +154,36 @@ public class ApiProductController {
         this.productService.deleteProduct(id);
     }
 
+    @DeleteMapping("/products/soft/{productId}")
+    public ResponseEntity<Map<String, Object>> softDelete(
+            @PathVariable(value = "productId") int id,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> authResult = authHelper.getUsernameFromToken(authHeader, "Seller");
+        if (!"success".equals(authResult.get("status"))) {
+            return new ResponseEntity<>(authResult, HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            String username = (String) authResult.get("username");
+
+            //kiem tra co nguoi ban co du quyen tao san pham khong
+            User user = userDetailsService.getUserByUsername(username);
+            Seller seller = user.getSeller();
+            if (seller.getStatus().equals(Seller.SellerStatusEnum.PENDING) || seller.getStatus().equals(Seller.SellerStatusEnum.REJECT)) {
+                response.put("status", "fail");
+                response.put("error", "người dùng chưa được duyệt hoặc đã bị từ chối");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            Product p = productService.getProductById(id);
+            p.setIsActive(Boolean.FALSE);
+            productService.saveOrUpdate(p);
+            response.put("status", "success");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", "fail");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

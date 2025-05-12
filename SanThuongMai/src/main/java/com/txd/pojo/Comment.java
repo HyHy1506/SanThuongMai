@@ -191,7 +191,7 @@ public class Comment implements Serializable {
 
     @Override
     public String toString() {
-        return "com.txd.pojo.Comment[ id=" + id + " ]";
+        return "com.txd.pojo.Comment[ id=" + id + " ]" + "content: "+content +" productId: " + productId.getId()+ "cusID: "+ customerId.getUserId() ;
     }
 
 }

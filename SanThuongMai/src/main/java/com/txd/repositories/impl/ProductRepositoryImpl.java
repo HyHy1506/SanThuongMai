@@ -76,6 +76,10 @@ public class ProductRepositoryImpl implements ProductRepository {
                 predicates.add(b.equal(root.get("shopId").as(Integer.class),
                         shopId));
             }
+            String isActive = params.get("isActive");
+            if (isActive != null && !isActive.isEmpty()) {
+                predicates.add(b.equal(root.get("isActive"), Boolean.parseBoolean(isActive)));
+            }
             cQ.where(predicates.toArray(Predicate[]::new));
         }
 
@@ -124,6 +128,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             s.merge(p);
         }
         s.flush();
+        s.refresh(p);
         return p;
     }
 
@@ -183,7 +188,15 @@ public class ProductRepositoryImpl implements ProductRepository {
                 predicates.add(b.equal(root.get("categoryId").as(Integer.class),
                         Integer.parseInt(cateId)));
             }
-
+            String isActive = params.get("isActive");
+            if (isActive != null && !isActive.isEmpty()) {
+                predicates.add(b.equal(root.get("isActive"), Boolean.parseBoolean(isActive)));
+            }
+            String shopId = params.get("shopId");
+            if (shopId != null && !shopId.isEmpty()) {
+                predicates.add(b.equal(root.get("shopId").as(Integer.class),
+                        shopId));
+            }
             cQ.where(predicates.toArray(Predicate[]::new));
         }
 

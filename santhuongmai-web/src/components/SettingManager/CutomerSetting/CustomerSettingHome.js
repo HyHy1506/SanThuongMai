@@ -19,11 +19,11 @@ const CustomerSettingHome = () => {
 
             <Nav variant="tabs" activeKey={activeTab} onSelect={(key) => setActiveTab(key)} className="mb-3 mt-2">
                 <Nav.Item>
-                    <Nav.Link eventKey="userInfo">Thông tin cá nhân</Nav.Link>
+                    <Nav.Link   style={{ color: activeTab === "userInfo" ? "green" : "black" }} eventKey="userInfo">Thông tin cá nhân</Nav.Link>
 
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="paymentHistory">Lịch sử thanh toán</Nav.Link>
+                    <Nav.Link   style={{ color: activeTab === "paymentHistory" ? "green" : "black" }} eventKey="paymentHistory">Lịch sử thanh toán</Nav.Link>
 
                 </Nav.Item>
 
