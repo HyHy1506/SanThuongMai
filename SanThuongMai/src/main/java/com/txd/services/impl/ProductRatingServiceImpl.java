@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProductRatingServiceImpl implements ProductRatingService{
+public class ProductRatingServiceImpl implements ProductRatingService {
 
     @Autowired
     private ProductRatingRepository productRatingRepository;
@@ -30,5 +30,16 @@ public class ProductRatingServiceImpl implements ProductRatingService{
     @Override
     public Productrating getRatingByCustomerAndProduct(int customerId, int productId) {
         return productRatingRepository.getRatingByCustomerAndProduct(customerId, productId);
+    }
+
+    @Override
+    public Double getAverageRating(int productId) {
+        return productRatingRepository.getAverageRating(productId);
+    }
+
+    @Override
+    public Long getRatingCount(int productId) {
+        return productRatingRepository.getRatingCount(productId);
+
     }
 }

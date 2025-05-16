@@ -67,4 +67,14 @@ public class CommentRepositoryImpl implements CommentRepository {
         Session session = factory.getObject().getCurrentSession();
         return session.get(Comment.class, id);
     }
+    @Override
+    public Long getCommentCount(int productId) {
+        Session session = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        Root<Comment> root = query.from(Comment.class);
+        query.select(builder.count(root));
+        query.where(builder.equal(root.get("productId").as(Integer.class), productId));
+        return session.createQuery(query).getSingleResult();
+    }
 }

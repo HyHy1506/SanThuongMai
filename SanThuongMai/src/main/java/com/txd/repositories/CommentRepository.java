@@ -20,4 +20,6 @@ public interface CommentRepository {
     void deleteComment(int id);
 
     Comment getCommentById(int id);
+
+    Long getCommentCount(int productId);
 }

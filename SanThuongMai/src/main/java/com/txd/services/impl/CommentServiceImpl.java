@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author tran1
  */
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
@@ -29,7 +29,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Comment addComment(Comment comment) {
-        
+
         return commentRepository.addComment(comment);
     }
 
@@ -41,5 +41,10 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public Comment getCommentById(int id) {
         return commentRepository.getCommentById(id);
+    }
+
+    @Override
+    public Long getCommentCount(int productId) {
+        return commentRepository.getCommentCount(productId);
     }
 }

@@ -5,6 +5,7 @@
 package com.txd.repositories;
 
 import com.txd.pojo.Productrating;
+import java.util.List;
 
 /**
  *
@@ -15,4 +16,10 @@ public interface ProductRatingRepository {
     Productrating saveOrUpdateRating(Productrating rating);
 
     Productrating getRatingByCustomerAndProduct(int customerId, int productId);
+
+    Double getAverageRating(int productId);
+
+    Long getRatingCount(int productId);
+
+    List<Productrating> getRatingsByProduct(int productId);
 }

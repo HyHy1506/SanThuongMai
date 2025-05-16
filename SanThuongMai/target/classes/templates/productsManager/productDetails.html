@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title th:text="'Product Details - ' + ${product.name}">Chi tiết sản phẩm</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div class="container mt-5 min-vh-100">
+        <!-- Product Details Card -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Chi tiết sản phẩm</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <th:block th:if="${product.image != null and product.image != ''}">
+                            <img th:src="${product.image}" class="img-fluid rounded" alt="Product Image" />
+                        </th:block>
+                        <th:block th:unless="${product.image != null and product.image != ''}">
+                            <p class="text-muted">Lỗi ảnh</p>
+                        </th:block>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="card-title" th:text="${product.name}">Tên sản phẩm</h4>
+                        <p class="card-text"><strong>ID:</strong> <span th:text="${product.id}">N/A</span></p>
+                        <p class="card-text"><strong>Giá:</strong> <span th:text="${product.price}">N/A</span></p>
+                        <p class="card-text"><strong>Danh mục:</strong> <span th:text="${product.categoryName}">N/A</span> (ID: <span th:text="${product.categoryId}">N/A</span>)</p>
+                        <p class="card-text"><strong>Cửa hàng:</strong> <span th:text="${product.shopName}">N/A</span> (ID: <span th:text="${product.shopId}">N/A</span>)</p>
+                        <p class="card-text"><strong>Trạng thái</strong> <span th:text="${product.isActive ? 'Active' : 'Inactive'}">N/A</span></p>
+                        <p class="card-text"><strong>Miêu tả:</strong> <span th:text="${product.description}">N/A</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ratings Card -->
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Đánh giá</h5>
+            </div>
+            <div class="card-body">
+                <th:block th:if="${ratingCount > 0}">
+                    <p><strong>Điểm trung bình:</strong> <span th:text="${averageRating}">N/A</span></p>
+                    <p><strong>Số lượng đánh giá:</strong> <span th:text="${ratingCount}">0</span></p>
+                </th:block>
+                <th:block th:unless="${ratingCount > 0}">
+                    <p class="text-muted">Chưa có đánh giá</p>
+                </th:block>
+            </div>
+        </div>
+
+        <!-- Comments Card -->
+        <div class="card mt-4 mb-5">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Bình luận (<span th:text="${commentCount}">0</span>)</h5>
+            </div>
+            <div class="card-body">
+                <th:block th:if="${not #lists.isEmpty(comments)}">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Khách hàng</th>
+                                <th scope="col">Nội dung</th>
+                                <th scope="col">Ngày</th>
+                                <th scope="col">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="comment : ${comments}">
+                                <td>
+                                    
+                                    <img th:if="${comment.customerAvatar != null}" th:src="${comment.customerAvatar}" 
+                                         alt="Avatar" class="rounded-circle me-2" style="width: 30px; height: 30px;" />
+                                    <img th:unless="${comment.customerAvatar != null}" th:src="https://picsum.photos/200/300" 
+                                         alt="Avatar" class="rounded-circle me-2" style="width: 30px; height: 30px;" />
+                                    <span th:text="${comment.customerNickname}">Ẩn danh</span>
+                                </td>
+                                <td th:text="${comment.content}">N/A</td>
+                                <td th:text="${#dates.format(comment.createAt, 'yyyy-MM-dd HH:mm:ss')}">N/A</td>
+                                <td>
+                                    <span th:text="${comment.isActive ? 'Active' : 'Inactive'}" 
+                                          th:class="${comment.isActive ? 'badge bg-success' : 'badge bg-danger'}">N/A</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </th:block>
+                <th:block th:unless="${not #lists.isEmpty(comments)}">
+                    <p class="text-muted">Chưa có comment.</p>
+                </th:block>
+            </div>
+        </div>
+    </div>
+    <div th:replace="base :: footer"></div>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

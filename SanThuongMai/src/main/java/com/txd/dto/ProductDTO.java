@@ -19,7 +19,9 @@ public class ProductDTO {
     private Integer categoryId;
     private String categoryName;
     private Integer shopId;
-    private String shopName;
+    private String shopName;    
+    private String description;
+
     private Boolean isActive;
 
     public ProductDTO(Product product) {
@@ -27,7 +29,9 @@ public class ProductDTO {
             this.id = product.getId();
             this.name = product.getName();
             this.price = product.getPrice();
-            this.image = product.getImage();
+            this.image = product.getImage();            
+            this.description = product.getDescription();
+
             this.categoryId = product.getCategoryId() != null ? product.getCategoryId().getId() : null;
             this.categoryName = product.getCategoryId() != null ? product.getCategoryId().getName() : null;
             this.shopId = product.getShopId() != null ? product.getShopId().getId() : null;
@@ -107,6 +111,20 @@ public class ProductDTO {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

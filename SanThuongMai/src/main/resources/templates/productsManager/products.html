@@ -2,7 +2,7 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Trang chủ</title>
+        <title>Sản phẩm</title>
     <th:block th:replace="base :: bootstrap"></th:block>
 </head>
 <body>
@@ -44,7 +44,7 @@
                 <div class="card h-100">
                     <img th:src="${p.image}" class="card-img-top" alt="Product Image" style="height: 200px; object-fit: cover;">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${p.name}"></h5>
+                        <a th:href="@{'/admin/products/' + ${p.id}}"><h5 class="card-title" th:text="${p.name}"></h5></a>
                         <p class="card-text" th:text="'Giá: ' + ${p.price} + ' VNĐ'"></p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">

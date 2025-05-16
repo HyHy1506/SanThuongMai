@@ -7,6 +7,7 @@ package com.txd.services;
 import com.txd.pojo.Comment;
 import java.util.List;
 import java.util.Map;
+
 public interface CommentService {
 
     List<Comment> getCommentsByProductId(int productId);
@@ -16,4 +17,6 @@ public interface CommentService {
     void deleteComment(int id);
 
     Comment getCommentById(int id);
+
+    Long getCommentCount(int productId);
 }
