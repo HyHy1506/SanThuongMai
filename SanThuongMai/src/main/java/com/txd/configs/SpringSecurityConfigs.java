@@ -60,13 +60,11 @@ public class SpringSecurityConfigs {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(c -> c.disable()).authorizeHttpRequests(requests
                 -> requests.requestMatchers("/", "/home").authenticated()
-                        .requestMatchers("/api/users").permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("Admin")
                         .requestMatchers("/staff/**").hasAuthority("Staff")
-                        .requestMatchers("/api/shops").authenticated()
         )
                 .formLogin(form -> form.loginPage("/login")
                 .loginProcessingUrl("/login")
