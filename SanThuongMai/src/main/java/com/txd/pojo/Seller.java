@@ -16,10 +16,13 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -46,6 +49,10 @@ public class Seller implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private SellerStatusEnum status = SellerStatusEnum.PENDING;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "account_balance")
+    private BigDecimal accountBalance;
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
@@ -56,6 +63,11 @@ public class Seller implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sellerId")
     private Set<Sellerreview> sellerreviewSet;
 
+    
+    @PrePersist
+    protected void onCreate() {
+//        this.accountBalance=BigDecimal.valueOf(0);
+    }
     public Seller() {
     }
 
@@ -134,6 +146,20 @@ public class Seller implements Serializable {
     @Override
     public String toString() {
         return "com.txd.pojo.Seller[ userId=" + userId + " ]";
+    }
+
+    /**
+     * @return the accountBalance
+     */
+    public BigDecimal getAccountBalance() {
+        return accountBalance;
+    }
+
+    /**
+     * @param accountBalance the accountBalance to set
+     */
+    public void setAccountBalance(BigDecimal accountBalance) {
+        this.accountBalance = accountBalance;
     }
 
 }

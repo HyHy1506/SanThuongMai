@@ -78,6 +78,7 @@ com\txd\pojo\Seller.class
 com\txd\controllers\AuthenticationController.class
 com\txd\pojo\User.class
 com\txd\filters\JwtFilter.class
+com\txd\controllers\StaffTransactionController.class
 com\txd\services\impl\CommentServiceImpl.class
 com\txd\services\SellerService.class
 com\txd\controllers\apis\ApiCategoryController.class

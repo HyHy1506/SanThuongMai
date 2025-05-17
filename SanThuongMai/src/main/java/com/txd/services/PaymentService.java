@@ -31,4 +31,8 @@ public interface PaymentService {
     List<Map<String, Object>> getSalesFrequencyByShop(Map<String, Object> params);
 
     List<Map<String, Object>> getTotalProductsSoldByShop(Map<String, Object> params);
+
+    Payment save(Payment payment);
+
+    void paySeller(int paymentId);
 }

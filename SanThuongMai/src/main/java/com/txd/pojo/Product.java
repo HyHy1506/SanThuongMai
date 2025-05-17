@@ -73,6 +73,8 @@ public class Product implements Serializable {
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
+    @Column(name = "inventory_quantity")
+    private Integer inventoryQuantity;
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
@@ -87,7 +89,7 @@ public class Product implements Serializable {
     @JoinColumn(name = "shop_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Shop shopId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId", orphanRemoval = true)
     private Set<Productattribute> productattributeSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Productrating> productratingSet;
@@ -281,6 +283,20 @@ public class Product implements Serializable {
      */
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    /**
+     * @return the inventoryQuantity
+     */
+    public Integer getInventoryQuantity() {
+        return inventoryQuantity;
+    }
+
+    /**
+     * @param inventoryQuantity the inventoryQuantity to set
+     */
+    public void setInventoryQuantity(Integer inventoryQuantity) {
+        this.inventoryQuantity = inventoryQuantity;
     }
 
 }

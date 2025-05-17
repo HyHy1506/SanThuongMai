@@ -75,7 +75,7 @@ const ManageProduct = () => {
       price: product.price,
       description: product.description || '',
       categoryId: product.categoryId,
-      stock: product.stock || '',
+      inventoryQuantity: product.inventoryQuantity ,
       image: null,
       attributes: product.attributes || [{ attributeId: '', value: '' }],
     });
@@ -111,7 +111,7 @@ const ManageProduct = () => {
     setError('');
     setLoading(true);
 
-    if (!editProduct.name || !editProduct.price || !editProduct.categoryId || !editProduct.stock) {
+    if (!editProduct.name || !editProduct.price || !editProduct.categoryId || !editProduct.inventoryQuantity) {
       setError('Vui lòng điền đầy đủ tên, giá, danh mục và số lượng tồn kho');
       setLoading(false);
       return;
@@ -126,9 +126,10 @@ const ManageProduct = () => {
       const formData = new FormData();
       const params = {
         name: editProduct.name,
-        price: editProduct.price,
+        price:toString( editProduct.price),
         description: editProduct.description,
         categoryId: parseInt(editProduct.categoryId),
+        inventoryQuantity:toString( editProduct.inventoryQuantity),
         attributes: editProduct.attributes.map((attr) => ({
           attributeId: parseInt(attr.attributeId),
           value: attr.value,
@@ -306,8 +307,8 @@ const ManageProduct = () => {
                         <Form.Label>Số lượng tồn kho</Form.Label>
                         <Form.Control
                           type="number"
-                          name="stock"
-                          value={editProduct.stock}
+                          name="inventoryQuantity"
+                          value={editProduct.inventoryQuantity}
                           onChange={handleChange}
                           min="0"
                           required
@@ -370,7 +371,7 @@ const ManageProduct = () => {
                     Thêm thuộc tính
                   </Button>
                   <div className="text-center">
-                    <Button variant="primary" type="submit" disabled={loading} className="me-2" size="lg">
+                    <Button variant="success" type="submit" disabled={loading} className="me-2" size="lg">
                       {loading ? 'Đang cập nhật...' : 'Cập nhật'}
                     </Button>
                     <Button variant="secondary" onClick={() => setEditProduct(null)} size="lg">

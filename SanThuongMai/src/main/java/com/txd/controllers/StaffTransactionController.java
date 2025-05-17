@@ -24,19 +24,19 @@ import com.txd.utils.GlobalVariables;
  * @author tran1
  */
 @Controller
-@RequestMapping("/admin")
-public class TransactionController {
+@RequestMapping("/staff")
+public class StaffTransactionController {
 
     @Autowired
     private PaymentService paymentService;
 
+
     @GetMapping("/transactions")
-    public String showTransactions(Model model, @RequestParam Map<String, String> params) {
+    public String showTransactionsPay(Model model, @RequestParam Map<String, String> params) {
         int page = Integer.parseInt(params.getOrDefault("page", "1"));
         int pageSize = GlobalVariables.PAGE_SIZE;
         long totalPayments = paymentService.countPayments(params);
         int totalPages = (int) Math.ceil((double) totalPayments / pageSize);
-        // gan lai param page để tránh lấy tất cả payment
         params.compute("page", (k, v) -> String.valueOf(page));
         model.addAttribute("payments", paymentService.getPayments(params));
         model.addAttribute("currentPage", page);
@@ -44,12 +44,24 @@ public class TransactionController {
         model.addAttribute("selectedPaymentMethod", params.get("paymentMethod"));
         model.addAttribute("selectedIsPay", params.get("isPay"));
         model.addAttribute("selectedIsPayForSeller", params.get("isPayForSeller"));
-        return "TransactionsManager/transactions";
+        return "TransactionsManager/transactions-pay";
     }
 
-    @GetMapping("/transactions/{paymentId}")
-    public String viewTransaction(Model model, @PathVariable("paymentId") int paymentId) {
-        model.addAttribute("payment", paymentService.getPaymentById(paymentId));
-        return "TransactionsManager/transaction-details";
+ 
+
+    @PostMapping("/transactions/mark-paid/{paymentId}")
+    public String markAsPaid(@PathVariable("paymentId") int paymentId) {
+        Payment payment = paymentService.getPaymentById(paymentId);
+        if (payment != null && !payment.getIsPay()) {
+            payment.setIsPay(true);
+            paymentService.save(payment);
+        }
+        return "redirect:/staff/transactions";
+    }
+
+    @PostMapping("/transactions/mark-paid-seller/{paymentId}")
+    public String markAsPaidForSeller(@PathVariable("paymentId") int paymentId) {
+        paymentService.paySeller(paymentId);
+        return "redirect:/staff/transactions";
     }
 }

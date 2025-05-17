@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
                 Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return proRepo.saveOrUpdate(p);
     }
 
@@ -95,6 +95,10 @@ public class ProductServiceImpl implements ProductService {
         product.setName((String) params.get("name"));
         product.setDescription((String) params.get("description"));
         product.setPrice(BigDecimal.valueOf(Double.valueOf((String) params.get("price"))));
+        Integer inventoryQuantity = Integer.valueOf((String) params.get("inventoryQuantity"));
+
+        product.setInventoryQuantity(inventoryQuantity != null ? inventoryQuantity : 0);
+
         Shop shop = shopService.getShopBySellerId(sellerId);
         product.setShopId(shop);
         product.setCategoryId(new Category((int) params.get("categoryId")));
@@ -109,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
         }
         //luu product xong roi luu product attribute
         Product savedProduct = proRepo.saveOrUpdate(product);
-        
+
         Set<Productattribute> attributes = new HashSet<>();
         List<Map<String, Object>> attributeList = (List<Map<String, Object>>) params.get("attributes");
         logger.info("Processing " + attributeList.size() + " attributes for product: " + product.getName());
@@ -139,7 +143,8 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription((String) params.get("description"));
         product.setPrice(BigDecimal.valueOf(Double.valueOf((String) params.get("price"))));
         product.setCategoryId(new Category((int) params.get("categoryId")));
-        
+        Integer inventoryQuantity = Integer.valueOf((String) params.get("inventoryQuantity"));
+        product.setInventoryQuantity(inventoryQuantity != null ? inventoryQuantity : 0);
         //chinh image
         if (!image.isEmpty()) {
             try {
@@ -150,7 +155,6 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
-        
         //  xoa cac attribute 
         productattributeRepository.deleteByProductId(productId);
         product.getProductattributeSet().clear();

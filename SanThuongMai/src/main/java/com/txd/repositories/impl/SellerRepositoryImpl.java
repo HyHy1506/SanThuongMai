@@ -178,4 +178,12 @@ public class SellerRepositoryImpl implements SellerRepository {
         return false;
 
     }
+
+    @Override
+    public Seller findByShopId(int shopId) {
+        Session session = factory.getObject().getCurrentSession();
+        return session.createQuery("SELECT s FROM Seller s WHERE s.shop.id = :shopId", Seller.class)
+                .setParameter("shopId", shopId)
+                .uniqueResult();
+    }
 }

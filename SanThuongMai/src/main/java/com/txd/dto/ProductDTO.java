@@ -21,7 +21,7 @@ public class ProductDTO {
     private Integer shopId;
     private String shopName;    
     private String description;
-
+    private Integer inventoryQuantity;
     private Boolean isActive;
 
     public ProductDTO(Product product) {
@@ -37,6 +37,7 @@ public class ProductDTO {
             this.shopId = product.getShopId() != null ? product.getShopId().getId() : null;
             this.shopName = product.getShopId() != null ? product.getShopId().getName() : null;
             this.isActive = product.getIsActive();
+            this.inventoryQuantity=product.getInventoryQuantity();
         }
     }
 
@@ -125,6 +126,20 @@ public class ProductDTO {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return the inventoryQuantity
+     */
+    public Integer getInventoryQuantity() {
+        return inventoryQuantity;
+    }
+
+    /**
+     * @param inventoryQuantity the inventoryQuantity to set
+     */
+    public void setInventoryQuantity(Integer inventoryQuantity) {
+        this.inventoryQuantity = inventoryQuantity;
     }
 
 }

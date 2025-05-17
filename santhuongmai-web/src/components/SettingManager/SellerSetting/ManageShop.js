@@ -153,7 +153,7 @@ const ManageShop = () => {
                     disabled={loading}
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit" className="me-2" disabled={loading}>
+                <Button variant="success" type="submit" className="me-2" disabled={loading}>
                   {loading ? 'Đang cập nhật...' : 'Cập nhật'}
                 </Button>
                 <Button

@@ -31,6 +31,8 @@
                         <p class="card-text"><strong>Cửa hàng:</strong> <span th:text="${product.shopName}">N/A</span> (ID: <span th:text="${product.shopId}">N/A</span>)</p>
                         <p class="card-text"><strong>Trạng thái</strong> <span th:text="${product.isActive ? 'Active' : 'Inactive'}">N/A</span></p>
                         <p class="card-text"><strong>Miêu tả:</strong> <span th:text="${product.description}">N/A</span></p>
+                        <p class="card-text"><strong>Số lượng tồn kho:</strong> <span th:text="${product.inventoryQuantity}">N/A</span></p>
+
                     </div>
                 </div>
             </div>
@@ -71,7 +73,7 @@
                         <tbody>
                             <tr th:each="comment : ${comments}">
                                 <td>
-                                    
+
                                     <img th:if="${comment.customerAvatar != null}" th:src="${comment.customerAvatar}" 
                                          alt="Avatar" class="rounded-circle me-2" style="width: 30px; height: 30px;" />
                                     <img th:unless="${comment.customerAvatar != null}" th:src="https://picsum.photos/200/300" 

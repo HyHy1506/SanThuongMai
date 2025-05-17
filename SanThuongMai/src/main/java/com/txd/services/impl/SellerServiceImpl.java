@@ -19,11 +19,11 @@ import com.txd.services.SellerService;
  * @author tran1
  */
 @Service
-public class SellerServiceImpl implements SellerService{
-    
+public class SellerServiceImpl implements SellerService {
+
     @Autowired
     private SellerRepository sellerRepo;
-    
+
     @Override
     public List<Seller> getSellers(Map<String, String> params) {
         return sellerRepo.getSellers(params);
@@ -33,7 +33,8 @@ public class SellerServiceImpl implements SellerService{
     public List<Seller> getSellersWithoutShop(Map<String, String> params) {
         return sellerRepo.getSellersWithoutShop(params);
     }
-      @Override
+
+    @Override
     public Seller getSellerById(int id) {
         return sellerRepo.getSellerById(id);
     }
@@ -48,9 +49,13 @@ public class SellerServiceImpl implements SellerService{
         sellerRepo.deleteSeller(id);
     }
 
-  
     @Override
     public void updateSellerStatus(Seller seller) {
         sellerRepo.updateSellerStatus(seller);
+    }
+
+    @Override
+    public Seller findByShopId(int shopId) {
+        return sellerRepo.findByShopId(shopId);
     }
 }

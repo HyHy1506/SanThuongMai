@@ -33,6 +33,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.math.BigDecimal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -102,7 +103,6 @@ public class UserRepositoryImpl implements UserRepository {
         } else if (orderBy.equalsIgnoreCase("asc")) {
             query.orderBy(builder.asc(root.get("id")));
         }
-        
 
         Query q = session.createQuery(query);
 
@@ -158,7 +158,7 @@ public class UserRepositoryImpl implements UserRepository {
         } else {
             session.merge(user);
         }
-        session.refresh(user);
+//        session.refresh(user);
         return user;
     }
 
@@ -231,6 +231,8 @@ public class UserRepositoryImpl implements UserRepository {
                     case Seller:
                         Seller newSeller = new Seller(user.getId());
                         newSeller.setStatus(Seller.SellerStatusEnum.PENDING);
+                        newSeller.setAccountBalance(BigDecimal.valueOf(0));
+
                         sellerRepo.saveOrUpdate(newSeller);
                         break;
                     case Staff:
@@ -251,14 +253,14 @@ public class UserRepositoryImpl implements UserRepository {
         Session s = this.factory.getObject().getCurrentSession();
         s.persist(u);
         createEntityByRoleOfUser(u);
-        s.refresh(u);
+//        s.refresh(u);
         return u;
     }
 
     @Override
     public boolean authenticate(String username, String password) {
         User u = this.getUserByUsername(username);
-        if(u==null){
+        if (u == null) {
             return false;
         }
         return this.passwordEncoder.matches(password, u.getPassword());

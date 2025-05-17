@@ -60,6 +60,7 @@ public class ApiPaymentController {
             Payment payment = new Payment();
             payment.setCustomerId(new Customer(user.getId()));
             payment.setIsPay(true);
+            payment.setIsPayForSeller(false);
             payment.setPaymentMethod(Payment.PaymentMethodEnum.valueOf(paymentRequest.getPaymentMethod()));
 
             // tinh tong so tien va tao orderdetail

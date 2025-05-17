@@ -70,6 +70,8 @@ public class Payment implements Serializable {
     private PaymentMethodEnum paymentMethod;
     @Column(name = "is_pay")
     private Boolean isPay;
+    @Column(name = "is_pay_for_seller")
+    private Boolean isPayForSeller;
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
@@ -103,6 +105,7 @@ public class Payment implements Serializable {
     protected void onCreate() {
         this.createAt = new Date();
         this.updateAt = new Date();
+//        isPayForSeller=false;
     }
 
     @PreUpdate
@@ -173,7 +176,6 @@ public class Payment implements Serializable {
 //    public void setPaymentdetailSet(Set<Paymentdetail> paymentdetailSet) {
 //        this.paymentdetailSet = paymentdetailSet;
 //    }
-
     public Customer getCustomerId() {
         return customerId;
     }
@@ -219,6 +221,20 @@ public class Payment implements Serializable {
      */
     public void setOrderdetailSet(Set<Orderdetail> orderdetailSet) {
         this.orderdetailSet = orderdetailSet;
+    }
+
+    /**
+     * @return the isPayForSeller
+     */
+    public Boolean getIsPayForSeller() {
+        return isPayForSeller;
+    }
+
+    /**
+     * @param isPayForSeller the isPayForSeller to set
+     */
+    public void setIsPayForSeller(Boolean isPayForSeller) {
+        this.isPayForSeller = isPayForSeller;
     }
 
 }

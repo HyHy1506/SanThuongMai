@@ -94,7 +94,7 @@ const CreateShop = () => {
             placeholder="Nhập URL hình ảnh"
           />
         </Form.Group> */}
-        <Button variant="primary" type="submit" disabled={loading}>
+        <Button variant="success" type="submit" disabled={loading}>
           {loading ? 'Đang tạo...' : 'Tạo Cửa Hàng'}
         </Button>
       </Form>

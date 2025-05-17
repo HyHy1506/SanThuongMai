@@ -151,7 +151,7 @@ const RevenueStatistics = () => {
                             </Form.Group>
                         </Col>
                         <Col md={3} className="d-flex align-items-end">
-                            <Button variant="primary" onClick={fetchRevenueStatistics} disabled={loading}>
+                            <Button variant="success" onClick={fetchRevenueStatistics} disabled={loading}>
                                 Tải lại dữ liệu
                             </Button>
                         </Col>

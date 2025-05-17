@@ -9,7 +9,7 @@ const CreateProduct = () => {
     price: '',
     description: '',
     categoryId: 1,
-    stock: '',
+    inventoryQuantity: '',
     attributes: [{ attributeId: '', value: '' }],
   });
   const [attributes, setAttributes] = useState([]);
@@ -81,7 +81,7 @@ const CreateProduct = () => {
     setLoading(true);
 
     // Validation
-    if (!formData.name || !formData.price || !formData.categoryId || !formData.stock) {
+    if (!formData.name || !formData.price || !formData.categoryId || !formData.inventoryQuantity) {
       setError('Vui lòng điền đầy đủ tên, giá, danh mục và số lượng tồn kho');
       setLoading(false);
       return;
@@ -98,6 +98,7 @@ const CreateProduct = () => {
         price: formData.price,
         description: formData.description,
         categoryId: parseInt(formData.categoryId),
+        inventoryQuantity:formData.inventoryQuantity,
         attributes: formData.attributes.map(attr => ({
           attributeId: parseInt(attr.attributeId),
           value: attr.value,
@@ -119,7 +120,7 @@ const CreateProduct = () => {
         price: '',
         description: '',
         categoryId: '',
-        stock: '',
+        inventoryQuantity: '',
         attributes: [{ attributeId: '', value: '' }],
       });
       if (image.current) {
@@ -210,8 +211,8 @@ const CreateProduct = () => {
                 <Form.Label>Số lượng tồn kho</Form.Label>
                 <Form.Control
                   type="number"
-                  name="stock"
-                  value={formData.stock}
+                  name="inventoryQuantity"
+                  value={formData.inventoryQuantity}
                   onChange={handleChange}
                   placeholder="Nhập số lượng tồn kho"
                   min="0"
@@ -220,7 +221,7 @@ const CreateProduct = () => {
               </Form.Group>
             </Col>
             <Col md={6}>
-              <Form.Group className="mb-3" controlId="productStock">
+              <Form.Group className="mb-3" controlId="productImage">
                 <Form.Label>Ảnh</Form.Label>
                 <Form.Control
                   type="file"
@@ -279,7 +280,7 @@ const CreateProduct = () => {
             </Row>
           ))}
           <Button
-            variant="outline-primary"
+            variant="outline-success"
             size="sm"
             onClick={addAttribute}
             className="mb-4"
@@ -289,7 +290,7 @@ const CreateProduct = () => {
           </Button>
           <div className="text-center">
             <Button
-              variant="primary"
+              variant="success"
               type="submit"
               disabled={loading || attributesLoading || attributes.length === 0}
               size="lg"

@@ -26,4 +26,6 @@ public interface SellerService {
     void deleteSeller(int id);
 
     void updateSellerStatus(Seller seller);
+
+    Seller findByShopId(int shopId);
 }

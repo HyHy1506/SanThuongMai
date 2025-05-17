@@ -128,7 +128,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             s.merge(p);
         }
         s.flush();
-        s.refresh(p);
+//        s.refresh(p);
         return p;
     }
 
