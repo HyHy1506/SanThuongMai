@@ -165,8 +165,13 @@
                             <a class="nav-link" th:href="@{/staff/check}">Phê duyệt</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/staff/transactions}">Hóa đơn</a>
+                            <a class="nav-link" th:href="@{/staff/transactions/customer}">Hóa đơn</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" sec:authorize="hasAnyAuthority()">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
                         </li>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đơn hàng</title>
+    <th:block th:replace="base :: bootstrap"></th:block>
+    <style>
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .nav-tabs .nav-link {
+            color: #495057;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #f8f9fa;
+        }
+
+        .filter-form {
+            max-width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="base :: header"></div>
+    <div class="container mt-5 min-vh-100">
+        <h1 class="mb-4">Quản lý hóa đơn</h1>
+
+        <ul class="nav nav-tabs" >
+            <li class="nav-item" >
+                <button class="nav-link active" 
+                    type="button" >Hóa đơn người mua</button>
+            </li>
+            <li class="nav-item" >
+                <button class="nav-link"  type="button"><a th:href="@{/staff/transactions/seller}">Hóa đơn người bán</a></button>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-4">
+            <!-- Customer Payments Tab -->
+            <div  id="customer" >
+                <h3>Hóa đơn người mua</h3>
+                <form th:action="@{/staff/transactions/customer}" method="get" class="filter-form mb-3">
+                    <div class="mb-3">
+                        <label for="isPay" class="form-label">Tình trạng hóa đơn</label>
+                        <select name="isPay" id="isPay" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option th:value="true" th:selected="${selectedIsPay == 'true'}">Đã thanh toán</option>
+                            <option th:value="false" th:selected="${selectedIsPay == 'false'}">Chưa thanh toán</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Bộ lọc</button>
+                </form>
+
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Người mua</th>
+                            <th>Giá tiền</th>
+                            <th>Phương thức thanh toán</th>
+                            <th>Tình trạng</th>
+                            <th>Hànhd động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="payment : ${payments}">
+                            <td><a th:href="@{/staff/transactions/{id}(id=${payment.id})}" th:text="${payment.id}"></a>
+                            </td>
+                            <td th:text="${payment.customerId.user.nickname}"></td>
+                            <td th:text="${payment.price}"></td>
+                            <td th:text="${payment.paymentMethod}"></td>
+                            <td th:text="${payment.isPay ? 'Paid' : 'Unpaid'}"></td>
+                            <td>
+                                <form th:if="${!payment.isPay}"
+                                    th:action="@{/staff/transactions/mark-paid/{id}(id=${payment.id})}" method="post"
+                                    class="d-inline">
+                                    <button type="submit" class="btn btn-success btn-sm">Đánh dấu thanh toán</button>
+                                </form>
+                                <span th:if="${payment.isPay}" class="text-muted">Đã thanh toán</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <nav th:if="${totalPages > 1}">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                            <a class="page-link"
+                                th:href="@{/staff/transactions/customer(page=${currentPage - 1}, isPay=${selectedIsPay})}">Trước</a>
+                        </li>
+                        <li class="page-item" th:each="page : ${#numbers.sequence(1, totalPages)}"
+                            th:classappend="${page == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{/staff/transactions/customer(page=${page}, isPay=${selectedIsPay})}"
+                                th:text="${page}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                            <a class="page-link"
+                                th:href="@{/staff/transactions/customer(page=${currentPage + 1}, isPay=${selectedIsPay})}">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+           
+        </div>
+    </div>
+    <div th:replace="base :: footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

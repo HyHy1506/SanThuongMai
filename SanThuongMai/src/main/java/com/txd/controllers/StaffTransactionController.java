@@ -30,9 +30,8 @@ public class StaffTransactionController {
     @Autowired
     private PaymentService paymentService;
 
-
-    @GetMapping("/transactions")
-    public String showTransactionsPay(Model model, @RequestParam Map<String, String> params) {
+    @GetMapping("/transactions/customer")
+    public String showTransactionsPayCustomer(Model model, @RequestParam Map<String, String> params) {
         int page = Integer.parseInt(params.getOrDefault("page", "1"));
         int pageSize = GlobalVariables.PAGE_SIZE;
         long totalPayments = paymentService.countPayments(params);
@@ -43,11 +42,23 @@ public class StaffTransactionController {
         model.addAttribute("totalPages", totalPages > 0 ? totalPages : 1);
         model.addAttribute("selectedPaymentMethod", params.get("paymentMethod"));
         model.addAttribute("selectedIsPay", params.get("isPay"));
-        model.addAttribute("selectedIsPayForSeller", params.get("isPayForSeller"));
-        return "TransactionsManager/transactions-pay";
+        return "TransactionsManager/transactions-pay-customer";
     }
 
- 
+    @GetMapping("/transactions/seller")
+    public String showTransactionsPaySeller(Model model, @RequestParam Map<String, String> params) {
+        int page = Integer.parseInt(params.getOrDefault("page", "1"));
+        int pageSize = GlobalVariables.PAGE_SIZE;
+        long totalPayments = paymentService.countPayments(params);
+        int totalPages = (int) Math.ceil((double) totalPayments / pageSize);
+        params.compute("page", (k, v) -> String.valueOf(page));
+        model.addAttribute("payments", paymentService.getPayments(params));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages > 0 ? totalPages : 1);
+        model.addAttribute("selectedPaymentMethod", params.get("paymentMethod"));
+        model.addAttribute("selectedIsPayForSeller", params.get("isPayForSeller"));
+        return "TransactionsManager/transactions-pay-seller";
+    }
 
     @PostMapping("/transactions/mark-paid/{paymentId}")
     public String markAsPaid(@PathVariable("paymentId") int paymentId) {
