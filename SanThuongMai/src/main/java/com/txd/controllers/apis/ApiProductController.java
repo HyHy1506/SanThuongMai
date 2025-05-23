@@ -59,7 +59,12 @@ public class ApiProductController {
     @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> list(@RequestParam Map<String, String> params) {
         List<Product> products = this.productService.getProducts(params);
-        List<ProductDTO> proDTOs = products.stream().map(ProductDTO::new).collect(Collectors.toList());
+        List<ProductDTO> proDTOs = products.stream().map(product -> {
+            ProductDTO dto = new ProductDTO(product);
+            Integer salesQuantity = productService.getSalesQuantity(product.getId());
+            dto.setSalesQuantity(salesQuantity);
+            return dto;
+        }).collect(Collectors.toList());
         return new ResponseEntity<>(proDTOs, HttpStatus.OK);
     }
 
@@ -69,7 +74,9 @@ public class ApiProductController {
         if (product == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        Integer salesQuantity = productService.getSalesQuantity(id);
         ProductDetailDTO dto = new ProductDetailDTO(product);
+        dto.setSalesQuantity(salesQuantity);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

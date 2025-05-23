@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../actions/cartActions';
 import { toast } from 'react-toastify';
 import { Xanh5 } from '../../utils/MyColors';
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -25,7 +26,19 @@ const ProductCard = ({ product }) => {
     );
     toast.success('Đã thêm sản phẩm vào giỏ hàng');
   };
-
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= Math.floor(rating)) {
+        stars.push(<FaStar key={i} color="#9EBC8A" />);
+      } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+        stars.push(<FaStarHalfAlt key={i} color="#9EBC8A" />);
+      } else {
+        stars.push(<FaRegStar key={i} color="#9EBC8A" />);
+      }
+    }
+    return stars;
+  };
   return (
     <>
       <style>
@@ -124,8 +137,12 @@ const ProductCard = ({ product }) => {
             <Card.Text className="card-text-custom">
               Giá: {product.price.toLocaleString()} VND
             </Card.Text>
+            {/* <div className="rating-custom">
+              ★★★★★ (12) 
+            </div> */}
             <div className="rating-custom">
-              ★★★★★ (12) {/* Placeholder rating, replace with dynamic data if available */}
+              {renderStars(product.averageRating)}
+              <span className="ms-2 text-muted">{product.averageRating} </span>
             </div>
           </div>
           <Card.Footer style={{ background: 'none', borderTop: 'none' }}>

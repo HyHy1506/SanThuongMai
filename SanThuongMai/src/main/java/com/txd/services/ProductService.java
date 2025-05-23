@@ -30,4 +30,6 @@ public interface ProductService {
     Product addProduct(Map<String, Object> params, int sellerId, MultipartFile image);
 
     Product updateProduct(Map<String, Object> params, int productId, MultipartFile image);
+
+    Integer getSalesQuantity(int productId);
 }

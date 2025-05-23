@@ -45,8 +45,8 @@
             </div>
             <div class="card-body">
                 <th:block th:if="${ratingCount > 0}">
-                    <p><strong>Điểm trung bình:</strong> <span th:text="${averageRating}">N/A</span></p>
-                    <p><strong>Số lượng đánh giá:</strong> <span th:text="${ratingCount}">0</span></p>
+                    <p><strong>Điểm trung bình:</strong> <span th:text="${product.averageRating}">N/A</span></p>
+                    <p><strong>Số lượng đánh giá:</strong> <span th:text="${product.totalRatings}">0</span></p>
                 </th:block>
                 <th:block th:unless="${ratingCount > 0}">
                     <p class="text-muted">Chưa có đánh giá</p>

@@ -176,4 +176,9 @@ public class ProductServiceImpl implements ProductService {
 
         return proRepo.saveOrUpdate(product);
     }
+
+    @Override
+    public Integer getSalesQuantity(int productId) {
+        return proRepo.getSalesQuantity(productId);
+    }
 }

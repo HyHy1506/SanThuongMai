@@ -5,6 +5,7 @@
 package com.txd.dto;
 
 import com.txd.pojo.Seller;
+import java.math.BigDecimal;
 
 /**
  *
@@ -20,7 +21,7 @@ public class SellerDTO {
     private Boolean isActive;
     private String shopName;
     private Integer shopId;
-
+    private BigDecimal accountBalance;
     public SellerDTO(Seller seller) {
         if (seller != null) {
             this.id = seller.getUserId();
@@ -31,7 +32,7 @@ public class SellerDTO {
             this.isActive = seller.getUser() != null ? seller.getUser().getIsActive():null;
             this.shopName=seller.getShop()  != null ? seller.getShop().getName():null;            
             this.shopId=seller.getShop()  != null ? seller.getShop().getId():null;
-
+            this.accountBalance=seller.getAccountBalance();
         }
     }
 
@@ -109,5 +110,19 @@ public class SellerDTO {
      */
     public void setShopId(Integer shopId) {
         this.shopId = shopId;
+    }
+
+    /**
+     * @return the accountBalance
+     */
+    public BigDecimal getAccountBalance() {
+        return accountBalance;
+    }
+
+    /**
+     * @param accountBalance the accountBalance to set
+     */
+    public void setAccountBalance(BigDecimal accountBalance) {
+        this.accountBalance = accountBalance;
     }
 }

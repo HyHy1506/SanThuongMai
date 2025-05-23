@@ -22,14 +22,18 @@ public class ProductDetailDTO {
     private String name;
     private BigDecimal price;
     private String image;
+    private String description;
+
     private Integer categoryId;
     private String categoryName;
     private Integer shopId;
     private String shopName;
     private Boolean isActive;
     private Map<String, String> attributes = new HashMap<>();
-    private Double averageRating=0.0;
-    private Integer totalRatings=0;
+    private Double averageRating = 0.0;
+    private Integer totalRatings = 0;
+    private Integer salesQuantity = 0;
+    private Integer inventoryQuantity;
 
     public ProductDetailDTO(Product product) {
         if (product != null) {
@@ -41,6 +45,9 @@ public class ProductDetailDTO {
             this.categoryName = product.getCategoryId() != null ? product.getCategoryId().getName() : null;
             this.shopId = product.getShopId() != null ? product.getShopId().getId() : null;
             this.shopName = product.getShopId() != null ? product.getShopId().getName() : null;
+            this.inventoryQuantity = product.getInventoryQuantity();
+            this.description = product.getDescription();
+
             if (product.getProductattributeSet() != null) {
                 for (Productattribute pa : product.getProductattributeSet()) {
                     if (pa.getAttributeId() != null) {
@@ -50,7 +57,6 @@ public class ProductDetailDTO {
             }
             this.isActive = product.getIsActive();
 
-            
             if (product.getProductratingSet() != null && !product.getProductratingSet().isEmpty()) {
                 this.totalRatings = product.getProductratingSet().size();
                 double sum = 0.0;
@@ -180,5 +186,47 @@ public class ProductDetailDTO {
      */
     public void setTotalRatings(Integer totalRatings) {
         this.totalRatings = totalRatings;
+    }
+
+    /**
+     * @return the salesQuantity
+     */
+    public Integer getSalesQuantity() {
+        return salesQuantity;
+    }
+
+    /**
+     * @param salesQuantity the salesQuantity to set
+     */
+    public void setSalesQuantity(Integer salesQuantity) {
+        this.salesQuantity = salesQuantity;
+    }
+
+    /**
+     * @return the inventoryQuantity
+     */
+    public Integer getInventoryQuantity() {
+        return inventoryQuantity;
+    }
+
+    /**
+     * @param inventoryQuantity the inventoryQuantity to set
+     */
+    public void setInventoryQuantity(Integer inventoryQuantity) {
+        this.inventoryQuantity = inventoryQuantity;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

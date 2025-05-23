@@ -218,6 +218,8 @@ const ProductDetail = () => {
                 ))}
               </tbody>
             </Table>
+            <h4 className="mt-3"><strong>Miêu tả</strong></h4>
+            <p>{product.description}</p>
           </Col>
         </Row>
         <Row className="mb-5">

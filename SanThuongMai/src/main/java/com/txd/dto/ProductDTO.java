@@ -6,6 +6,7 @@ package com.txd.dto;
 
 import com.txd.pojo.Product;
 import com.txd.pojo.Productattribute;
+import com.txd.pojo.Productrating;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,28 +17,43 @@ public class ProductDTO {
     private String name;
     private BigDecimal price;
     private String image;
+
     private Integer categoryId;
     private String categoryName;
     private Integer shopId;
-    private String shopName;    
-    private String description;
-    private Integer inventoryQuantity;
+    private String shopName;
+
     private Boolean isActive;
+    private Double averageRating = 0.0;
+    private Integer totalRatings = 0;
+    private Integer salesQuantity = 0;
 
     public ProductDTO(Product product) {
         if (product != null) {
             this.id = product.getId();
             this.name = product.getName();
             this.price = product.getPrice();
-            this.image = product.getImage();            
-            this.description = product.getDescription();
+            this.image = product.getImage();
 
             this.categoryId = product.getCategoryId() != null ? product.getCategoryId().getId() : null;
             this.categoryName = product.getCategoryId() != null ? product.getCategoryId().getName() : null;
             this.shopId = product.getShopId() != null ? product.getShopId().getId() : null;
             this.shopName = product.getShopId() != null ? product.getShopId().getName() : null;
             this.isActive = product.getIsActive();
-            this.inventoryQuantity=product.getInventoryQuantity();
+
+            if (product.getProductratingSet() != null && !product.getProductratingSet().isEmpty()) {
+                this.totalRatings = product.getProductratingSet().size();
+                double sum = 0.0;
+                for (Productrating pr : product.getProductratingSet()) {
+                    if (pr.getRate() != null) {
+                        sum += Integer.parseInt(pr.getRate());
+                    }
+                }
+                this.averageRating = sum / this.totalRatings;
+            } else {
+                this.totalRatings = 0;
+                this.averageRating = 0.0;
+            }
         }
     }
 
@@ -114,32 +130,71 @@ public class ProductDTO {
         this.isActive = isActive;
     }
 
+//    /**
+//     * @return the description
+//     */
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    /**
+//     * @param description the description to set
+//     */
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
+//    /**
+//     * @return the inventoryQuantity
+//     */
+//    public Integer getInventoryQuantity() {
+//        return inventoryQuantity;
+//    }
+//
+//    /**
+//     * @param inventoryQuantity the inventoryQuantity to set
+//     */
+//    public void setInventoryQuantity(Integer inventoryQuantity) {
+//        this.inventoryQuantity = inventoryQuantity;
+//    }
     /**
-     * @return the description
+     * @return the averageRating
      */
-    public String getDescription() {
-        return description;
+    public Double getAverageRating() {
+        return averageRating;
     }
 
     /**
-     * @param description the description to set
+     * @param averageRating the averageRating to set
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
     }
 
     /**
-     * @return the inventoryQuantity
+     * @return the totalRatings
      */
-    public Integer getInventoryQuantity() {
-        return inventoryQuantity;
+    public Integer getTotalRatings() {
+        return totalRatings;
     }
 
     /**
-     * @param inventoryQuantity the inventoryQuantity to set
+     * @param totalRatings the totalRatings to set
      */
-    public void setInventoryQuantity(Integer inventoryQuantity) {
-        this.inventoryQuantity = inventoryQuantity;
+    public void setTotalRatings(Integer totalRatings) {
+        this.totalRatings = totalRatings;
     }
 
+    /**
+     * @return the salesQuantity
+     */
+    public Integer getSalesQuantity() {
+        return salesQuantity;
+    }
+
+    /**
+     * @param salesQuantity the salesQuantity to set
+     */
+    public void setSalesQuantity(Integer salesQuantity) {
+        this.salesQuantity = salesQuantity;
+    }
 }

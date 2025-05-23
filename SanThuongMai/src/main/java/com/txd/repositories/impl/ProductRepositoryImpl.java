@@ -1,5 +1,6 @@
 package com.txd.repositories.impl;
 
+import com.txd.pojo.Orderdetail;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -115,8 +116,43 @@ public class ProductRepositoryImpl implements ProductRepository {
             query.setFirstResult(start);
             query.setMaxResults(PAGE_SIZE);
         }
+        // quan he lazy nen phai tu lay neu khong se bij loi lazy
+        List<Product> ps = query.getResultList();
+        for (Product pro : ps) {
+            if (pro != null) {
+                Hibernate.initialize(pro.getProductattributeSet());
+                Hibernate.initialize(pro.getProductratingSet());
 
-        return query.getResultList();
+            }
+        }
+        return ps;
+    }
+
+    @Override
+    public Integer getSalesQuantity(int productId) {
+
+        try {
+            Session session = factory.getObject().getCurrentSession();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Orderdetail> query = builder.createQuery(Orderdetail.class);
+            Root<Orderdetail> root = query.from(Orderdetail.class);
+            query.select(root);
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(builder.equal(root.get("productId").get("id"), productId));
+            predicates.add(builder.equal(root.get("isActive"), true));
+            query.where(predicates.toArray(Predicate[]::new));
+
+            List<Orderdetail> ods = session.createQuery(query).getResultList();
+            int sum = 0;
+            for (Orderdetail od : ods) {
+                sum += od.getQuantity();
+            }
+            return sum;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

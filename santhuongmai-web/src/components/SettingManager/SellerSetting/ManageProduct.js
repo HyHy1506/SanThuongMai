@@ -186,10 +186,11 @@ const ManageProduct = () => {
                 <thead>
                   <tr>
                     <th>ID</th>
+                    <th>Hình ảnh</th>
                     <th>Tên</th>
                     <th>Giá (VND)</th>
                     <th>Danh mục</th>
-                    <th>Hình ảnh</th>
+                    <th>Lượt mua</th>
                     <th>Hành động</th>
                   </tr>
                 </thead>
@@ -197,9 +198,6 @@ const ManageProduct = () => {
                   {products.map((product) => (
                     <tr key={product.id}>
                       <td>{product.id}</td>
-                      <td>{product.name}</td>
-                      <td>{parseFloat(product.price).toLocaleString('vi-VN')}</td>
-                      <td>{product.categoryName}</td>
                       <td>
                         {product.image ? (
                           <img src={product.image} alt={product.name} width="50" className="rounded" />
@@ -207,15 +205,20 @@ const ManageProduct = () => {
                           'Không có'
                         )}
                       </td>
+                      <td>{product.name}</td>
+                      <td>{parseFloat(product.price).toLocaleString('vi-VN')}</td>
+                      <td>{product.categoryName}</td>
+                      <td>{product.salesQuantity}</td>
+                      
                       <td>
-                        <Button
+                        {/* <Button
                           variant="warning"
                           size="sm"
                           onClick={() => handleEdit(product)}
                           className="me-2"
                         >
                           <FaEdit />
-                        </Button>
+                        </Button> */}
                         <Button
                           variant="danger"
                           size="sm"

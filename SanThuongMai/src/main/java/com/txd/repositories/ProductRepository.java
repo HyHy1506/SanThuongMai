@@ -24,4 +24,6 @@ public interface ProductRepository {
     Long countProducts(Map<String, String> params);
 
     void deleteProduct(int id);
+
+    Integer getSalesQuantity(int productId);
 }

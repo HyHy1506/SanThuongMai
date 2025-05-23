@@ -6,6 +6,7 @@ package com.txd.controllers;
 
 import com.txd.dto.CommentDTO;
 import com.txd.dto.ProductDTO;
+import com.txd.dto.ProductDetailDTO;
 import com.txd.pojo.Comment;
 import java.util.Map;
 
@@ -70,19 +71,19 @@ public class ProductController {
     public String productDetails(Model model, @PathVariable("id") int id) {
         Product product = proSer.getProductById(id);
         if (product == null) {
-            return "error"; // Redirect to an error page if product not found
+            return "error"; // tra ve trang loi
         }
-        Double averageRating = productRatingService.getAverageRating(id);
-        Long ratingCount = productRatingService.getRatingCount(id);
+
         Long commentCount = commentService.getCommentCount(id);
         List<Comment> comments = commentService.getCommentsByProductId(id);
+        Integer salesQuantity=proSer.getSalesQuantity(id);
         
-        model.addAttribute("product", new ProductDTO(product));
+        model.addAttribute("product", new ProductDetailDTO(product));
          List<CommentDTO> commentDTOs = comments.stream().map(CommentDTO::new).collect(Collectors.toList());
-        model.addAttribute("averageRating", averageRating);
-        model.addAttribute("ratingCount", ratingCount);
+
         model.addAttribute("commentCount", commentCount);
         model.addAttribute("comments", commentDTOs);
+        model.addAttribute("salesQuantity", salesQuantity);
 
         return "ProductsManager/productDetails";
     }

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import Apis, { authApis, endpoints } from '../../../configs/Apis';
 import MySpinner from '../../layouts/MySpinner';
 import { useSelector } from 'react-redux';
+import { Xanh1, Xanh2, Xanh3, Xanh4, Xanh5 } from '../../../utils/MyColors';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, ArcElement, Title, Tooltip, Legend);
 
@@ -38,6 +39,7 @@ const RevenueStatistics = () => {
         try {
             const res = await Apis.get(endpoints['seller-with-id'](user.id));
             setSeller(res.data);
+            console.log(res.data)
         } catch (error) {
             toast.error(error);
         }
@@ -114,6 +116,7 @@ const RevenueStatistics = () => {
 
     return (
         <Container className="py-4">
+            <h4>Doanh thu: <strong className='text-success'>${seller.accountBalance!=null ?seller.accountBalance.toLocaleString("vi-VI") : 0} VND </strong></h4>
             <h4>Thống kê Doanh thu</h4>
             {loading ? (
                 <MySpinner />
