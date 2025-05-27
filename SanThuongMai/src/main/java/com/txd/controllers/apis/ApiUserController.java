@@ -74,15 +74,16 @@ public class ApiUserController {
         Map<String, Object> response = new HashMap<String, Object>();
         try {
             String uid = params.get("uid");
-            String userRole = params.get("userRole");
-            if (userRole == null || userRole.isBlank()) {
-                response.compute("status", (k, v) -> "fail");
-                response.compute("error", (k, v) -> "Hãy đăng ký và chọn vai trò trước");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
+
             User user = userDetailsService.getUserByUsername(uid);
             if (user == null) {
                 //create user
+                String userRole = params.get("userRole");
+                if (userRole == null || userRole.isBlank()) {
+                    response.compute("status", (k, v) -> "fail");
+                    response.compute("error", (k, v) -> "Hãy đăng ký và chọn vai trò trước");
+                    return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+                }
                 user = userDetailsService.addUserByGoogle(params);
             }
             //kiem tra tai khoan, tao jwt

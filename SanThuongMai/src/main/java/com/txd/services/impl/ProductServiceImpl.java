@@ -67,7 +67,37 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
-        return proRepo.saveOrUpdate(p);
+        //xoa may cai productattribute cu
+        if (p.getId() != null) {
+            productattributeRepository.deleteByProductId(p.getId());
+            Product oldP = proRepo.getProductById(p.getId());
+            // lay  oldP sau khi da xoa attribute de reset lai du lieu
+            oldP.setName(p.getName());
+            oldP.setDescription(p.getDescription());
+            oldP.setPrice(p.getPrice());
+            oldP.setInventoryQuantity(p.getInventoryQuantity());
+            oldP.setCategoryId(p.getCategoryId());
+
+            Product savedProduct = proRepo.saveOrUpdate(oldP);
+
+            // bat dau luu cac attibute moi
+            Set<Productattribute> attributes = new HashSet<>();
+            for (Productattribute pa : p.getProductattributeSet()) {
+                pa.setProductId(p);
+                pa.setAttributeId(attributeService.getAttributeById(pa.getAttributeId().getId()));
+                Productattribute savedPa = productattributeRepository.save(pa);
+                attributes.add(savedPa);
+            }
+            // gan lai cac attribuet moi vao oldP , vut cai p di (do p chi la doi tuong luu cac attribute moi)
+            savedProduct.setProductattributeSet(attributes);
+
+            // Save product again to update relationships
+            return proRepo.saveOrUpdate(savedProduct);
+        } else {
+            //product moi
+            return proRepo.saveOrUpdate(p);
+        }
+
     }
 
     @Override

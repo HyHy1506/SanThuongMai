@@ -27,6 +27,7 @@ public class ProductattributeRepositoryImpl implements ProductattributeRepositor
             session.merge(productattribute);
         }
         session.flush();
+        session.refresh(productattribute);
         return productattribute;
     }
     

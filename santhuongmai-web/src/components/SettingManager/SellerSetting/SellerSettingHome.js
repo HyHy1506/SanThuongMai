@@ -32,7 +32,18 @@ const SellerSettingHome = () => {
 
     return (
         <>
-            <h2>Cài đặt Seller</h2>
+            <Row>
+                <Col className="mb-6">
+                    <h2>Cài đặt Seller </h2>
+                </Col>
+                <Col className="mb-6">
+                    <h2>
+                        <a className="text-success" href="http://moonice.fun:8080/SanThuongMai">
+                            --->  Trang quản trị 
+                        </a>
+                    </h2>
+                </Col>
+            </Row>
             <span >Trạng thái </span><span style={{ color: seller.status === 'PENDING' ? 'orange' : seller.status === 'APPROVED' ? 'green' : seller.status === 'REJECT' ? 'red' : 'black' }}>{seller.status}
             </span>
             <Nav variant="tabs" activeKey={activeTab} onSelect={(key) => setActiveTab(key)} className="mb-3 mt-2">
@@ -43,16 +54,16 @@ const SellerSettingHome = () => {
                     <Nav.Link style={{ color: activeTab === "manageShop" ? "green" : "black" }} eventKey="manageShop">Quản lý Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link  style={{ color: activeTab === "manageProduct" ? "green" : "black" }} eventKey="manageProduct">Quản lý Sản Phẩm</Nav.Link>
+                    <Nav.Link style={{ color: activeTab === "manageProduct" ? "green" : "black" }} eventKey="manageProduct">Quản lý Sản Phẩm</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link  style={{ color: activeTab === "shop" ? "green" : "black" }} eventKey="shop">Tạo Shop</Nav.Link>
+                    <Nav.Link style={{ color: activeTab === "shop" ? "green" : "black" }} eventKey="shop">Tạo Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link  style={{ color: activeTab === "product" ? "green" : "black" }} eventKey="product">Tạo Sản Phẩm</Nav.Link>
+                    <Nav.Link style={{ color: activeTab === "product" ? "green" : "black" }} eventKey="product">Tạo Sản Phẩm</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link  style={{ color: activeTab === "statistics" ? "green" : "black" }} eventKey="statistics">Thống kê Doanh thu</Nav.Link>
+                    <Nav.Link style={{ color: activeTab === "statistics" ? "green" : "black" }} eventKey="statistics">Thống kê Doanh thu</Nav.Link>
                 </Nav.Item>
             </Nav>
             <Row>

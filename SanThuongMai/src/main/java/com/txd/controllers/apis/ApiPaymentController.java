@@ -59,10 +59,15 @@ public class ApiPaymentController {
             // tao  hoa don
             Payment payment = new Payment();
             payment.setCustomerId(new Customer(user.getId()));
-            payment.setIsPay(true);
             payment.setIsPayForSeller(false);
             payment.setPaymentMethod(Payment.PaymentMethodEnum.valueOf(paymentRequest.getPaymentMethod()));
-
+            
+            //neu thanh toan cod thi tuc la chua tra tien
+            if (payment.getPaymentMethod() == Payment.PaymentMethodEnum.COD) {
+                payment.setIsPay(false);
+            }else{
+                payment.setIsPay(true);
+            }
             // tinh tong so tien va tao orderdetail
             List<Orderdetail> orderDetailEntities = paymentRequest.getItems().stream().map(dto -> {
                 Orderdetail od = new Orderdetail();
@@ -121,7 +126,7 @@ public class ApiPaymentController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.compute("status", (k, v) -> "fail");
-            response.compute("error", (k, v) -> "Lỗi lấy danh sách thanh toán "+e.getMessage());
+            response.compute("error", (k, v) -> "Lỗi lấy danh sách thanh toán " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }

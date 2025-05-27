@@ -6,6 +6,7 @@ package com.txd.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -71,6 +72,11 @@ public class Productattribute implements Serializable {
 
     public Productattribute(Integer id) {
         this.id = id;
+    }
+
+    public Productattribute(Integer attrivuteId, String value) {
+        this.attributeId = new Attribute(attrivuteId);
+        this.value = value;
     }
 
     @PrePersist
@@ -149,12 +155,21 @@ public class Productattribute implements Serializable {
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
+
+        // Nếu id đều null, so sánh theo attributeId và value
+        if (this.id == null && other.id == null) {
+            Integer thisAttrId = this.attributeId != null ? this.attributeId.getId() : null;
+            Integer otherAttrId = other.attributeId != null ? other.attributeId.getId() : null;
+
+            return Objects.equals(thisAttrId, otherAttrId);
+                    
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "com.txd.pojo.Productattribute[ id=" + id + " ]";
+        return "com.txd.pojo.Productattribute[ id=" + id + " ]" + " attribute: " + attributeId.getId() + " value: " + value;
     }
 
     /**

@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -26,8 +25,8 @@
                     <input type="number" class="form-control" th:field="*{price}" id="price" placeholder="Giá sản phẩm">
                 </div>
                 <div class="mb-3">
-                    <label for="price" class="form-label">Số lượng tồn kho</label>
-                    <input type="number" class="form-control" th:field="*{inventoryQuantity}" id="price" placeholder="Số lượng tồn kho">
+                    <label for="inventoryQuantity" class="form-label">Số lượng tồn kho</label>
+                    <input type="number" class="form-control" th:field="*{inventoryQuantity}" id="inventoryQuantity" placeholder="Số lượng tồn kho">
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Miêu tả</label>
@@ -43,18 +42,144 @@
                         <option th:each="c: ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
                     </select>
                 </div>
+                
+                <!-- Product Attributes Section - Now as separate parameters -->
+                <div class="form-group">
+                    <label>Thuộc tính</label>
+                    <div id="attributes-container">
+                        <!-- Existing attributes -->
+                        <div th:each="attr, iterStat : ${product.productattributeSet}" class="attribute-row mb-2">
+                            <!-- Hidden field for existing attribute ID -->
+                            <input type="hidden" th:name="'attributeIds[' + ${iterStat.index} + ']'" th:value="${attr.id}" />
+                            <div class="d-flex gap-2 align-items-center">
+                                <select class="form-control" th:name="'attributeTypeIds[' + ${iterStat.index} + ']'" required style="flex: 1;">
+                                    <option th:each="availableAttr : ${attributes}" 
+                                            th:value="${availableAttr.id}" 
+                                            th:text="${availableAttr.name}" 
+                                            th:selected="${availableAttr.id == attr.attributeId.id}"></option>
+                                </select>
+                                <input type="text" class="form-control" 
+                                       th:name="'attributeValues[' + ${iterStat.index} + ']'" 
+                                       th:value="${attr.value}"
+                                       placeholder="Giá trị thuộc tính" required style="flex: 2;">
+                                <button type="button" class="btn btn-danger btn-sm remove-attribute">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-2" id="add-attribute">Thêm thuộc tính</button>
+                </div>
+
                 <div class="text-center">
                     <button class="btn btn-success px-5">Lưu sản phẩm</button>
                 </div>
+                
+                <!-- Product fields -->
                 <input type="hidden" th:field="*{id}" />
                 <input type="hidden" th:field="*{shopId.id}" />
                 <input type="hidden" th:field="*{image}" />
                 <input type="hidden" th:field="*{isActive}" />
+                
+                <!-- Hidden field to track total number of attributes -->
+                <input type="hidden" id="attributeCount" name="attributeCount" th:value="${#lists.size(product.productattributeSet)}" />
             </form>
         </div>
     </main>
 
     <div th:replace="base :: footer"></div>
-    <script>(function(){function c(){var b = a.contentDocument || a.contentWindow.document; if (b){var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'93631e54ac41673d',t:'MTc0NTYzOTQ1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d)}}if (document.body){var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState)c();  else if (window.addEventListener)document.addEventListener('DOMContentLoaded', c);  else{var e = document.onreadystatechange || function(){}; document.onreadystatechange = function(b){e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c())}}}})();</script>
+    
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const attributesContainer = document.getElementById('attributes-container');
+            const addAttributeBtn = document.getElementById('add-attribute');
+            const attributeCountInput = document.getElementById('attributeCount');
+            let attributeIndex = parseInt(attributeCountInput.value) || 0;
+
+            // Available attributes data
+            const availableAttributes = /*[[${attributes}]]*/ [];
+
+            // Add new attribute row
+            addAttributeBtn.addEventListener('click', function() {
+                const newAttributeRow = createAttributeRow(attributeIndex);
+                attributesContainer.appendChild(newAttributeRow);
+                attributeIndex++;
+                attributeCountInput.value = attributeIndex;
+            });
+
+            // Remove attribute row (event delegation)
+            attributesContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-attribute')) {
+                    e.target.closest('.attribute-row').remove();
+                    updateAttributeIndices();
+                }
+            });
+
+            function createAttributeRow(index) {
+                const div = document.createElement('div');
+                div.className = 'attribute-row mb-2';
+                
+                div.innerHTML = `
+                    <div class="d-flex gap-2 align-items-center">
+                        <select class="form-control" name="attributeTypeIds[${index}]" required style="flex: 1;">
+                            <option value="">Chọn thuộc tính</option>
+                            ${availableAttributes.map(attr => 
+                                `<option value="${attr.id}">${attr.name}</option>`
+                            ).join('')}
+                        </select>
+                        <input type="text" class="form-control" name="attributeValues[${index}]" placeholder="Giá trị thuộc tính" required style="flex: 2;">
+                        <button type="button" class="btn btn-danger btn-sm remove-attribute">Xóa</button>
+                    </div>
+                `;
+                
+                return div;
+            }
+
+            function updateAttributeIndices() {
+                const attributeRows = document.querySelectorAll('.attribute-row');
+                let currentIndex = 0;
+                
+                attributeRows.forEach((row) => {
+                    const hiddenId = row.querySelector('input[type="hidden"]');
+                    const select = row.querySelector('select');
+                    const input = row.querySelector('input[type="text"]');
+                    
+                    if (hiddenId) {
+                        hiddenId.name = `attributeIds[${currentIndex}]`;
+                    }
+                    if (select) {
+                        select.name = `attributeTypeIds[${currentIndex}]`;
+                    }
+                    if (input) {
+                        input.name = `attributeValues[${currentIndex}]`;
+                    }
+                    currentIndex++;
+                });
+                
+                attributeIndex = currentIndex;
+                attributeCountInput.value = attributeIndex;
+            }
+        });
+    </script>
+
+    <style>
+        .attribute-row {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        
+        .attribute-row:hover {
+            background-color: #e9ecef;
+        }
+        
+        .remove-attribute {
+            white-space: nowrap;
+        }
+        
+        .d-flex.gap-2 {
+            gap: 0.5rem !important;
+        }
+    </style>
 </body>
+
 </html>

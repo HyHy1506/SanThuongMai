@@ -120,7 +120,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         List<Product> ps = query.getResultList();
         for (Product pro : ps) {
             if (pro != null) {
-                Hibernate.initialize(pro.getProductattributeSet());
+//                Hibernate.initialize(pro.getProductattributeSet());
                 Hibernate.initialize(pro.getProductratingSet());
 
             }
@@ -164,7 +164,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             s.merge(p);
         }
         s.flush();
-//        s.refresh(p);
+        s.refresh(p);
         return p;
     }
 

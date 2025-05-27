@@ -66,6 +66,9 @@ const Register = () => {
   const googleSignIn = async () => {
     setLoading(true);
     try {
+      provider.setCustomParameters({
+        prompt: "select_account",
+      });
       const result = await signInWithPopup(auth, provider);
       const userGoogle = result.user;
 
@@ -90,6 +93,7 @@ const Register = () => {
         }
       }
     } catch (error) {
+      console.log(error)
       toast.error("Lỗi đăng nhập Google:" + error.response?.data?.error);
       setMsg("Đăng nhập Google thất bại: " + error.response?.data?.error);
     } finally {

@@ -1,35 +1,4 @@
-<!--
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Quản trị sàn thương mại</title>
-    <th:block th:replace="base :: bootstrap"></th:block>
-    <body>
-        <div th:replace="base :: header"></div>
-        
-        <section class="container">
-            <h1 class="text-center text-info mt-1">ĐĂNG NHẬP</h1>
-            
-            <form method="post" th:action="@{/login}" >
-                <div class="form-floating mb-3 mt-3">
-                    <input type="text" class="form-control" name="username" id="name" placeholder="Tên sản phẩm">
-                    <label for="name">Tên đăng nhập</label>
-                </div>
-                <div class="form-floating mb-3 mt-3">
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Tên sản phẩm">
-                    <label for="password">Mật khẩu</label>
-                </div>
-                
-                <div class="form-floating mt-1">
-                    
-                    <button class="btn btn-success" >Đăng nhập</button>
-                </div>
-            </form>
-        </section>
-        
-        <div th:replace="base :: footer"></div>
-    </body>
-</html>-->
+
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -40,25 +9,44 @@
     <div th:replace="base :: header"></div>
 
     <section class="container py-5">
-        <div class="card p-4 mx-auto" style="max-width: 400px;">
-            <h1 class="text-center mb-4">Đăng nhập</h1>
-            <form method="post" th:action="@{/login}">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Tên đăng nhập</label>
-                    <input type="text" class="form-control" name="username" id="name" placeholder="Tên đăng nhập">
+        <div class="row">
+            <div class="col-3">
+                <div >
+                    <h4>Tài khoản mẫu</h4>
+                    <p>Quản trị viên : <br />
+                        username: admin <br />
+                        password: 123456 <br />
+                    </p>
+                    <p>Nhân Viên : <br />
+                        username: staff1 <br />
+                        password: 123456 <br />
+                    </p>
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Mật khẩu</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu">
+            </div>
+            <div class="col-6">
+                <div class="card p-4 mx-auto" style="max-width: 400px;">
+                    <h1 class="text-center mb-4">Đăng nhập</h1>
+                    <form method="post" th:action="@{/login}">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" name="username" id="name" placeholder="Tên đăng nhập">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu">
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-success w-100">Đăng nhập</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="text-center">
-                    <button class="btn btn-success w-100">Đăng nhập</button>
-                </div>
-            </form>
+            </div>
         </div>
+
+
     </section>
 
     <div th:replace="base :: footer"></div>
-    <script>(function(){function c(){var b = a.contentDocument || a.contentWindow.document; if (b){var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'93631e56683d32e0',t:'MTc0NTYzOTQ1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d)}}if (document.body){var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState)c();  else if (window.addEventListener)document.addEventListener('DOMContentLoaded', c);  else{var e = document.onreadystatechange || function(){}; document.onreadystatechange = function(b){e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c())}}}})();</script>
+    <script>(function(){function c(){var b = a.contentDocument || a.contentWindow.document; if (b){var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'93631e56683d32e0',t:'MTc0NTYzOTQ1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d)}}if (document.body){var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState)c(); else if (window.addEventListener)document.addEventListener('DOMContentLoaded', c); else{var e = document.onreadystatechange || function(){}; document.onreadystatechange = function(b){e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c())}}}})();</script>
 </body>
 </html>

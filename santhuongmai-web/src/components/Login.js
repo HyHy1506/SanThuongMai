@@ -39,7 +39,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await Apis.post(endpoints.login, user);
-      if (res.data.status === "success") {
+      if (res?.data?.status === "success") {
         localStorage.setItem("token", res.data.token)
         try {
           const resUser = await authApis().get(endpoints["current-user"]);
@@ -63,6 +63,9 @@ const Login = () => {
   const googleSignIn = async () => {
     setLoading(true);
     try {
+      provider.setCustomParameters({
+        prompt: "select_account",
+      });
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const idToken = await user.getIdToken();
@@ -74,7 +77,7 @@ const Login = () => {
       // // Gửi token Google đến backend để xác thực
       const res = await Apis.post(endpoints.googleLogin, infoGoogleAccount);
 
-      if (res.data.status === "success") {
+      if (res?.data?.status === "success") {
         localStorage.setItem("token", res.data.token)
         try {
           const resUser = await authApis().get(endpoints["current-user"]);
@@ -86,17 +89,27 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.log(error.response.data.error)
+      console.log(error)
       toast.error("Lỗi đăng nhập Google:" + error.response?.data?.error);
       setMsg("Đăng nhập Google thất bại: " + error.response?.data?.error);
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
       <Row className="w-100">
+        <Col md-3>
+          <h5>Tài khoản mẫu</h5>
+          <p>Khách hàng : <br />
+            username: nam <br />
+            password: 123456 <br />
+          </p>
+          <p>Người bán : <br />
+            username: john <br />
+            password: 123456 <br />
+          </p>
+        </Col>
         <Col md={{ span: 6, offset: 3 }}>
           <Card className="shadow-lg p-4 rounded-4" style={{ border: "none" }}>
             <Card.Body>

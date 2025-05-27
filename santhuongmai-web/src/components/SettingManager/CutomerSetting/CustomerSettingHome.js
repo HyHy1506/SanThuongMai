@@ -15,7 +15,18 @@ const CustomerSettingHome = () => {
 
     return (
         <>
-            <h2>Cài đặt </h2>
+              <Row>
+                           <Col className="mb-6">
+                               <h2>Cài đặt  </h2>
+                           </Col>
+                           <Col className="mb-6">
+                               <h2>
+                                   <a className="text-success" href="http://moonice.fun:8080/SanThuongMai">
+                                       --->  Trang quản trị 
+                                   </a>
+                               </h2>
+                           </Col>
+                       </Row>
 
             <Nav variant="tabs" activeKey={activeTab} onSelect={(key) => setActiveTab(key)} className="mb-3 mt-2">
                 <Nav.Item>
