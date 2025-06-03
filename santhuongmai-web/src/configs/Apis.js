@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const BASE_URL = 'http://moonice.fun:8080/SanThuongMai/api/';
+const BASE_URL = 'http://localhost:8080/SanThuongMai/api/';
 
 export const endpoints = {
   'register': '/users',
